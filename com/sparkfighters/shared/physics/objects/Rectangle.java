@@ -75,6 +75,14 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Checks whether this rectangle intersects with another rectangle
+	 * @param r rectangle to check
+	 */
+	public boolean intersects(Rectangle r) {
+		return !((r.x1 > this.x2) || (r.x2 < this.x1) || (r.y1 > this.y2) || (r.y2 < this.y1));
+	}
+	
+	/**
 	 * Returns this rectangle as two points. First element is bottom-left corner,
 	 * second element is top-right corner
 	 * @return two-element array containing extreme points
