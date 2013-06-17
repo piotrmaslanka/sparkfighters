@@ -8,9 +8,9 @@ import java.lang.Math;
  * don't modify them.
  * @author Henrietta
  */
-public class Point {
-	private double x;
-	private double y;
+public class Point implements Cloneable {
+	public double x;
+	public double y;
 	
 	/**
 	 * Creates the point from raw coordinates
@@ -20,15 +20,6 @@ public class Point {
 	public Point(double x, double y) {
 		this.x = x;
 		this.y = y;
-	}
-	
-	/**
-	 * Copying constructor
-	 * @param p Point to copy from
-	 */
-	public Point(Point p) {
-		this.x = p.x;
-		this.y = p.y;
 	}
 	
 	/**
@@ -90,7 +81,6 @@ public class Point {
 		return new Point(this.x*k, this.y*k);
 	}
 	
-	
 	/**
 	 * Returns this point as two-element array of double
 	 * @return double[2]. First element is X coordinate, second element is Y coordinate.
@@ -98,5 +88,13 @@ public class Point {
 	public double[] as_vec2() {
 		double[] rv = {this.x, this.y};
 		return rv;
+	}
+	
+	/**
+	 * Returns a new point - a clone
+	 */
+	@Override
+	public Point clone() {
+		return new Point(this.x, this.y);
 	}
 }
