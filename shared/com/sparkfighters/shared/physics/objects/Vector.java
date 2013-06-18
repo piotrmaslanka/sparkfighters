@@ -56,6 +56,16 @@ public class Vector implements Cloneable {
 	public Vector add(Vector p) {
 		return new Vector(this.x + p.x, this.y + p.y);
 	}
+
+	/**
+	 * Adds this vector to another vector, symbolized by (x, y) values
+	 * @param x Value to add to X
+	 * @param y Value to add to Y
+	 * @return new vector
+	 */
+	public Vector add(double x, double y) {
+		return new Vector(this.x + x, this.y + y);
+	}	
 	
 	/**
 	 * Returns an negative version of this vector
@@ -66,18 +76,7 @@ public class Vector implements Cloneable {
 	public Vector negative() {
 		return new Vector(-this.x, -this.y);
 	}
-	
-	/**
-	 * Returns a new vector which is composed of this vector with added values
-	 * to coordinates
-	 * @param dx Value to add to X
-	 * @param dy Value to add to Y
-	 * @return new vector
-	 */
-	public Vector delta(double dx, double dy) {
-		return new Vector(this.x + dx, this.y + dy);
-	}
-	
+
 	/**
 	 * Returns new vector which is composed of this vector by coordinates
 	 * multiplied by k.
