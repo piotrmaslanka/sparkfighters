@@ -26,15 +26,16 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
-	 * Constructs a rectangle from points. First element is bottom-left corner,
-	 * second element is top-right corner.
-	 * @param in at least 2-element array
+	 * Constructs a rectangle from points. First point is bottom-left corner,
+	 * second point is top-right corner.
+	 * @param p1 first point, ie. bottom-left corner
+	 * @param p2 second point, ie. top-right corner
 	 */
-	public Rectangle(Point[] in) {
-		this.x1 = in[0].x;
-		this.y1 = in[0].y;
-		this.x2 = in[1].x;
-		this.y2 = in[1].y;
+	public Rectangle(Point p1, Point p2) {
+		this.x1 = p1.x;
+		this.y1 = p1.y;
+		this.x2 = p2.x;
+		this.y2 = p2.y;
 	}
 	
 	/**
@@ -77,6 +78,7 @@ public class Rectangle implements Cloneable {
 	/**
 	 * Checks whether this rectangle intersects with another rectangle
 	 * @param r rectangle to check
+	 * @param whether rectangles intersect
 	 */
 	public boolean intersects(Rectangle r) {
 		return !((r.x1 > this.x2) || (r.x2 < this.x1) || (r.y1 > this.y2) || (r.y2 < this.y1));

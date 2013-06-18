@@ -41,6 +41,14 @@ public class Point implements Cloneable {
 	}
 	
 	/**
+	 * Returns distance of the point from the origin, ie. (0, 0)
+	 * @return euclidean distance from (0, 0)
+	 */
+	public double norm() {
+		return Math.hypot(this.x, this.y);
+	}
+	
+	/**
 	 * Adds this point to another point, returning a new point
 	 * @param p the another point
 	 * @return result point
