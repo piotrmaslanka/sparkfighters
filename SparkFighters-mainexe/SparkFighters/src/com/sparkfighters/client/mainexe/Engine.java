@@ -3,6 +3,7 @@ package com.sparkfighters.client.mainexe;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -47,12 +48,13 @@ public enum Engine {
 		
 		batch.begin();
 		stateTime += Gdx.graphics.getDeltaTime(); 
-		TextureRegion currentFrame=ResourcesManager.INSTANCE.HeroesData.get(0).Animations.get(0).getKeyFrame(stateTime, true);
-		batch.draw(currentFrame, 400, 400);
-		currentFrame=ResourcesManager.INSTANCE.HeroesData.get(0).Animations.get(1).getKeyFrame(stateTime, true);
-		batch.draw(currentFrame, 600, 600);
-		currentFrame=ResourcesManager.INSTANCE.HeroesData.get(0).Animations.get(2).getKeyFrame(stateTime, true);
-		batch.draw(currentFrame, 800, 800);
+		int x=20,y=20;
+		for(Animation a:ResourcesManager.INSTANCE.HeroesData.get(0).Animations)
+		{
+			TextureRegion currentFrame=a.getKeyFrame(stateTime, true);
+			batch.draw(currentFrame, x,y);
+			x+=200;
+		}
 		batch.end();
 
 	}
