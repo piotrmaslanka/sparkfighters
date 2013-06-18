@@ -98,11 +98,11 @@ public class Vector implements Cloneable {
 	}
 	
 	/**
-	 * Returns a new vector - a clone
+	 * Because vector is immutable, we can return self.
 	 */
 	@Override
 	public Vector clone() {
-		return new Vector(this.x, this.y);
+		return this;
 	}
 	
 	/**

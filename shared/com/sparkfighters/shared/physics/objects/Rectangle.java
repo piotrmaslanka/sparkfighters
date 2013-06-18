@@ -1,6 +1,7 @@
 package com.sparkfighters.shared.physics.objects;
 
 import com.sparkfighters.shared.physics.objects.Vector;
+import com.sparkfighters.shared.physics.objects.HorizSegment;
 
 /**
  * Class representing a rectangle with borders aligned to axes
@@ -65,6 +66,17 @@ public class Rectangle implements Cloneable {
 			   (this.x2 >= p.x) && (this.y2 >= p.y);
 	}
 	
+	/** 
+	 * Checks whether this rectangle contains a horizontal segment.
+	 * Being located at boundaries also counts
+	 * @param hs Segment to be tested for inclusion
+	 * @return whether hs lies inside this rectangle
+	 */
+	public boolean contains(HorizSegment hs) {
+		if ((this.y1 > hs.y) || (this.y2 < hs.y)) return false;
+		return (this.x1 >= hs.x1) && (this.x2 <= hs.x2);
+	}
+	
 	/**
 	 * Checks whether this rectangle contains another rectangle
 	 * @param r rectangle to be checked for being fully included in this rectangle
@@ -78,10 +90,20 @@ public class Rectangle implements Cloneable {
 	/**
 	 * Checks whether this rectangle intersects with another rectangle
 	 * @param r rectangle to check
-	 * @param whether rectangles intersect
+	 * @return whether rectangles intersect
 	 */
 	public boolean intersects(Rectangle r) {
 		return !((r.x1 > this.x2) || (r.x2 < this.x1) || (r.y1 > this.y2) || (r.y2 < this.y1));
+	}
+	
+	/**
+	 * Checks whether this rectangle intersects with a horizontal segment
+	 * @param hs horizontal segment to check
+	 * @return whether this rectangle intersects with horizontal segment
+	 */
+	public boolean intersects(HorizSegment hs) {
+		if ((this.y1 > hs.y) || (this.y2 < hs.y)) return false;		
+		return (hs.x1 <= this.x2) && (hs.x2 >= this.x1);
 	}
 	
 	/**
@@ -103,12 +125,12 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
-	 * Clones this object
+	 * Because rectangle is immutable, we can return self
 	 * @return a clone of this object
 	 */
 	@Override
 	public Rectangle clone() {
-		return new Rectangle(this.x1, this.y1, this.x2, this.y2);
+		return this;
 	}
 
 }
