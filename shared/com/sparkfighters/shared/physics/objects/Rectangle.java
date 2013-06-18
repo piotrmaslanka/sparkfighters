@@ -95,6 +95,14 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Returns center of mass of this rectangle
+	 * @return center of mass
+	 */
+	public Vector get_center_of_mass() {
+		return new Vector((this.x2 - this.x1) / 2, (this.y2 - this.y1) / 2);
+	}
+	
+	/**
 	 * Clones this object
 	 * @return a clone of this object
 	 */
