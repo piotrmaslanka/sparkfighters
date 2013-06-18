@@ -1,6 +1,6 @@
 package com.sparkfighters.shared.physics.objects;
 
-import com.sparkfighters.shared.physics.objects.Point;
+import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
  * Class representing a rectangle.
@@ -31,7 +31,7 @@ public class Rectangle implements Cloneable {
 	 * @param p1 first point, ie. bottom-left corner
 	 * @param p2 second point, ie. top-right corner
 	 */
-	public Rectangle(Point p1, Point p2) {
+	public Rectangle(Vector p1, Vector p2) {
 		this.x1 = p1.x;
 		this.y1 = p1.y;
 		this.x2 = p2.x;
@@ -42,7 +42,7 @@ public class Rectangle implements Cloneable {
 	 * Returns height of the rectangle
 	 * @return height
 	 */
-	public double getHeight() {
+	public double get_height() {
 		return this.y2 - this.y1;
 	}
 
@@ -50,7 +50,7 @@ public class Rectangle implements Cloneable {
 	 * Returns width of the rectangle
 	 * @return width
 	 */
-	public double getWidth() {
+	public double get_width() {
 		return this.x2 - this.x1;
 	}
 	
@@ -60,7 +60,7 @@ public class Rectangle implements Cloneable {
 	 * @param p Point to be tested for inclusion
 	 * @return whether p lies inside this rectangle
 	 */
-	public boolean contains(Point p) {
+	public boolean contains(Vector p) {
 		return (this.x1 <= p.x) && (this.y1 <= p.y) &&
 			   (this.x2 >= p.x) && (this.y2 >= p.y);
 	}
@@ -89,8 +89,8 @@ public class Rectangle implements Cloneable {
 	 * second element is top-right corner
 	 * @return two-element array containing extreme points
 	 */
-	public Point[] as_point2() {
-		Point[] out = {new Point(this.x1, this.y2), new Point(this.x2, this.y2)};
+	public Vector[] as_vector2() {
+		Vector[] out = {new Vector(this.x1, this.y2), new Vector(this.x2, this.y2)};
 		return out;
 	}
 	
