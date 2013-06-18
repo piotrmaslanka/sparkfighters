@@ -30,7 +30,7 @@ public enum ResourcesManager
 		HeroesData=new ArrayList<HeroData>();
 		
 		FileHandle[] list=HDD.getDirectories("data/heroes");
-			
+		
 		//Directory of hero
 		for(int i=0;i<list.length;i++)
 		{
@@ -47,28 +47,31 @@ public enum ResourcesManager
 			ArrayList<TextureRegion> listFrames=new ArrayList<TextureRegion>();
 			ArrayList<Animation> Animations=new ArrayList<Animation>();
 			String nameAnimation="";
+			float AnimationSpeed=0f;
 			
 			for (Entry<String, JsonElement> je : j2.entrySet()) 
 			{
 				String key=je.getKey().substring(0, je.getKey().length()-4);
+				JsonObject j3=j2.getAsJsonObject(je.getKey());
+				JsonObject j4=j3.getAsJsonObject("frame");
+				
 				if(key.equals(nameAnimation)==false)
 				{
 					nameAnimation=key;
+					//AnimationSpeed=j3.get("speed").getAsFloat();
 					if(listFrames.size()>0)
 					{
 						TextureRegion[] tmp=new TextureRegion[listFrames.size()];
 						listFrames.toArray(tmp);
-						Animation anim=new Animation(0.100f,tmp);
+						Animation anim=new Animation(AnimationSpeed,tmp);
 						Animations.add(anim);
 						listFrames.clear();
 					}
+					AnimationSpeed=j3.get("speed").getAsFloat();
 				}
 				
 				if(key.equals(nameAnimation)==true)
 				{				
-					JsonObject j3=j2.getAsJsonObject(je.getKey());
-					JsonObject j4=j3.getAsJsonObject("frame");
-
 					int x=j4.get("x").getAsInt();
 					int y=j4.get("y").getAsInt();
 					int w=j4.get("w").getAsInt();
@@ -82,7 +85,7 @@ public enum ResourcesManager
 			
 			TextureRegion[] tmp=new TextureRegion[listFrames.size()];
 			listFrames.toArray(tmp);
-			Animation anim=new Animation(0.025f,tmp);
+			Animation anim=new Animation(AnimationSpeed,tmp);
 			Animations.add(anim);
 			
 			HeroData HG=new HeroData();
