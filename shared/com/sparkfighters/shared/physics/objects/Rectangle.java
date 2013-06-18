@@ -3,7 +3,7 @@ package com.sparkfighters.shared.physics.objects;
 import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
- * Class representing a rectangle.
+ * Class representing a rectangle with borders aligned to axes
  * Immutable.
  * @author Henrietta
  *
