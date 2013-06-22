@@ -4,8 +4,7 @@ import java.lang.Math;
 
 /**
  * Class representing a vector, or a vector.
- * It is immutable once created. It's x and y properties are public, but
- * don't modify them.
+ * Mutable.
  * @author Henrietta
  */
 public class Vector implements Cloneable {
@@ -68,6 +67,17 @@ public class Vector implements Cloneable {
 	}	
 	
 	/**
+	 * Adds this vector to another vector in-place, returning self
+	 * @param p Vector to add to this
+	 * @return self
+	 */
+	public Vector iadd(Vector p) {
+		this.x += p.x;
+		this.y += p.y;
+		return this;
+	}
+	
+	/**
 	 * Returns an negative version of this vector
 	 * By negative it means that coordinates are negative, so if you added this
 	 * vector to it's inverted version, you would get (0, 0).
@@ -97,12 +107,9 @@ public class Vector implements Cloneable {
 		return rv;
 	}
 	
-	/**
-	 * Because vector is immutable, we can return self.
-	 */
 	@Override
 	public Vector clone() {
-		return this;
+		return new Vector(this.x, this.y);
 	}
 	
 	/**
