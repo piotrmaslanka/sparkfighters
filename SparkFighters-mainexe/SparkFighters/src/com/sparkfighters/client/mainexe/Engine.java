@@ -65,12 +65,12 @@ public enum Engine {
 		batch.begin();
 		stateTime += Gdx.graphics.getDeltaTime(); 
 		int x=20,y=20;
-		for(Animation a:ResourcesManager.INSTANCE.HeroesData.get(0).Animations)
+		/*for(Animation a:ResourcesManager.INSTANCE.HeroesData.get(0).Animations)
 		{
 			TextureRegion currentFrame=a.getKeyFrame(stateTime, true);
 			batch.draw(currentFrame, x,y);
 			x+=200;
-		}
+		}*/
 		batch.end();
 
 	}
