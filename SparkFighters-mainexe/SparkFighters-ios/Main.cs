@@ -13,7 +13,7 @@ namespace com.sparkfighters
 	{
 		[Register ("AppDelegate")]
 		public partial class AppDelegate : IOSApplication {
-			public AppDelegate(): base(new SF_Game(), getConfig()) {
+			public AppDelegate(): base(new SparkFightersGame(), getConfig()) {
 
 			}
 

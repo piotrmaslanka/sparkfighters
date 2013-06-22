@@ -1,6 +1,8 @@
 package com.sparkfighters.client.mainexe;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -19,6 +21,7 @@ public enum Engine {
 	public OrthographicCamera camera;
 	public SpriteBatch batch;
 	
+	
 	public void Create(int window_width,int window_height)
 	{
 		this.window_width=window_width;
@@ -33,12 +36,25 @@ public enum Engine {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
 		
-		 stateTime = 0f;
+		stateTime = 0f;
 	}
 	
 	public void ProcessData()
 	{
+		/*if(Gdx.input.isKeyPressed(Keys.Q))
+		{
+			temp=0;
+		}
 		
+		if(Gdx.input.isKeyPressed(Keys.W))
+		{
+			temp=1;
+		}
+		
+		if(Gdx.input.isKeyPressed(Keys.E))
+		{
+			temp=2;
+		}*/
 	}
 	
 	public void Draw()

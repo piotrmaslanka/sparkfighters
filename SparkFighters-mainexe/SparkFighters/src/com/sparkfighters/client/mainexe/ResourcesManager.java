@@ -89,6 +89,7 @@ public enum ResourcesManager
 			Animations.add(anim);
 			
 			HeroData HG=new HeroData();
+			HG.HeroName=list[i].name();
 			HG.Animations=Animations;
 			HeroesData.add(HG);
 			
