@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.sparkfighters.client.ResourcesManager.ResourcesManager;
 import com.sparkfighters.client.mainexe.Engine;
-import com.sparkfighters.client.mainexe.ResourcesManager;
 
 public class SparkFightersGame implements ApplicationListener 
 {

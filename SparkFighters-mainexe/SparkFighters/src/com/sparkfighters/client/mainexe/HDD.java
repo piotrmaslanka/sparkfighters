@@ -6,9 +6,9 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class HDD 
 {
-	public static FileHandle Load(String path)
+	public static FileHandle getFileHandle(String path)
 	{
-		return Gdx.files.internal(path);	
+		return Gdx.files.local(path);	
 	}
 	
 	public static FileHandle[] getDirectories(String path)
@@ -16,7 +16,7 @@ public class HDD
 		FileHandle dirHandle;
 		//if (Gdx.app.getType() == ApplicationType.Android) 
 		//{
-			dirHandle=HDD.Load(path);
+			dirHandle=HDD.getFileHandle(path);
 		//} 
 		//else 
 		//{

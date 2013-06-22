@@ -1,17 +1,18 @@
-package com.sparkfighters.client.mainexe;
+package com.sparkfighters.client.ResourcesManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sparkfighters.client.mainexe.HDD;
+import com.sparkfighters.shared.physics.objects.Rectangle;
 
 
 public enum ResourcesManager 
@@ -29,28 +30,31 @@ public enum ResourcesManager
 	{
 		HeroesData=new ArrayList<HeroData>();
 		
+		
 		FileHandle[] list=HDD.getDirectories("data/heroes");
 		
 		//Directory of hero
 		for(int i=0;i<list.length;i++)
 		{
+			HeroData HG=new HeroData();
+			HG.HeroName=list[i].name();
+			
 			//parse json and png
-			Texture Sheet=new Texture(HDD.Load(list[i]+"/data.png"));
-			Sheet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			FileHandle fh=HDD.Load(list[i]+"/data.json");
+			//Texture Sheet=new Texture(HDD.getFileHandle(list[i]+"/data.png"));
+			//Sheet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			FileHandle fh=HDD.getFileHandle(list[i]+"/data.json");
 			String json=fh.readString();
 			
 			JsonParser parser = new JsonParser(); 
 			JsonObject j1 = (JsonObject) parser.parse(json); 
 			JsonObject j2=j1.getAsJsonObject("frames");
 			
-			ArrayList<TextureRegion> listFrames=new ArrayList<TextureRegion>();
-			ArrayList<Animation> Animations=new ArrayList<Animation>();
+			AnimationData Animation=new AnimationData();
+			
 			String nameAnimation="";
-			float AnimationSpeed=0f;
 			
 			for (Entry<String, JsonElement> je : j2.entrySet()) 
-			{
+			{				
 				String key=je.getKey().substring(0, je.getKey().length()-4);
 				JsonObject j3=j2.getAsJsonObject(je.getKey());
 				JsonObject j4=j3.getAsJsonObject("frame");
@@ -58,16 +62,12 @@ public enum ResourcesManager
 				if(key.equals(nameAnimation)==false)
 				{
 					nameAnimation=key;
-					//AnimationSpeed=j3.get("speed").getAsFloat();
-					if(listFrames.size()>0)
+					if(Animation.frames.size()>0)					
 					{
-						TextureRegion[] tmp=new TextureRegion[listFrames.size()];
-						listFrames.toArray(tmp);
-						Animation anim=new Animation(AnimationSpeed,tmp);
-						Animations.add(anim);
-						listFrames.clear();
+						HG.Animations.add(Animation);
+						Animation=new AnimationData();
 					}
-					AnimationSpeed=j3.get("speed").getAsFloat();
+					Animation.speedOfAnimation=j3.get("speed").getAsFloat();
 				}
 				
 				if(key.equals(nameAnimation)==true)
@@ -77,24 +77,25 @@ public enum ResourcesManager
 					int w=j4.get("w").getAsInt();
 					int h=j4.get("h").getAsInt();
 					
-					TextureRegion frame=new TextureRegion(Sheet);
-					frame.setRegion(x, y, w, h);
-					listFrames.add(frame);
+					Rectangle frame=new Rectangle(x, y, x+w, y+h);
+					Animation.frames.add(frame);
+					
 				}
 			}
 			
-			TextureRegion[] tmp=new TextureRegion[listFrames.size()];
-			listFrames.toArray(tmp);
-			Animation anim=new Animation(AnimationSpeed,tmp);
-			Animations.add(anim);
-			
-			HeroData HG=new HeroData();
-			HG.HeroName=list[i].name();
-			HG.Animations=Animations;
+			HG.Animations.add(Animation);
 			HeroesData.add(HG);
 			
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json2 = gson.toJson(HG);
+			
+			json2=json2.replace("\n","\r\n");
+			
+			FileHandle fh2=HDD.getFileHandle("data/test.json");
+			fh2.writeString(json2, false);
+			
 		}
-
+		
 
 	}
 	
