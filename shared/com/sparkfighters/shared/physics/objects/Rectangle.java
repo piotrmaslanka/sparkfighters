@@ -97,6 +97,32 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Checks whether this rectangle intersects with another rectangle
+	 * given an update in position to this rectangle
+	 * @param r the other, stationary rectangle
+	 * @param tx X update to this rectangle coordinates
+	 * @param ty Y update to this rectangle coordinates
+	 */
+	public boolean intersects_m(Rectangle r, double tx, double ty) {
+		return !((r.x1 > this.x2+tx) || (r.x2 < this.x1+tx) || (r.y1 > this.y2+ty) || (r.y2 < this.y1+ty));
+	}
+
+	/**
+	 * Checks whether this rectangle intersects with another rectangle
+	 * given an update in position to this rectangle.
+	 *
+	 * @param r the other rectangle
+	 * @param tx X update to this rectangle coordinates
+	 * @param ty Y update to this rectangle coordinates
+	 * @param ox X update to the other rectangle
+	 * @param oy Y update to the other rectangle
+	 */
+	public boolean intersects_m2(Rectangle r, double tx, double ty, double ox, double oy) {
+		return !((r.x1+ox > this.x2+tx) || (r.x2+ox < this.x1+tx) || 
+				 (r.y1+oy > this.y2+ty) || (r.y2+oy < this.y1+ty));
+	}
+	
+	/**
 	 * Checks whether this rectangle intersects with a horizontal segment
 	 * @param hs horizontal segment to check
 	 * @return whether this rectangle intersects with horizontal segment

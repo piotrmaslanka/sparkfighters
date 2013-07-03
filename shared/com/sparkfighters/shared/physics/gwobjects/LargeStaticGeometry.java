@@ -21,15 +21,22 @@ public class LargeStaticGeometry implements GameWorldObject {
 	
 	/**
 	 * 
-	 * @param rectangles Rectangles to construct with. This array
-	 * will be borrowed by this instance.
+	 * @param rectangles Rectangles to construct with. Immutable.
 	 */
 	public LargeStaticGeometry(Rectangle[] rectangles) {
 		this.rectangles = rectangles; 
 	}
-	
-	
-	
+
+	/**
+	 * Checks if this collides with a SmallMovingGeometry
+	 * @param smg a SmallMovingGeometry to check
+	 * @return bool whether collision occurs
+	 */
+	public boolean intersects(SmallMovingGeometry smg) {
+		for (Rectangle rect : rectangles)
+			if (smg.intersects(rect)) return true;
+		return false;
+	}
 	
 	/**
 	 * Because LSG is immutable, we can return self

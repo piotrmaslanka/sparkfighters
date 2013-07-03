@@ -8,6 +8,9 @@ import com.sparkfighters.shared.physics.gwobjects.GameWorldObject;
  * @author Henrietta
  */
 public interface Oriented extends GameWorldObject {
+	/**
+	 * Invariant: Modifying returned vector cannot affect this objects velocity.
+	 */
 	public Vector get_position();
-	public void set_position(Vector p);
+	public Oriented set_position(Vector p);
 }
