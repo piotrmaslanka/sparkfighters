@@ -141,14 +141,23 @@ public class Rectangle implements Cloneable {
 		Vector[] out = {new Vector(this.x1, this.y2), new Vector(this.x2, this.y2)};
 		return out;
 	}
+
+	/**
+	 * Returns the rectangle reflected across axis Y
+	 * @return reflected rectangle
+	 */
+	public Rectangle reflect_y() {
+		return new Rectangle(-this.x2, this.y1, -this.x1, this.y2);
+	}
 	
 	/**
-	 * Returns center of mass of this rectangle
-	 * @return center of mass
+	 * Returns the rectangle reflected across axis X
+	 * @return reflected rectangle
 	 */
-	public Vector get_center_of_mass() {
-		return new Vector((this.x2 - this.x1) / 2, (this.y2 - this.y1) / 2);
+	public Rectangle reflect_x() {
+		return new Rectangle(this.x1, -this.y2, this.x2, -this.y1);
 	}
+	
 	
 	/**
 	 * Because rectangle is immutable, we can return self

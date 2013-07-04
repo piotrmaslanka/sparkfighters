@@ -2,8 +2,6 @@ package com.sparkfighters.shared.physics.gwobjects;
 
 import com.sparkfighters.shared.physics.objects.Vector;
 import com.sparkfighters.shared.physics.objects.Rectangle;
-import com.sparkfighters.shared.physics.gwobjects.Moveable;
-
 
 /**
  * A moveable set of rectangles. Rectangles cannot be changed
