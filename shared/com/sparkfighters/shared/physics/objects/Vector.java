@@ -120,4 +120,20 @@ public class Vector implements Cloneable {
 	public double dot(Vector p) {
 		return p.x*this.x + p.y*this.y;
 	}
+	
+	/**
+	 * Returns a mirror image of this vector 
+	 * reflected by Y axis
+	 */
+	public Vector reflect_y() {
+		return new Vector(this.x, -this.y);
+	}
+	
+	/**
+	 * Returns a mirror image of this vector 
+	 * reflected by X axis
+	 */
+	public Vector reflect_x() {
+		return new Vector(-this.x, this.y);
+	}	
 }

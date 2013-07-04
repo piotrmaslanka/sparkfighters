@@ -1,8 +1,6 @@
 package com.sparkfighters.shared.physics.gwobjects;
 
-import com.sparkfighters.shared.physics.gwobjects.GameWorldObject;
 import com.sparkfighters.shared.physics.objects.Rectangle;
-import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
  * A static set of rectangles, good for representing static elements of the map.
@@ -36,6 +34,15 @@ public class LargeStaticGeometry implements GameWorldObject {
 		for (Rectangle rect : rectangles)
 			if (smg.intersects(rect)) return true;
 		return false;
+	}
+	
+	/**
+	 * Checks if this collides with a GeometrySet
+	 * @param gs a GeometrySet to check
+	 * @return bool whether collision occurs
+	 */
+	public boolean intersects(GeometrySet gs) {
+		return this.intersects(gs.get());
 	}
 	
 	/**
