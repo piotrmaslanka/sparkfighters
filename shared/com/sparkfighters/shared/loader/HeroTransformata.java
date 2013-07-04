@@ -1,7 +1,6 @@
 package com.sparkfighters.shared.loader;
 
 import com.sparkfighters.shared.physics.objects.Rectangle;
-import com.sparkfighters.shared.physics.objects.Vector;
 import com.sparkfighters.shared.physics.gwobjects.*;
 import com.sparkfighters.shared.loader.jsonobjs.hero.*;
 
@@ -14,8 +13,6 @@ import com.sparkfighters.shared.loader.jsonobjs.hero.*;
 public class HeroTransformata {
 	/**
 	 * Transforms an AnimationData into a SmallMovingGeometry
-	 * @param ad
-	 * @return
 	 */
 	private static SmallMovingGeometry transform(AnimationData ad) {
 		// construct an array and transcribe ArrayList into it

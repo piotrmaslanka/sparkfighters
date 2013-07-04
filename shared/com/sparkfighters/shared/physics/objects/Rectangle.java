@@ -10,9 +10,21 @@ import com.sparkfighters.shared.physics.objects.HorizSegment;
  *
  */
 public class Rectangle implements Cloneable {
+	/** 
+	 * Do not modify!
+	 */
 	public double x1;
+	/** 
+	 * Do not modify!
+	 */
 	public double y1;
+	/** 
+	 * Do not modify!
+	 */
 	public double x2;
+	/** 
+	 * Do not modify!
+	 */
 	public double y2;
 	
 	/**
@@ -44,7 +56,7 @@ public class Rectangle implements Cloneable {
 	 * @return height
 	 */
 	public double get_height() {
-		return this.y2 - this.y1;
+		return this.y2 - this.y1 + 1;
 	}
 
 	/**
@@ -52,7 +64,7 @@ public class Rectangle implements Cloneable {
 	 * @return width
 	 */
 	public double get_width() {
-		return this.x2 - this.x1;
+		return this.x2 - this.x1 + 1;
 	}
 	
 	/**
@@ -130,16 +142,6 @@ public class Rectangle implements Cloneable {
 	public boolean intersects(HorizSegment hs) {
 		if ((this.y1 > hs.y) || (this.y2 < hs.y)) return false;		
 		return (hs.x1 <= this.x2) && (hs.x2 >= this.x1);
-	}
-	
-	/**
-	 * Returns this rectangle as two points. First element is bottom-left corner,
-	 * second element is top-right corner
-	 * @return two-element array containing extreme points
-	 */
-	public Vector[] as_vector2() {
-		Vector[] out = {new Vector(this.x1, this.y2), new Vector(this.x2, this.y2)};
-		return out;
 	}
 
 	/**
