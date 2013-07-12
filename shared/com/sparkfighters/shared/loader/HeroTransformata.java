@@ -13,6 +13,8 @@ import com.sparkfighters.shared.loader.jsonobjs.hero.*;
 public class HeroTransformata {
 	/**
 	 * Transforms an AnimationData into a SmallMovingGeometry
+	 * @param ad AnimationData to transform
+	 * @return resulting SmallMovingGeometry
 	 */
 	private static SmallMovingGeometry transform(AnimationData ad) {
 		// construct an array and transcribe ArrayList into it
@@ -31,7 +33,12 @@ public class HeroTransformata {
 	
 	
 	/**
-	 * Transforms a HeroData instance into a GeometrySet instance
+	 * Transforms a HeroData instance into a GeometrySet instance.
+	 * 
+	 * Remember that it's position and velocity is (0, 0) after creation!
+	 *  
+	 * @param hd HeroData instance to transform
+	 * @return resulting GeometrySet
 	 */
 	public static GeometrySet transform(HeroData hd) {
 		SmallMovingGeometry[] gs = new SmallMovingGeometry[hd.Animations.size()];

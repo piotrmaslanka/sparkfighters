@@ -13,14 +13,18 @@ import com.sparkfighters.shared.physics.objects.Rectangle;
  *
  */
 public class SmallMovingGeometry extends Moveable {
-	private Vector position;
-	private Vector velocity;
+	private Vector position = new Vector(0, 0);
+	private Vector velocity = new Vector(0, 0);
 	
 	private Rectangle[] rectangles;
 	private Rectangle mbr;
 	
+	private int color = 0;
+	
 	/**
-	 * @param Immutable
+	 * @param rectangles Rectangles for use. Borrows this array,
+	 * but seeing as it's an array of immutable items, then it's also
+	 * immutable.
 	 */
 	public SmallMovingGeometry(Rectangle[] rectangles) {
 		this.rectangles = rectangles;
@@ -40,8 +44,10 @@ public class SmallMovingGeometry extends Moveable {
 	
 	public SmallMovingGeometry set_position(Vector p) {	this.position = p; return this;	}
 	public SmallMovingGeometry set_velocity(Vector v) {	this.velocity = v; return this;	}
+	public SmallMovingGeometry set_color(int color) { this.color = color; return this; }
 	public Vector get_position() { return this.position.clone(); }
 	public Vector get_velocity() { return this.velocity.clone(); }
+	public int get_color() { return this.color; }
 	
 	/**
 	 * Checks whether this geometry intersects with a stationary rectangle
@@ -74,8 +80,10 @@ public class SmallMovingGeometry extends Moveable {
 	}	
 	
 	public SmallMovingGeometry clone() {
-		return (new SmallMovingGeometry(this.rectangles)).set_position(this.position)
-														 .set_velocity(this.velocity);
+		return (new SmallMovingGeometry(this.rectangles))
+								.set_position(this.position)
+								.set_velocity(this.velocity)
+								.set_color(this.color);
 	}
 	
 

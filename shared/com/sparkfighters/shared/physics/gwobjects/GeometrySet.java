@@ -61,6 +61,15 @@ public class GeometrySet extends Moveable {
 		return this;
 	}
 	
+	public GeometrySet set_color(int color) {
+		for (SmallMovingGeometry geom : this.geoms)
+			geom.set_color(color);
+		return this;
+	}
+	
+	public int get_color() { return this.geoms[0].get_color(); }
+	
+	
 	public GeometrySet clone() {
 		SmallMovingGeometry[] ngs = new SmallMovingGeometry[this.geoms.length];
 		for (int i=0; i<ngs.length; i++)
