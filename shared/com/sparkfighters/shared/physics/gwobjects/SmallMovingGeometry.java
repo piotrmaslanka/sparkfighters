@@ -18,9 +18,7 @@ public class SmallMovingGeometry extends Moveable {
 	
 	private Rectangle[] rectangles;
 	private Rectangle mbr;
-	
-	private int color = 0;
-	
+
 	/**
 	 * @param rectangles Rectangles for use. Borrows this array,
 	 * but seeing as it's an array of immutable items, then it's also
@@ -44,10 +42,8 @@ public class SmallMovingGeometry extends Moveable {
 	
 	public SmallMovingGeometry set_position(Vector p) {	this.position = p; return this;	}
 	public SmallMovingGeometry set_velocity(Vector v) {	this.velocity = v; return this;	}
-	public SmallMovingGeometry set_color(int color) { this.color = color; return this; }
 	public Vector get_position() { return this.position.clone(); }
 	public Vector get_velocity() { return this.velocity.clone(); }
-	public int get_color() { return this.color; }
 	
 	/**
 	 * Checks whether this geometry intersects with a stationary rectangle
@@ -79,11 +75,26 @@ public class SmallMovingGeometry extends Moveable {
 		return false;
 	}	
 	
+	/**
+	 * Checks whether this geometry intersects with another geometry
+	 * @param smg other, geometry
+	 * @return intersection test result
+	 */
+	public boolean intersects(SmallMovingGeometry smg) {
+		if (!this.mbr.intersects_m2(smg.mbr, this.position, smg.position))
+			return false;
+	
+		for (Rectangle thisr : this.rectangles)
+			for (Rectangle otherr : smg.rectangles)
+				if (thisr.intersects_m2(otherr, this.position, smg.position))
+					return true;
+		return false;
+	}
+	
 	public SmallMovingGeometry clone() {
 		return (new SmallMovingGeometry(this.rectangles))
 								.set_position(this.position)
-								.set_velocity(this.velocity)
-								.set_color(this.color);
+								.set_velocity(this.velocity);
 	}
 	
 

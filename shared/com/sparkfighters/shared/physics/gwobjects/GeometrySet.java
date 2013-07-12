@@ -3,7 +3,10 @@ package com.sparkfighters.shared.physics.gwobjects;
 import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
- * A collection of integer-indexable geometries
+ * A collection of integer-indexable geometries.
+ * 
+ * Mutable. Private.
+ * 
  * @author Henrietta
  *
  */
@@ -60,15 +63,6 @@ public class GeometrySet extends Moveable {
 		this.geoms[this.currentlyPicked].set_velocity(v);
 		return this;
 	}
-	
-	public GeometrySet set_color(int color) {
-		for (SmallMovingGeometry geom : this.geoms)
-			geom.set_color(color);
-		return this;
-	}
-	
-	public int get_color() { return this.geoms[0].get_color(); }
-	
 	
 	public GeometrySet clone() {
 		SmallMovingGeometry[] ngs = new SmallMovingGeometry[this.geoms.length];

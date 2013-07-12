@@ -135,6 +135,18 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Checks whether this rectangle intersects with another rectangle
+	 * given an update in position to this rectangle.
+	 *
+	 * @param r the other rectangle
+	 * @param t update to this rectangle coordinates
+	 * @param o update to the other rectangle
+	 */	
+	public boolean intersects_m2(Rectangle r, Vector t, Vector o) {
+		return this.intersects_m2(r, t.x, t.y, o.x, o.y);
+	}
+
+	/**
 	 * Checks whether this rectangle intersects with a horizontal segment
 	 * @param hs horizontal segment to check
 	 * @return whether this rectangle intersects with horizontal segment
