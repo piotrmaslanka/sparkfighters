@@ -20,10 +20,12 @@ public enum ResourcesManager
 	INSTANCE;
 	
 	public List<HeroData> heroesData=new ArrayList<HeroData>();
+	public List<WeaponData> weaponsData=new ArrayList<WeaponData>();
 
 	public void LoadResources()
 	{
 		LoadHeroes();
+		LoadWeapons();
 	}
 	
 	private void LoadHeroes()
@@ -43,6 +45,24 @@ public enum ResourcesManager
 		}
 		
 
+	}
+	
+	private void LoadWeapons()
+	{
+		weaponsData=new ArrayList<WeaponData>();
+		
+		FileHandle[] list=HDD.getDirContent("data/weapons");
+		
+		//Directory of hero
+		for(int i=0;i<list.length;i++)
+		{
+			WeaponData WD=new WeaponData();
+			HDD.saveClass(list[i]+"/data.json", WD);
+			//WD=HDD.loadClass(list[i]+"/data.json", WeaponData.class);
+			//WD.loadTexture(list[i]+"/data.png");
+			//weaponsData.add(WD);
+		}
+		
 	}
 	
 	private void ConvertFlashJsonToOurJson(String loadPath, String savePath)
