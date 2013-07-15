@@ -1,14 +1,39 @@
 package com.sparkfighters;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.sparkfighters.client.mainexe.Engine;
+
 
 public class Main {
+	
+	public static String readFile(String filename)
+	{
+	   String content = null;
+	   File file = new File(filename); //for ex foo.txt
+	   try {
+	       FileReader reader = new FileReader(file);
+	       char[] chars = new char[(int) file.length()];
+	       reader.read(chars);
+	       content = new String(chars);
+	       reader.close();
+	   } catch (IOException e) {
+	       e.printStackTrace();
+	   }
+	   return content;
+	}
+	
 	public static void main(String[] args) 
 	{
-		int window_width=1280;
-		int window_height=720;
+
+		String s=readFile("data/cfg.txt");
+		String[] s2=s.split(" ");
+		
+		int window_width=Integer.parseInt(s2[0]);
+		int window_height=Integer.parseInt(s2[1]);
 		
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Spark Fighters";
@@ -19,8 +44,6 @@ public class Main {
 		//cfg.fullscreen=true;
 		cfg.backgroundFPS=40;
 		cfg.foregroundFPS=40;
-		
-		Engine.INSTANCE.Create(window_width,window_height);
 		
 		new LwjglApplication(new SparkFightersGame(), cfg);
 	}

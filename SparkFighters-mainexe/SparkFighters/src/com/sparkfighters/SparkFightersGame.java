@@ -2,13 +2,6 @@ package com.sparkfighters;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.ResourcesManager.ResourcesManager;
 import com.sparkfighters.client.mainexe.Engine;
 
@@ -16,9 +9,9 @@ public class SparkFightersGame implements ApplicationListener
 {
 	@Override
 	public void create() 
-	{		
-		Engine.INSTANCE.InitEngine();
+	{
 		ResourcesManager.INSTANCE.LoadResources();
+		Engine.INSTANCE.InitEngine(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 	}
 
 	@Override
