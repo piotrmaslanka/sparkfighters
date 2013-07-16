@@ -1,5 +1,5 @@
 {
-  "HeroName": "enemy_hero",
+  "name": "enemy_hero",
   "Animations": [
     {
       "id": 0,

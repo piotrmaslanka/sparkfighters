@@ -1,5 +1,5 @@
 {
-  "HeroName": "my_hero",
+  "name": "my_hero",
   "Animations": [
     {
       "id": 0,

@@ -60,9 +60,10 @@ public enum ResourcesManager
 		{
 			WeaponData WD=new WeaponData();
 			//277 x 63
-			//WD.right=new Rectangle(0.0f,0.0f,277.0f,63.0f);
-			//WD.left=new Rectangle(227.0f,63.0f,554.0f,126.0f);
-			//HDD.saveClass(list[i]+"/data.json", WD);
+			/*WD.right=new Rectangle(0.0f,0.0f,277.0f,63.0f);
+			WD.left=new Rectangle(227.0f,63.0f,554.0f,126.0f);
+			WD.name="Weapon "+i;
+			HDD.saveClass(list[i]+"/data.json", WD);*/
 			WD=HDD.loadClass(list[i]+"/data.json", WeaponData.class);
 			WD.loadTexture(list[i]+"/data.png");
 			weaponsData.add(WD);
@@ -73,7 +74,7 @@ public enum ResourcesManager
 	private void ConvertFlashJsonToOurJson(String loadPath, String savePath)
 	{
 		HeroData HD=new HeroData();
-		HD.HeroName=loadPath;
+		HD.name=loadPath;
 		
 		FileHandle fh=HDD.getFileHandle(loadPath);
 		String json=fh.readString();
