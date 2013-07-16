@@ -60,8 +60,8 @@ public enum ResourcesManager
 		{
 			WeaponData WD=new WeaponData();
 			//277 x 63
-			//WD.right=new Rectangle(0.0f,0.0f,227.0f,63.0f);
-			//WD.left=new Rectangle(227.0f,63.0f,454.0f,126.0f);
+			//WD.right=new Rectangle(0.0f,0.0f,277.0f,63.0f);
+			//WD.left=new Rectangle(227.0f,63.0f,554.0f,126.0f);
 			//HDD.saveClass(list[i]+"/data.json", WD);
 			WD=HDD.loadClass(list[i]+"/data.json", WeaponData.class);
 			WD.loadTexture(list[i]+"/data.png");
