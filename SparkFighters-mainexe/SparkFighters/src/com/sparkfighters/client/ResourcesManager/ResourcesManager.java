@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,6 +25,7 @@ public enum ResourcesManager
 
 	public void LoadResources()
 	{
+		Texture.setEnforcePotImages(false);
 		LoadHeroes();
 		LoadWeapons();
 	}
@@ -57,10 +59,13 @@ public enum ResourcesManager
 		for(int i=0;i<list.length;i++)
 		{
 			WeaponData WD=new WeaponData();
-			HDD.saveClass(list[i]+"/data.json", WD);
-			//WD=HDD.loadClass(list[i]+"/data.json", WeaponData.class);
-			//WD.loadTexture(list[i]+"/data.png");
-			//weaponsData.add(WD);
+			//277 x 63
+			//WD.right=new Rectangle(0.0f,0.0f,227.0f,63.0f);
+			//WD.left=new Rectangle(227.0f,63.0f,454.0f,126.0f);
+			//HDD.saveClass(list[i]+"/data.json", WD);
+			WD=HDD.loadClass(list[i]+"/data.json", WeaponData.class);
+			WD.loadTexture(list[i]+"/data.png");
+			weaponsData.add(WD);
 		}
 		
 	}
