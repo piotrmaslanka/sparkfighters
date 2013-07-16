@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
 public class HeroData 
 {
-	public String HeroName;
+	public String name;
 	public ArrayList<AnimationData> Animations=new ArrayList<AnimationData>();
 	public Texture texture;
 	
