@@ -81,6 +81,14 @@ public enum Engine {
 		{
 			TextureRegion currentFrame=a.getKeyFrame(stateTime, true);
 			batch.draw(currentFrame, x,y);
+			TextureRegion weapon=new TextureRegion(ResourcesManager.INSTANCE.weaponsData.get(0).texture);
+			weapon.setRegion(
+					(int)ResourcesManager.INSTANCE.weaponsData.get(0).right.x1, 
+					(int)ResourcesManager.INSTANCE.weaponsData.get(0).right.y1, 
+					(int)(ResourcesManager.INSTANCE.weaponsData.get(0).right.x2-ResourcesManager.INSTANCE.weaponsData.get(0).right.x1),
+					(int)(ResourcesManager.INSTANCE.weaponsData.get(0).right.y2-ResourcesManager.INSTANCE.weaponsData.get(0).right.y1)
+					);
+			batch.draw(weapon,200,200);
 			x+=200;
 			if(x>1800)
 			{
