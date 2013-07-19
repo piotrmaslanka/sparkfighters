@@ -34,16 +34,20 @@ public class Main {
 		
 		int window_width=Integer.parseInt(s2[0]);
 		int window_height=Integer.parseInt(s2[1]);
+		Boolean fullscreen= Boolean.valueOf(s2[2]);
+		int fps=40;
 		
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Spark Fighters";
 		cfg.useGL20 = false;
+		
+		cfg.fullscreen=fullscreen;
 		cfg.width = window_width;
 		cfg.height = window_height;
+		
 		cfg.resizable=false;
-		//cfg.fullscreen=true;
-		cfg.backgroundFPS=40;
-		cfg.foregroundFPS=40;
+		cfg.backgroundFPS=fps;
+		cfg.foregroundFPS=fps;
 		
 		new LwjglApplication(new SparkFightersGame(), cfg);
 	}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.sparkfighters.patcher.WebBrowser.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?scenebuilder-classpath-element ../../../../bin?>
+
+<AnchorPane maxHeight="300.0" maxWidth="600.0" minHeight="300.0" minWidth="600.0" prefHeight="300.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.sparkfighters.patcher.Controller">
+  <!-- TODO Add Nodes -->
+  <children>
+    <ScrollPane id="ScrollPane" hbarPolicy="AS_NEEDED" layoutX="25.0" layoutY="14.0" prefHeight="200.0" prefViewportHeight="200.0" prefViewportWidth="200.0" prefWidth="556.0" vbarPolicy="AS_NEEDED">
+      <content>
+        <WebBrowser fx:id="webBrowser" maxHeight="8.0E8" maxWidth="600.0" minHeight="183.0" minWidth="200.0" prefHeight="198.0" prefWidth="553.0" snapToPixel="true" />
+      </content>
+    </ScrollPane>
+    <Button fx:id="buttonStart" disable="true" layoutX="509.0" layoutY="255.0" mnemonicParsing="false" onAction="#buttonStartClick" prefHeight="31.0" prefWidth="75.0" text="Launch" visible="true">
+      <font>
+        <Font name="Arial" size="12.0" fx:id="x1" />
+      </font>
+    </Button>
+    <ProgressBar fx:id="progressBar" layoutX="14.0" layoutY="255.0" prefHeight="31.0" prefWidth="477.0" progress="0.0" />
+    <Text fx:id="textMB" font="$x1" strokeType="OUTSIDE" strokeWidth="0.0" text="600,00/800,00 MB" AnchorPane.leftAnchor="491.0" AnchorPane.topAnchor="235.0" />
+    <Text fx:id="textString" font="$x1" scaleX="1.0" scaleY="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="textString" AnchorPane.bottomAnchor="-5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="235.0" />
+  </children>
+</AnchorPane>
