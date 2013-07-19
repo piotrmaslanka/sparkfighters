@@ -39,12 +39,14 @@ public class WebBrowser extends Region
                 	  webEngine.load(oldLoc);
                 	  Desktop d = Desktop.getDesktop();
                 	  URI uri=URI.create(loc);
-                	  try {
+                	  try 
+                	  {
 						d.browse(uri);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
+                	  } 
+                	  catch (IOException e) 
+                	  {
 						e.printStackTrace();
-					}
+                	  }
                   }
                 });
               }
@@ -53,23 +55,29 @@ public class WebBrowser extends Region
      
     }
     
-    private Node createSpacer() {
+    /*private Node createSpacer() 
+    {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         return spacer;
+    }*/
+    
+     @Override protected double computePrefWidth(double height) 
+    {
+        return height;
     }
  
-    @Override protected void layoutChildren() {
+    @Override protected double computePrefHeight(double width) 
+    {
+        return width;
+    }
+    
+    @Override protected void layoutChildren() 
+    {
         double w = getWidth();
         double h = getHeight();
         layoutInArea(webView,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
     }
  
-    @Override protected double computePrefWidth(double height) {
-        return 750;
-    }
- 
-    @Override protected double computePrefHeight(double width) {
-        return 500;
-    }
+   
 }
