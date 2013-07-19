@@ -20,11 +20,11 @@ public enum Engine {
 	public final int orginal_height=1080;
 	public int window_width;
 	public int window_height;
-	public float stateTime;
 	
 	public OrthographicCamera camera;
 	public SpriteBatch batch;
 	
+	public float stateTime;
 	public Array<Animation> animations=new Array<Animation>();
 	
 	
