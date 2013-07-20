@@ -1,4 +1,4 @@
-package com.sparkfighters.patcher.WebBrowser;
+package com.sparkfighters.patcher;
 
 import java.awt.Desktop;
 import java.io.IOException;
