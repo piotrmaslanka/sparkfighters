@@ -43,6 +43,9 @@ public class BackgroundWorker
 	private ArrayList<FileInfo> downloadFiles;
 	private ArrayList<FileInfo> removeFiles;
 	
+	private ArrayList<String> ignoreFiles;
+	private ArrayList<String> ignoreFolders;
+	
 	private long totalSize;
 	private long totalDownloadedSize;
 	
@@ -90,17 +93,23 @@ public class BackgroundWorker
 	{
 		textString.setText("Download files list from server");
 		
+		ignoreFiles=new ArrayList<String>();
+		ignoreFolders=new ArrayList<String>();
 		serverFiles=new ArrayList<FileInfo>();
+		
 		String serverfilestxt="";
+		String serverfilesignoretxt="";
 		try
 		{
 			serverfilestxt=getTextFromWebsiteFile("http://sparkfighters.com/patcher/server_data.dat");
+			serverfilesignoretxt=getTextFromWebsiteFile("http://sparkfighters.com/patcher/server_data_ignore.dat");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
 		
+		//server files
 		String lines[]=serverfilestxt.split("\r\n");
 		for(int i=0; i<lines.length;i++)
 		{
@@ -109,6 +118,20 @@ public class BackgroundWorker
 			long size=Long.valueOf(line[1]).longValue();
 			String date=line[2]+" "+line[3];
 			serverFiles.add(new FileInfo(path,size,date));
+		}
+		
+		//ignore list
+		String lines2[]=serverfilesignoretxt.split("\r\n");
+		for(int i=0;i<lines2.length;i++)
+		{
+			if(lines2[i].endsWith("\\")==true)
+			{
+				ignoreFolders.add(lines2[i]);
+			}
+			else
+			{
+				ignoreFiles.add(lines2[i]);
+			}
 		}
 		
 		progressBar.setProgress(0.2f);
@@ -124,10 +147,18 @@ public class BackgroundWorker
 		for(int i=0;i<serverFiles.size();i++)
 		{
 			boolean found=false;
+			boolean ignore=false;
 			for(int j=0;j<clientFiles.size();j++)
 			{
 				if(serverFiles.get(i).path.equals(clientFiles.get(j).path))
 				{
+					for(int k=0;k<ignoreFiles.size();k++)
+					{
+						if(clientFiles.get(j).path.equals(ignoreFiles.get(k))==true)
+						{
+							ignore=true;
+						}
+					}
 					if(serverFiles.get(i).size==clientFiles.get(j).size)
 					{
 						if(serverFiles.get(i).lastModify.equals(clientFiles.get(j).lastModify))
@@ -138,16 +169,41 @@ public class BackgroundWorker
 					}
 				}
 			}
+			
 			if(found==false)
 			{
-				downloadFiles.add(serverFiles.get(i));
+				if(ignore==false)
+				{
+					downloadFiles.add(serverFiles.get(i));
+				}
+
 			}
 		}
 		
 		
 		//remove file list
+		
 		for(int i=0;i<clientFiles.size();i++)
 		{
+			boolean quit=false;
+			//checking ignore list
+			for(int j=0;j<ignoreFiles.size();j++)
+			{
+				if(clientFiles.get(i).path.equals(ignoreFiles.get(j)))
+				{
+					quit=true;
+				}
+			}
+			
+			for(int j=0;j<ignoreFolders.size();j++)
+			{
+				if(clientFiles.get(i).path.startsWith(ignoreFolders.get(j))==true)
+				{
+					quit=true;
+				}
+			}
+			if(quit==true) continue;
+			
 			boolean foundOnServer=false;
 			for(int j=0;j<serverFiles.size();j++)
 			{
@@ -168,6 +224,8 @@ public class BackgroundWorker
 				removeFiles.add(clientFiles.get(i));
 			}
 		}
+		
+		
 		
 		
 		if(downloadFiles.size()==0)

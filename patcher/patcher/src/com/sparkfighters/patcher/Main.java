@@ -35,7 +35,7 @@ public class Main extends Application implements EventHandler<WindowEvent>
 	          Scene scene = new Scene(anchorPane);
 	          this.primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo.png" ))); 
 	          this.primaryStage.setScene(scene);
-	          this.primaryStage.setTitle("Spark Fighters Patcher v. 0.1.0");
+	          this.primaryStage.setTitle("Spark Fighters Patcher v. 0.8.0");
 	          this.primaryStage.centerOnScreen();
 	          this.primaryStage.setResizable(false);
 	          this.primaryStage.setOnCloseRequest(this);
