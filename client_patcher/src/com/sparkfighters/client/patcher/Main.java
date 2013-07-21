@@ -23,7 +23,6 @@ public class Main extends Application implements EventHandler<WindowEvent>
 	
 	private BackgroundWorker backgroundWorker;
 
-	@SuppressWarnings("static-access")
 	public void start(Stage primaryStage)
 	{
 		  this.primaryStage = primaryStage;	      
