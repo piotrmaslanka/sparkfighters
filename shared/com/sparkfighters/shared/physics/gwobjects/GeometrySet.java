@@ -11,12 +11,58 @@ import com.sparkfighters.shared.physics.objects.Vector;
  *
  */
 public class GeometrySet extends Moveable {
+	
+	final static int IDLE_RIGHT = 0;
+	final static int IDLE_LEFT = 1;
+	final static int RUN_RIGHT = 4;
+	final static int RUN_LEFT = 5;
+	final static int JUMP_RIGHT = 8;
+	final static int JUMP_LEFT = 9;
+	
 	private SmallMovingGeometry[] geoms;
 	private int currentlyPicked = 0;
 	
 	public GeometrySet(SmallMovingGeometry[] geometries) {
 		this.geoms = geometries.clone();
 		assert(geometries.length > 0);
+	}
+	
+	
+	/**
+	 * Set this geometry to idle or jumping - anyway, actor
+	 * has braked horizontally.
+	 * 
+	 * Only changes geometry.
+	 */
+	public void on_hbrake() {
+		int prev_direction = this.currentlyPicked & 1;
+		
+		if (Math.abs(this.get().get_velocity().y) < Rebound.VERT_EPSILON) {
+			this.set(GeometrySet.JUMP_RIGHT + prev_direction);
+		} else {
+			this.set(GeometrySet.IDLE_RIGHT + prev_direction);
+		}		
+	}
+	
+	/**
+	 * Set this geometry to running or idle, maintaining
+	 * direction stemming from current dx. Actor has braked
+	 * vertically.
+	 * 
+	 * Only changes geometry.
+	 */
+	public void on_vbrake() {
+		Vector velocity = this.get().get_velocity();
+		
+		if (Math.abs(velocity.x) < Rebound.VERT_EPSILON) {
+			// not moving at all
+			int current_dir = this.currentlyPicked & 1;
+			this.set(current_dir);
+		} else {
+			// moving
+			int direction = (velocity.x < 0) ? 1 : 0;
+			this.set(GeometrySet.RUN_RIGHT + direction);
+		}		
 	}
 	
 	/**

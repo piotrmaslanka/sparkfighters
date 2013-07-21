@@ -193,6 +193,15 @@ public class Rectangle implements Cloneable {
 		return new Rectangle(this.x1, -this.y2, this.x2, -this.y1);
 	}
 	
+	/**
+	 * Returns a rectangle translated by some vector
+	 * @param vec Vector to translate this rectangle by
+	 * @return translated rectangle
+	 */
+	public Rectangle translate(Vector vec) {
+		return new Rectangle(this.x1 + vec.x, this.y1 + vec.y, 
+							 this.x2 + vec.x, this.y2 + vec.y);
+	}
 	
 	/**
 	 * Because rectangle is immutable, we can return self

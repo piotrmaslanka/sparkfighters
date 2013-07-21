@@ -100,6 +100,39 @@ public class Vector implements Cloneable {
 	}
 	
 	/**
+	 * Returns new vector with an addition to X axis
+	 * @param dx Addition to X
+	 */
+	public Vector add_x(double dx) {
+		return new Vector(this.x + dx, this.y);
+	}
+
+	/**
+	 * Returns new vector with an addition to Y axis
+	 * @param dy Addition to Y
+	 */
+	public Vector add_y(double dy) {
+		return new Vector(this.x, this.y + dy);
+	}
+	
+	/**
+	 * Returns a new vector with x parameter forced to particular value
+	 * @param x new value of x component
+	 */
+	public Vector force_x(double x) {
+		return new Vector(x, this.y);
+	}
+
+	/**
+	 * Returns a new vector with x parameter forced to particular value
+	 * @param x new value of x component
+	 */
+	public Vector force_y(double y) {
+		return new Vector(this.x, y);
+	}
+
+	
+	/**
 	 * Returns this vector as two-element array of double
 	 * @return double[2]. First element is X coordinate, second element is Y coordinate.
 	 */

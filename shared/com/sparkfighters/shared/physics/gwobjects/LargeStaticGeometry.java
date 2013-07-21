@@ -1,5 +1,8 @@
 package com.sparkfighters.shared.physics.gwobjects;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 import com.sparkfighters.shared.physics.objects.Rectangle;
 
 /**
@@ -14,7 +17,7 @@ import com.sparkfighters.shared.physics.objects.Rectangle;
  * 
  * @author Henrietta
  */
-public class LargeStaticGeometry implements GameWorldObject {
+public class LargeStaticGeometry implements GameWorldObject, Iterable<Rectangle> {
 	private Rectangle[] rectangles;
 	
 	/**
@@ -59,6 +62,11 @@ public class LargeStaticGeometry implements GameWorldObject {
 	 */
 	public LargeStaticGeometry clone() {
 		return this;
+	}
+
+	@Override
+	public Iterator<Rectangle> iterator() {
+		return Arrays.asList(this.rectangles).iterator();
 	}
 	
 }

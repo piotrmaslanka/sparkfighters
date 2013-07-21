@@ -37,7 +37,18 @@ public class PhysicActor extends GeometrySet {
 	public boolean get_h_braked() { return this.h_braked; }
 	public boolean get_v_braked() { return this.v_braked; }
 	public boolean get_h_moving() { return this.h_moving; }
+	public Rectangle get_last_obstacle_collided() {
+		return this.last_obstacle_collided;
+	}
 	
+	public PhysicActor set_h_braked(boolean x) { this.h_braked = x; return this; }
+	public PhysicActor set_v_braked(boolean x) { this.v_braked = x; return this; }
+	public PhysicActor set_h_moving(boolean x) { this.h_moving = x; return this; }
+	
+	public PhysicActor set_last_obstacle_collided(Rectangle r) {
+		this.last_obstacle_collided = r;
+		return this;
+	}
 	
 	public PhysicActor(SmallMovingGeometry[] geometries, int color, boolean collides_platforms) {
 		super(geometries);
@@ -100,7 +111,7 @@ public class PhysicActor extends GeometrySet {
 		ps.h_braked = this.h_braked;
 		ps.v_braked = this.v_braked;	
 		if (this.last_obstacle_collided != null)
-			ps.last_obstacle_collided = this.last_obstacle_collided.clone();
+			ps.last_obstacle_collided = this.last_obstacle_collided;
 		else
 			ps.last_obstacle_collided = null;
 		ps.collides_platforms = this.collides_platforms;
