@@ -38,6 +38,13 @@ public class SmallMovingGeometry extends Moveable {
 		}
 		this.mbr = new Rectangle(mbrx1, mbry1, mbrx2, mbry2);
 	}
+	
+	/**
+	 * Return minimum bounding rectangle for this geometry
+	 */
+	public Rectangle get_mbr() {
+		return this.mbr;
+	}
 
 	
 	public SmallMovingGeometry set_position(Vector p) {	this.position = p; return this;	}
