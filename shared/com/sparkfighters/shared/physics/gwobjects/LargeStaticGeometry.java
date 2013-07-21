@@ -1,8 +1,9 @@
 package com.sparkfighters.shared.physics.gwobjects;
 
-import com.sparkfighters.shared.physics.gwobjects.GameWorldObject;
+import java.util.Arrays;
+import java.util.Iterator;
+
 import com.sparkfighters.shared.physics.objects.Rectangle;
-import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
  * A static set of rectangles, good for representing static elements of the map.
@@ -16,7 +17,7 @@ import com.sparkfighters.shared.physics.objects.Vector;
  * 
  * @author Henrietta
  */
-public class LargeStaticGeometry implements GameWorldObject {
+public class LargeStaticGeometry implements GameWorldObject, Iterable<Rectangle> {
 	private Rectangle[] rectangles;
 	
 	/**
@@ -32,17 +33,40 @@ public class LargeStaticGeometry implements GameWorldObject {
 	 * @param smg a SmallMovingGeometry to check
 	 * @return bool whether collision occurs
 	 */
-	public boolean intersects(SmallMovingGeometry smg) {
+	public boolean intersects(SmallMovingGeometry smg, double dt) {
 		for (Rectangle rect : rectangles)
-			if (smg.intersects(rect)) return true;
+			if (smg.intersects(rect, dt)) return true;
 		return false;
 	}
+	
+	/**
+	 * Checks if this collides with a GeometrySet
+	 * @param gs a GeometrySet to check
+	 * @return bool whether collision occurs
+	 */
+	public boolean intersects(GeometrySet gs, double dt) {
+		return this.intersects(gs.get(), dt);
+	}
+
+	/**
+	 * Checks if this collides with a PhysicActor
+	 * @param gs a GeometrySet to check
+	 * @return bool whether collision occurs
+	 */
+	public boolean intersects(PhysicActor gs, double dt) {
+		return this.intersects(gs.get(), dt);
+	}	
 	
 	/**
 	 * Because LSG is immutable, we can return self
 	 */
 	public LargeStaticGeometry clone() {
 		return this;
+	}
+
+	@Override
+	public Iterator<Rectangle> iterator() {
+		return Arrays.asList(this.rectangles).iterator();
 	}
 	
 }

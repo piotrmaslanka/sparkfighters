@@ -10,9 +10,21 @@ import com.sparkfighters.shared.physics.objects.HorizSegment;
  *
  */
 public class Rectangle implements Cloneable {
+	/** 
+	 * Do not modify!
+	 */
 	public double x1;
+	/** 
+	 * Do not modify!
+	 */
 	public double y1;
+	/** 
+	 * Do not modify!
+	 */
 	public double x2;
+	/** 
+	 * Do not modify!
+	 */
 	public double y2;
 	
 	/**
@@ -44,7 +56,7 @@ public class Rectangle implements Cloneable {
 	 * @return height
 	 */
 	public double get_height() {
-		return this.y2 - this.y1;
+		return this.y2 - this.y1 + 1;
 	}
 
 	/**
@@ -52,7 +64,7 @@ public class Rectangle implements Cloneable {
 	 * @return width
 	 */
 	public double get_width() {
-		return this.x2 - this.x1;
+		return this.x2 - this.x1 + 1;
 	}
 	
 	/**
@@ -88,6 +100,17 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Checks whether this rectangle contains another rectangle, offset by
+	 * an update in coordinates
+	 * @param r the another rectangle
+	 * @param t offset to the another rectangle
+	 * @return true if this rect contains the another
+	 */
+	public boolean contains_m(Rectangle r, Vector t) {
+		return this.contains(new Rectangle(r.x1 + t.x, r.y1 + t.y, r.x2 + t.x, r.y2 + t.y));
+	}
+	
+	/**
 	 * Checks whether this rectangle intersects with another rectangle
 	 * @param r rectangle to check
 	 * @return whether rectangles intersect
@@ -109,6 +132,16 @@ public class Rectangle implements Cloneable {
 
 	/**
 	 * Checks whether this rectangle intersects with another rectangle
+	 * given an update in position to this rectangle
+	 * @param r the other, stationary rectangle
+	 * @param t update to this rectangle's position
+	 */
+	public boolean intersects_m(Rectangle r, Vector t) {
+		return this.intersects_m(r, t.x, t.y);
+	}	
+	
+	/**
+	 * Checks whether this rectangle intersects with another rectangle
 	 * given an update in position to this rectangle.
 	 *
 	 * @param r the other rectangle
@@ -123,6 +156,18 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Checks whether this rectangle intersects with another rectangle
+	 * given an update in position to this rectangle.
+	 *
+	 * @param r the other rectangle
+	 * @param t update to this rectangle coordinates
+	 * @param o update to the other rectangle
+	 */	
+	public boolean intersects_m2(Rectangle r, Vector t, Vector o) {
+		return this.intersects_m2(r, t.x, t.y, o.x, o.y);
+	}
+
+	/**
 	 * Checks whether this rectangle intersects with a horizontal segment
 	 * @param hs horizontal segment to check
 	 * @return whether this rectangle intersects with horizontal segment
@@ -131,23 +176,31 @@ public class Rectangle implements Cloneable {
 		if ((this.y1 > hs.y) || (this.y2 < hs.y)) return false;		
 		return (hs.x1 <= this.x2) && (hs.x2 >= this.x1);
 	}
-	
+
 	/**
-	 * Returns this rectangle as two points. First element is bottom-left corner,
-	 * second element is top-right corner
-	 * @return two-element array containing extreme points
+	 * Returns the rectangle reflected across axis Y
+	 * @return reflected rectangle
 	 */
-	public Vector[] as_vector2() {
-		Vector[] out = {new Vector(this.x1, this.y2), new Vector(this.x2, this.y2)};
-		return out;
+	public Rectangle reflect_y() {
+		return new Rectangle(-this.x2, this.y1, -this.x1, this.y2);
 	}
 	
 	/**
-	 * Returns center of mass of this rectangle
-	 * @return center of mass
+	 * Returns the rectangle reflected across axis X
+	 * @return reflected rectangle
 	 */
-	public Vector get_center_of_mass() {
-		return new Vector((this.x2 - this.x1) / 2, (this.y2 - this.y1) / 2);
+	public Rectangle reflect_x() {
+		return new Rectangle(this.x1, -this.y2, this.x2, -this.y1);
+	}
+	
+	/**
+	 * Returns a rectangle translated by some vector
+	 * @param vec Vector to translate this rectangle by
+	 * @return translated rectangle
+	 */
+	public Rectangle translate(Vector vec) {
+		return new Rectangle(this.x1 + vec.x, this.y1 + vec.y, 
+							 this.x2 + vec.x, this.y2 + vec.y);
 	}
 	
 	/**
