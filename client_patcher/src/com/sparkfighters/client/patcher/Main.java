@@ -2,6 +2,8 @@ package com.sparkfighters.client.patcher;
 
 import java.io.IOException;
 
+import com.sparkfighters.client.monitor.Monitor;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -56,8 +58,17 @@ public class Main extends Application implements EventHandler<WindowEvent>
 
 	
 	public static void main(String[] args) 
-	{
-		launch(args);
+	{       
+		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
+		
+		if(Monitor.launch(jarName, Main.class,"Spark Fighters Patcher")==true)
+		{
+			launch(args);
+		}
+		else
+		{
+			Platform.exit();
+		}
 	}
 
 
