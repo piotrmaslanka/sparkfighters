@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane cache="false" disable="false" focusTraversable="false" minHeight="248.0" minWidth="399.9998779296875" mouseTransparent="false" prefHeight="248.0" prefWidth="462.9998779296875" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <!-- TODO Add Nodes -->
+  <children>
+    <Button ellipsisString="" layoutX="141.0" layoutY="63.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="100.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="Button" textAlignment="RIGHT" textOverrun="CLIP" />
+  </children>
+</AnchorPane>
