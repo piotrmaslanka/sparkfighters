@@ -6,6 +6,7 @@ import com.sparkfighters.shared.physics.objects.Rectangle;
 
 public class WeaponData 
 {
+	public int id;
 	public String name;
 	public float health;
 	public float shield;
