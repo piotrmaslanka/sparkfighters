@@ -50,27 +50,33 @@ public class SmallMovingGeometry extends Moveable {
 	 * @param rect other, stationary rectangle
 	 * @return intersection test result
 	 */
-	public boolean intersects(Rectangle rect) {
-		if (!this.mbr.intersects_m(rect, this.position.x, this.position.y))
+	public boolean intersects(Rectangle rect, double dt) {
+		if (!this.mbr.intersects_m(rect, this.velocity.multiply(dt).add(this.position)))
 			return false;
 		for (Rectangle r: this.rectangles)
-			if (r.intersects_m(rect, this.position.x, this.position.y))
+			if (r.intersects_m(rect, this.velocity.multiply(dt).add(this.position)))
 				return true;
 		return false;
 	}
 	
 	/**
+	 * Check whether the other rectangle contains this geometry
+	 */
+	public boolean is_contained_by(Rectangle rect, double dt) {
+		return rect.contains_m(this.mbr, this.velocity.multiply(dt).add(this.position));
+	}
+	
+	/**
 	 * Checks whether this geometry intersects with an oriented rectangle
 	 * @param rect other, oriented rectangle
-	 * @param ox the other rectangle's X position
-	 * @param oy the other rectangle's Y position
+	 * @param o the other rectangle's position
 	 * @return intersection test result
 	 */
-	public boolean intersects_m(Rectangle rect, double ox, double oy) {
-		if (!this.mbr.intersects_m2(rect, this.position.x, this.position.y, ox, oy))
+	public boolean intersects_m(Rectangle rect, Vector o, double dt) {
+		if (!this.mbr.intersects_m2(rect, this.velocity.multiply(dt).add(this.position), o))
 			return false;
 		for (Rectangle r: this.rectangles)
-			if (r.intersects_m2(rect, this.position.x, this.position.y, ox, oy))
+			if (r.intersects_m2(rect, this.velocity.multiply(dt).add(this.position), o))
 				return true;
 		return false;
 	}	
@@ -80,13 +86,15 @@ public class SmallMovingGeometry extends Moveable {
 	 * @param smg other, geometry
 	 * @return intersection test result
 	 */
-	public boolean intersects(SmallMovingGeometry smg) {
-		if (!this.mbr.intersects_m2(smg.mbr, this.position, smg.position))
+	public boolean intersects(SmallMovingGeometry smg, double dt) {
+		if (!this.mbr.intersects_m2(smg.mbr, this.velocity.multiply(dt).add(this.position),
+											 smg.velocity.multiply(dt).add(smg.position)))
 			return false;
 	
 		for (Rectangle thisr : this.rectangles)
 			for (Rectangle otherr : smg.rectangles)
-				if (thisr.intersects_m2(otherr, this.position, smg.position))
+				if (thisr.intersects_m2(otherr, this.velocity.multiply(dt).add(this.position),
+												smg.velocity.multiply(dt).add(smg.position)))
 					return true;
 		return false;
 	}

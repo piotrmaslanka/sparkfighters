@@ -30,9 +30,9 @@ public class LargeStaticGeometry implements GameWorldObject {
 	 * @param smg a SmallMovingGeometry to check
 	 * @return bool whether collision occurs
 	 */
-	public boolean intersects(SmallMovingGeometry smg) {
+	public boolean intersects(SmallMovingGeometry smg, double dt) {
 		for (Rectangle rect : rectangles)
-			if (smg.intersects(rect)) return true;
+			if (smg.intersects(rect, dt)) return true;
 		return false;
 	}
 	
@@ -41,9 +41,18 @@ public class LargeStaticGeometry implements GameWorldObject {
 	 * @param gs a GeometrySet to check
 	 * @return bool whether collision occurs
 	 */
-	public boolean intersects(GeometrySet gs) {
-		return this.intersects(gs.get());
+	public boolean intersects(GeometrySet gs, double dt) {
+		return this.intersects(gs.get(), dt);
 	}
+
+	/**
+	 * Checks if this collides with a PhysicActor
+	 * @param gs a GeometrySet to check
+	 * @return bool whether collision occurs
+	 */
+	public boolean intersects(PhysicActor gs, double dt) {
+		return this.intersects(gs.get(), dt);
+	}	
 	
 	/**
 	 * Because LSG is immutable, we can return self

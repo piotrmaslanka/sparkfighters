@@ -27,16 +27,28 @@ public class PhysicActor extends GeometrySet {
 	/**
 	 * Checks whether this actor intersects with another actor
 	 * @param a other actor
+	 * @param dt time delta
 	 * @return intersection test result
 	 */
-	public boolean intersects(PhysicActor a) {
+	public boolean intersects(PhysicActor a, double dt) {
 		if (a.color == this.color) return false;
-		return this.get().intersects(a.get());
+		return this.get().intersects(a.get(), dt);
 	}
 	
-	public boolean intersects(HorizSegment hs) {
+	public boolean intersects(Rectangle r, double dt) {
+		return this.get().intersects(r, dt);
+	}
+
+	/**
+	 * Check whether the other rectangle contains this actor
+	 */
+	public boolean is_contained_by(Rectangle rect, double dt) {
+		return this.get().is_contained_by(rect, dt);
+	}
+	
+	public boolean intersects(HorizSegment hs, double dt) {
 		if (!this.collides_platforms) return false;
-		return this.get().intersects(new Rectangle(hs.x1, hs.y, hs.x2, hs.y));
+		return this.get().intersects(new Rectangle(hs.x1, hs.y, hs.x2, hs.y), dt);
 	}
 	
 	public PhysicActor clone() {

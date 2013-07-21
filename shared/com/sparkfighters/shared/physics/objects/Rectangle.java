@@ -100,6 +100,17 @@ public class Rectangle implements Cloneable {
 	}
 	
 	/**
+	 * Checks whether this rectangle contains another rectangle, offset by
+	 * an update in coordinates
+	 * @param r the another rectangle
+	 * @param t offset to the another rectangle
+	 * @return true if this rect contains the another
+	 */
+	public boolean contains_m(Rectangle r, Vector t) {
+		return this.contains(new Rectangle(r.x1 + t.x, r.y1 + t.y, r.x2 + t.x, r.y2 + t.y));
+	}
+	
+	/**
 	 * Checks whether this rectangle intersects with another rectangle
 	 * @param r rectangle to check
 	 * @return whether rectangles intersect
@@ -119,6 +130,16 @@ public class Rectangle implements Cloneable {
 		return !((r.x1 > this.x2+tx) || (r.x2 < this.x1+tx) || (r.y1 > this.y2+ty) || (r.y2 < this.y1+ty));
 	}
 
+	/**
+	 * Checks whether this rectangle intersects with another rectangle
+	 * given an update in position to this rectangle
+	 * @param r the other, stationary rectangle
+	 * @param t update to this rectangle's position
+	 */
+	public boolean intersects_m(Rectangle r, Vector t) {
+		return this.intersects_m(r, t.x, t.y);
+	}	
+	
 	/**
 	 * Checks whether this rectangle intersects with another rectangle
 	 * given an update in position to this rectangle.

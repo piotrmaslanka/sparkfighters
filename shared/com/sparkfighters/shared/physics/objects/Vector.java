@@ -8,6 +8,7 @@ import java.lang.Math;
  * @author Henrietta
  */
 public class Vector implements Cloneable {
+	
 	public double x;
 	public double y;
 	
