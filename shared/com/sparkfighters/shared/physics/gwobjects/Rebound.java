@@ -66,11 +66,6 @@ final public class Rebound {
 					fx - actor.get().get_mbr().x1 + Rebound.VERT_EPSILON
 				));
 		actor.set_h_braked(true);
-		
-		if (actor.get_last_obstacle_collided() != rect) {
-			actor.set_v_braked(true);
-			actor.set_last_obstacle_collided(rect);
-		}		
 	}
 	
 	/**
@@ -82,11 +77,7 @@ final public class Rebound {
 					fx - actor.get().get_mbr().x2 - Rebound.VERT_EPSILON
 				));
 		actor.set_h_braked(true);
-		
-		if (actor.get_last_obstacle_collided() != rect) {
-			actor.set_v_braked(true);
-			actor.set_last_obstacle_collided(rect);
-		}		
+			
 	}
 	
 	/**
@@ -199,11 +190,21 @@ final public class Rebound {
 		if (smallest_index == 1) 	// colliding with roof
 			Rebound.actor_hit_roof(actor, rect.y1, dt);
 		
-		if (smallest_index == 2)
+		if (smallest_index == 2) {
 			Rebound.actor_hit_rightside(actor, rect.x1, dt);
+			if (actor.get_last_obstacle_collided() != rect) {
+				actor.set_v_braked(true);
+				actor.set_last_obstacle_collided(rect);
+			}	
+		}
 			
-		if (smallest_index == 3)
+		if (smallest_index == 3) {
 			Rebound.actor_hit_leftside(actor, rect.x2, dt);
+			if (actor.get_last_obstacle_collided() != rect) {
+				actor.set_v_braked(true);
+				actor.set_last_obstacle_collided(rect);
+			}			
+		}
 		
 	}
 	
