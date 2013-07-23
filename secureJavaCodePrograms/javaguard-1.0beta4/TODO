@@ -1,0 +1,50 @@
+$Id: TODO,v 1.7 2002/05/24 09:51:51 glurk Exp $
+
+
+General
+=======
+
+* JavaGuard is written and tested on MacOS X and Windows 2000, both having
+  JDK 1.3.1 installed. Because it doesn't use any special features of 1.3.x
+  it should also run under a JDK 1.2 but I haven't tested it.
+
+
+
+To Do-List for 1.0beta5
+=======================
+
+* Logfile enhancements. So far JavaGuard only lists classes that are used in
+  hardcoded references, but doesn't print the origin of such a reference.
+
+* Speed improvements. When you specify a package, class, method or field
+  pattern in the script file JavaGuard treats it as a full regular expression
+  even when the term is not directly a regular expression and only denotes
+  exactly one package, class etc. So far JavaGuard walks through the whole
+  class tree to finally find only one element.
+
+* Dependency checks. So far JavaGuard relies on the user when files are taken
+  from local directories; only the log file will print missing classes.
+
+
+
+To Do-List for 1.0 (final)
+==========================
+
+* Full API documentation. Currently there are still some parts which are
+  either undocumented or documented only suboptimal ;-)
+
+* Documentation and user guide how to use JavaGuard. Currently there's only
+  quite few information in the README.txt file.
+
+
+
+Post 1.0 (ideas collection)
+===========================
+
+* Pluggable API to allow custom modules influence how JavaGuard works;
+  for example a Naming module that tells JavaGuard to rename classes,
+  methods etc. in a special way.
+
+* Obfuscation of constant strings.
+
+* Better handling/special processing of Class.forName() calls.

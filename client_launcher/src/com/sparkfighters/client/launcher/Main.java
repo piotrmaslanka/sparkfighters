@@ -27,8 +27,8 @@ public class Main extends Application
 		  this.primaryStage = primaryStage;	      
 	      try 
 	      {
-	          FXMLLoader loader = new FXMLLoader();
-	          anchorPane = (AnchorPane) loader.load(Main.class.getResource("layouts/LoginScreen.fxml"));
+	          //FXMLLoader loader = new FXMLLoader();
+	          anchorPane = (AnchorPane) FXMLLoader.load(Main.class.getResource("layouts/LoginScreen.fxml"));
 	          Scene scene = new Scene(anchorPane);
 	          this.primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo.png" ))); 
 	          this.primaryStage.setScene(scene);
@@ -55,8 +55,7 @@ public class Main extends Application
 
 	public static void main(String[] args) 
 	{
-		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
-		
+		/*String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
 		if(Monitor.launch(jarName, Main.class,"Spark Fighters Launcher")==true)
 		{
 			launch(args);
@@ -64,7 +63,7 @@ public class Main extends Application
 		else
 		{
 			Platform.exit();
-		}
+		}*/
 	}
 
 
