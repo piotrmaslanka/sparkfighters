@@ -3,7 +3,6 @@ package com.sparkfighters.shared.debug.physics;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.sparkfighters.shared.physics.objects.*;
@@ -77,6 +76,64 @@ public class Collisions {
 		}
 		
 		assertTrue(ps.get_position().y - 35 < 0.14);		
+		assertTrue(ps.get_v_braked());
 	}
 	
+	@Test
+	public void testPlatformCollisionWithAnchor() {
+		PhysicActor ps = Collisions.make_dummy_actor();
+		ps.set_position(new Vector(20, 40));
+		
+		HorizSegment hs = new HorizSegment(0, 1000, 30);
+		this.world.add_platform(hs);
+		this.world.add_actor(ps);
+		
+		for (int i=0; i<1000; i++) {
+			this.world.advance_gravity(1);
+			this.world.advance_collisions(1);
+			this.world.advance_movement(1);
+		}
+		
+		assertTrue(ps.get_position().y - 35 < 0.14);
+		assertTrue(ps.get_v_braked());
+	}	
+
+	
+	@Test
+	public void testPlatformCollisionSomewhereElse() {
+		PhysicActor ps = Collisions.make_dummy_actor();
+		ps.set_position(new Vector(20, 40));
+		
+		HorizSegment hs = new HorizSegment(500, 1000, 30);
+		this.world.add_platform(hs);
+		this.world.add_actor(ps);
+		
+		for (int i=0; i<1000; i++) {
+			this.world.advance_gravity(1);
+			this.world.advance_collisions(1);
+			this.world.advance_movement(1);
+		}
+		
+		assertTrue(ps.get_position().y - 5 < 0.14);
+		assertTrue(ps.get_v_braked());
+	}	
+	
+	@Test
+	public void testPlatformCollisionAnchorless() {
+		PhysicActor ps = Collisions.make_dummy_actor();
+		ps.set_collides_platforms(false).set_position(new Vector(20, 40));
+		
+		HorizSegment hs = new HorizSegment(0, 1000, 30);
+		this.world.add_platform(hs);
+		this.world.add_actor(ps);
+		
+		for (int i=0; i<1000; i++) {
+			this.world.advance_gravity(1);
+			this.world.advance_collisions(1);
+			this.world.advance_movement(1);
+		}
+		
+		assertTrue(ps.get_position().y - 5 < 0.14);
+		assertTrue(ps.get_v_braked());
+	}		
 }

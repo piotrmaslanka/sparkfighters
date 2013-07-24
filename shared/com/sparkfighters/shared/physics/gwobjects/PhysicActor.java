@@ -38,6 +38,7 @@ public class PhysicActor extends GeometrySet {
 	
 	private Rectangle last_obstacle_collided = null; 
 	
+	public boolean get_collides_platforms() { return this.collides_platforms; }
 	public double get_gravity_factor() { return this.gravity_factor; }
 	public boolean get_h_braked() { return this.h_braked; }
 	public boolean get_v_braked() { return this.v_braked; }
@@ -46,6 +47,7 @@ public class PhysicActor extends GeometrySet {
 		return this.last_obstacle_collided;
 	}
 	
+	public PhysicActor set_collides_platforms(boolean x) { this.collides_platforms = x; return this; }
 	public PhysicActor set_h_braked(boolean x) { this.h_braked = x; return this; }
 	public PhysicActor set_v_braked(boolean x) { this.v_braked = x; return this; }
 	public PhysicActor set_h_moving(boolean x) { this.h_moving = x; return this; }
