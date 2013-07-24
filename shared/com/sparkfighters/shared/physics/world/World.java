@@ -12,7 +12,7 @@ import com.sparkfighters.shared.physics.gwobjects.*;
  * @author Henrietta
  */
 public class World implements Cloneable {
-	public LargeStaticGeometry lsg = null;
+	public LargeStaticGeometry lsg = new LargeStaticGeometry(new Rectangle[0]);
 	public Vector<PhysicActor> actors = new Vector<>();
 	public Vector<HorizSegment> platforms = new Vector<>();
 	public Rectangle world_area = null;
