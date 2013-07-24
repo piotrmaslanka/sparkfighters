@@ -55,15 +55,16 @@ public class Main extends Application
 
 	public static void main(String[] args) 
 	{
-		/*String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
-		if(Monitor.launch(jarName, Main.class,"Spark Fighters Launcher")==true)
+		Monitor m=new Monitor();
+		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
+		if(m.launch(jarName, Main.class,"Spark Fighters Launcher")==true)
 		{
 			launch(args);
 		}
 		else
 		{
 			Platform.exit();
-		}*/
+		}
 	}
 
 
