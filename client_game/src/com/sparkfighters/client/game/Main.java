@@ -42,7 +42,7 @@ public class Main {
 			int fps=40;
 			
 			LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-			cfg.title = "Spark Fighters";
+			cfg.title = "Spark Fighters Game";
 			cfg.useGL20 = false;
 			
 			cfg.fullscreen=fullscreen;
