@@ -1,10 +1,6 @@
 package com.sparkfighters.client.game.singletons;
 
-import java.awt.Desktop;
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -43,7 +39,7 @@ public enum Logger
 	
 	public enum LogType
 	{
-		INFO, WARNING,ERROR, FATALERROR;
+		INFO, DEBUG, WARNING, ERROR, FATALERROR;
 	}
 	
 	public void write(String text, LogType lt)
