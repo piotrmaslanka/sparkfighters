@@ -7,11 +7,12 @@ import com.sparkfighters.shared.physics.gwobjects.*;
 /**
  * World, as seen by physics only.
  * 
- * This does not, at all, apply gravity!!!
+ * Cloning this object is responsibility of the owner. This object
+ * does not know how to clone itself
  * 
  * @author Henrietta
  */
-public class World implements Cloneable {
+public class World {
 	public LargeStaticGeometry lsg = new LargeStaticGeometry(new Rectangle[0]);
 	public Vector<PhysicActor> actors = new Vector<>();
 	public Vector<HorizSegment> platforms = new Vector<>();
@@ -95,11 +96,4 @@ public class World implements Cloneable {
 					));
 	}
 	
-	/**
-	 * CLONING WILL NOT PRESERVE WORLD PROCESSOR!!!
-	 * IT IS DUTY OF PARENT CLASS TO SET IT UP LATER!!!
-	 */
-	public World clone() {
-		return null;
-	}
 }
