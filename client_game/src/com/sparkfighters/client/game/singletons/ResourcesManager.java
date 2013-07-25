@@ -11,8 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sparkfighters.client.game.HDD;
-import com.sparkfighters.client.game.loader.HeroDataClient;
-import com.sparkfighters.client.game.loader.WeaponDataClient;
+import com.sparkfighters.client.game.resources.HeroDataClient;
+import com.sparkfighters.client.game.resources.WeaponDataClient;
 import com.sparkfighters.shared.loader.jsonobjs.hero.AnimationData;
 import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
 import com.sparkfighters.shared.physics.objects.Rectangle;
@@ -44,7 +44,7 @@ public enum ResourcesManager
 		{
 			//ConvertFlashJsonToOurJson(list[i]+"/data.json","data/"+list[i].name()+"_new.json");
 			HeroDataClient HD=new HeroDataClient();
-			HD=HDD.loadClass(list[i]+"/data.json", HeroDataClient.class);
+			HD= HDD.loadClass(list[i]+"/data.json", HeroDataClient.class);
 			HD.loadTexture(list[i]+"/data.png");
 			heroesData.add(HD);
 		}

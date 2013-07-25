@@ -1,16 +1,11 @@
-package com.sparkfighters.client.game.loader;
-
-import java.util.ArrayList;
+package com.sparkfighters.client.game.resources;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
+import com.sparkfighters.shared.loader.jsonobjs.hero.WeaponData;
 
-
-
-public class HeroDataClient extends HeroData
+public class WeaponDataClient extends WeaponData implements Cloneable
 {
-
 	public Texture texture;
 	
 	public void loadTexture(String filePath)

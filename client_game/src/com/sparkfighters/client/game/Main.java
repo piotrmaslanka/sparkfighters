@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.sparkfighters.client.game.singletons.Logger;
 import com.sparkfighters.client.monitor.Monitor;
 
 
@@ -15,13 +16,15 @@ public class Main {
 	{
 	   String content = null;
 	   File file = new File(filename); //for ex foo.txt
-	   try {
+	   try 
+	   {
 	       FileReader reader = new FileReader(file);
 	       char[] chars = new char[(int) file.length()];
 	       reader.read(chars);
 	       content = new String(chars);
 	       reader.close();
-	   } catch (IOException e) {
+	   } catch (IOException e)
+	   {
 	       e.printStackTrace();
 	   }
 	   return content;
@@ -29,6 +32,8 @@ public class Main {
 	
 	public static void main(String[] args) 
 	{
+		Logger.INSTANCE.write("SparkFightersGame.jar", Logger.LogType.INFO);
+		
 		Monitor m=new Monitor();
 		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
 		if(m.launch(jarName, Main.class,"Spark Fighters Game")==true)

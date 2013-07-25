@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.sparkfighters.client.game.enums.Debug;
 
 public enum GameEngine 
 {
@@ -16,12 +17,12 @@ public enum GameEngine
 	public final int orginal_height=1080;
 	public int window_width;
 	public int window_height;
+	public Debug debug=Debug.ALLMETHODS;
 	
 	public OrthographicCamera camera;
 	public SpriteBatch batch;
 	
 	public float stateTime;
-	public Array<Animation> animations=new Array<Animation>();
 	
 	
 	public void InitEngine(int window_width,int window_height)
@@ -35,29 +36,7 @@ public enum GameEngine
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
 		
-		stateTime = 0f;
-		
-		
-		for(int i=0; i<ResourcesManager.INSTANCE.heroesData.size();i++)
-		{
-			for(int j=0;j<ResourcesManager.INSTANCE.heroesData.get(i).Animations.size();j++)
-			{
-				TextureRegion[] frames=new TextureRegion[ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).frames.size()];
-				
-				for(int k=0;k<ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).frames.size();k++)
-				{
-					int x=(int)ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).frames.get(k).x1;
-				    int y=(int)ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).frames.get(k).y1;
-				    int w=(int)ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).frames.get(k).x2-x;
-				    int h=(int)ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).frames.get(k).y2-y;
-					TextureRegion tr=new TextureRegion(ResourcesManager.INSTANCE.heroesData.get(i).texture);
-					tr.setRegion(x,y, w, h);
-					frames[k]=tr;
-				}
-				Animation a=new Animation(ResourcesManager.INSTANCE.heroesData.get(i).Animations.get(j).speedOfAnimation,frames);
-				animations.add(a);
-			}
-		}
+		stateTime = 0f;	
 	}
 	
 	public void ProcessData()
@@ -73,25 +52,29 @@ public enum GameEngine
 		batch.begin();
 		stateTime += Gdx.graphics.getDeltaTime(); 
 		int x=20,y=20;
-		for(Animation a:animations)
+		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.size();i++)
 		{
-			TextureRegion currentFrame=a.getKeyFrame(stateTime, true);
-			batch.draw(currentFrame, x,y);
-			TextureRegion weapon=new TextureRegion(ResourcesManager.INSTANCE.weaponsData.get(0).texture);
-			weapon.setRegion(
-					(int)ResourcesManager.INSTANCE.weaponsData.get(0).right.x1, 
-					(int)ResourcesManager.INSTANCE.weaponsData.get(0).right.y1, 
-					(int)(ResourcesManager.INSTANCE.weaponsData.get(0).right.x2-ResourcesManager.INSTANCE.weaponsData.get(0).right.x1),
-					(int)(ResourcesManager.INSTANCE.weaponsData.get(0).right.y2-ResourcesManager.INSTANCE.weaponsData.get(0).right.y1)
-					);
-			batch.draw(weapon,200,200);
-			x+=200;
-			if(x>1800)
+			for(int j=0;j<ResourcesManager.INSTANCE.heroesData.get(i).animationsDrawable.size();j++)
 			{
-				x=20;
-				y+=200;
+				TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(i).animationsDrawable.get(j).getKeyFrame(stateTime, true);
+				batch.draw(currentFrame, x,y);
+				TextureRegion weapon=new TextureRegion(ResourcesManager.INSTANCE.weaponsData.get(0).texture);
+				weapon.setRegion(
+						(int)ResourcesManager.INSTANCE.weaponsData.get(0).right.x1, 
+						(int)ResourcesManager.INSTANCE.weaponsData.get(0).right.y1, 
+						(int)(ResourcesManager.INSTANCE.weaponsData.get(0).right.x2-ResourcesManager.INSTANCE.weaponsData.get(0).right.x1),
+						(int)(ResourcesManager.INSTANCE.weaponsData.get(0).right.y2-ResourcesManager.INSTANCE.weaponsData.get(0).right.y1)
+						);
+				batch.draw(weapon,200,200);
+				x+=200;
+				if(x>1800)
+				{
+					x=20;
+					y+=200;
+				}
 			}
 		}
+		
 		batch.end();
 
 	}
