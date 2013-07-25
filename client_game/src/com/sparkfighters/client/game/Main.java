@@ -53,7 +53,7 @@ public class Main {
 			cfg.backgroundFPS=fps;
 			cfg.foregroundFPS=fps;
 			
-			new LwjglApplication(new SparkFightersGame(), cfg);
+			new LwjglApplication(new GameListener(), cfg);
 		}
 		else
 		{

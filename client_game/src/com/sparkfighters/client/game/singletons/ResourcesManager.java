@@ -1,4 +1,4 @@
-package com.sparkfighters.client.game.ResourcesManager;
+package com.sparkfighters.client.game.singletons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sparkfighters.client.game.HDD;
+import com.sparkfighters.client.game.loader.HeroDataClient;
+import com.sparkfighters.client.game.loader.WeaponDataClient;
+import com.sparkfighters.shared.loader.jsonobjs.hero.AnimationData;
+import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
 import com.sparkfighters.shared.physics.objects.Rectangle;
 import com.sparkfighters.shared.physics.objects.Vector;
 
@@ -19,8 +23,8 @@ public enum ResourcesManager
 {
 	INSTANCE;
 	
-	public List<HeroData> heroesData=new ArrayList<HeroData>();
-	public List<WeaponData> weaponsData=new ArrayList<WeaponData>();
+	public List<HeroDataClient> heroesData=new ArrayList<HeroDataClient>();
+	public List<WeaponDataClient> weaponsData=new ArrayList<WeaponDataClient>();
 
 	public void LoadResources()
 	{
@@ -31,7 +35,7 @@ public enum ResourcesManager
 	
 	private void LoadHeroes()
 	{
-		heroesData=new ArrayList<HeroData>();
+		heroesData=new ArrayList<HeroDataClient>();
 		
 		FileHandle[] list=HDD.getDirContent("data/heroes");
 		
@@ -39,8 +43,8 @@ public enum ResourcesManager
 		for(int i=0;i<list.length;i++)
 		{
 			//ConvertFlashJsonToOurJson(list[i]+"/data.json","data/"+list[i].name()+"_new.json");
-			HeroData HD=new HeroData();
-			HD=HDD.loadClass(list[i]+"/data.json", HeroData.class);
+			HeroDataClient HD=new HeroDataClient();
+			HD=HDD.loadClass(list[i]+"/data.json", HeroDataClient.class);
 			HD.loadTexture(list[i]+"/data.png");
 			heroesData.add(HD);
 		}
@@ -50,20 +54,20 @@ public enum ResourcesManager
 	
 	private void LoadWeapons()
 	{
-		weaponsData=new ArrayList<WeaponData>();
+		weaponsData=new ArrayList<WeaponDataClient>();
 		
 		FileHandle[] list=HDD.getDirContent("data/weapons");
 		
 		//Directory of hero
 		for(int i=0;i<list.length;i++)
 		{
-			WeaponData WD=new WeaponData();
+			WeaponDataClient WD=new WeaponDataClient();
 			//277 x 63
 			/*WD.right=new Rectangle(0.0f,0.0f,277.0f,63.0f);
 			WD.left=new Rectangle(227.0f,63.0f,554.0f,126.0f);
 			WD.name="Weapon "+i;
 			HDD.saveClass(list[i]+"/data.json", WD);*/
-			WD=HDD.loadClass(list[i]+"/data.json", WeaponData.class);
+			WD=HDD.loadClass(list[i]+"/data.json", WeaponDataClient.class);
 			WD.loadTexture(list[i]+"/data.png");
 			weaponsData.add(WD);
 		}

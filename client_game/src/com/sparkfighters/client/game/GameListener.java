@@ -2,9 +2,10 @@ package com.sparkfighters.client.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.sparkfighters.client.game.ResourcesManager.ResourcesManager;
+import com.sparkfighters.client.game.singletons.GameEngine;
+import com.sparkfighters.client.game.singletons.ResourcesManager;
 
-public class SparkFightersGame implements ApplicationListener 
+public class GameListener implements ApplicationListener 
 {
 	@Override
 	public void create() 

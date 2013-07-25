@@ -1,17 +1,16 @@
-package com.sparkfighters.client.game.ResourcesManager;
+package com.sparkfighters.client.game.loader;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
 
 
 
-public class HeroData 
+public class HeroDataClient extends HeroData
 {
-	public int id;
-	public String name;
-	public ArrayList<AnimationData> Animations=new ArrayList<AnimationData>();
+
 	public Texture texture;
 	
 	public void loadTexture(String filePath)

@@ -63,12 +63,12 @@
 
 # Keep - Applications. Keep all application classes, along with their 'main'
 # methods.
--keepclasseswithmembers public class com.sparkfighters.client.game.Main,* {
+-keepclasseswithmembers public class com.sparkfighters.client.game.Main {
     public static void main(java.lang.String[]);
 }
 
 # Keep - Library. Keep all public and protected classes, fields, and methods.
--keep public class com.sparkfighters.client.game.ResourcesManager.** {
+-keep public class com.sparkfighters.client.game.**,com.sparkfighters.shared.** {
     public protected <fields>;
     public protected <methods>;
 }

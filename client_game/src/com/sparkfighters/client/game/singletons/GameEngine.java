@@ -1,4 +1,4 @@
-package com.sparkfighters.client.game;
+package com.sparkfighters.client.game.singletons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.sparkfighters.client.game.ResourcesManager.ResourcesManager;
 
 public enum GameEngine 
 {
