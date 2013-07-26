@@ -6,6 +6,9 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,12 +28,24 @@ public enum ResourcesManager
 	
 	public List<HeroDataClient> heroesData=new ArrayList<HeroDataClient>();
 	public List<WeaponDataClient> weaponsData=new ArrayList<WeaponDataClient>();
+	
+	public BitmapFont font;
 
 	public void LoadResources()
 	{
-		Texture.setEnforcePotImages(false);
+		//Texture.setEnforcePotImages(false);
+		LoadFonts();
 		LoadHeroes();
 		LoadWeapons();
+		
+	}
+	
+	private void LoadFonts()
+	{
+		Texture texture = new Texture(HDD.getFileHandle("data/font.png"));
+		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		TextureRegion tr=new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
+		font = new BitmapFont(HDD.getFileHandle("data/font.fnt"), tr, false);
 	}
 	
 	private void LoadHeroes()

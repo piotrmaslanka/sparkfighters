@@ -44,7 +44,7 @@ public class Main {
 			int window_width=Integer.parseInt(s2[0]);
 			int window_height=Integer.parseInt(s2[1]);
 			Boolean fullscreen= Boolean.valueOf(s2[2]);
-			int fps=40;
+			int fps=60;
 			
 			LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 			cfg.title = "Spark Fighters Game";

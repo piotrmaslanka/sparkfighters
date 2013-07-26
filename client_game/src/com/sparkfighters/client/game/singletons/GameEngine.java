@@ -1,6 +1,9 @@
 package com.sparkfighters.client.game.singletons;
 
+import java.util.ArrayList;
+
 import com.sparkfighters.client.game.enums.Debug;
+import com.sparkfighters.client.game.scene.Actor;
 import com.sparkfighters.client.game.tests.DrawTest;
 
 public enum GameEngine 
@@ -13,7 +16,8 @@ public enum GameEngine
 	public int window_height;
 	public Debug debug=Debug.ALLMETHODS;	
 	
-	DrawTest dt=new DrawTest();
+	public ArrayList<Actor> actors=new ArrayList<Actor>();
+	public int myHeroArrayActors;
 	
 	public void Init(int window_width,int window_height)
 	{
@@ -22,16 +26,42 @@ public enum GameEngine
 		
 		DrawEngine.INSTANCE.Init();
 		ResourcesManager.INSTANCE.LoadResources();		
+		
+		Actor a=new Actor(0,0, 0, 100, 0);
+		actors.add(a);
+		myHeroArrayActors=0;
+		
+		a=new Actor(1,1, 1, 100, 150);
+		a.setAnimation(1);
+		actors.add(a);
+		
+		a=new Actor(2,2, 2, 100, 300);
+		actors.add(a);
+		a=new Actor(3,2, 3, 100, 450);
+		actors.add(a);
+		
+		a=new Actor(4,2, 4, 100, 600);
+		actors.add(a);	
+		a=new Actor(5,2, 0, 100, 750);
+		actors.add(a);	
 	}
 	
 	public void ProcessData()
 	{
-		
+		Input.INSTANCE.processInput();
 	}
 	
 	public void Draw()
 	{	
 		DrawEngine.INSTANCE.ClearScreen();		
-		dt.runTest();	
+		
+		for(int i=0;i<actors.size();i++)
+		{
+			actors.get(i).Draw();
+			if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
+				actors.get(i).DrawDebugInfo();
+		}
+		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
+			DrawEngine.INSTANCE.DrawDebugInfo();
 	}
 }
