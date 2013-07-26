@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.sparkfighters.client.game.enums.Debug;
 import com.sparkfighters.client.game.scene.Actor;
-import com.sparkfighters.client.game.tests.DrawTest;
 
 public enum GameEngine 
 {
@@ -61,6 +60,7 @@ public enum GameEngine
 			if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
 				actors.get(i).DrawDebugInfo();
 		}
+		
 		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
 			DrawEngine.INSTANCE.DrawDebugInfo();
 	}
