@@ -28,7 +28,7 @@
          classpath="proguard/proguard.jar" />
 		<proguard configuration="proguard/client_game.pro"/>
 		
-		 <move file="../bin/data/SparkFightersGame_proguard.jar" tofile="../bin/data/SparkFightersGame.jar" verbose="true" overwrite="true" />
+		<move file="../bin/data/SparkFightersGame_proguard.jar" tofile="../bin/data/SparkFightersGame.jar" verbose="true" overwrite="true" />
     </target>
    
 </project>

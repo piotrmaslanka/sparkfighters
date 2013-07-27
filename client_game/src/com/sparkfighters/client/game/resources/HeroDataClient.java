@@ -10,7 +10,7 @@ import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
 
 
 
-public class HeroDataClient extends HeroData implements Cloneable
+public class HeroDataClient extends HeroData
 {
 
 	public Texture texture;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.shared.loader.jsonobjs.hero.WeaponData;
 
-public class WeaponDataClient extends WeaponData implements Cloneable
+public class WeaponDataClient extends WeaponData
 {
 	public Texture texture;
 	public TextureRegion right_region;
