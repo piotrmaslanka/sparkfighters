@@ -14,7 +14,7 @@ import java.io.File;
 
 public class MapImageToJson 
 {
-	MapData MD;
+	private MapData MD=new MapData();
 	
 	private void platformsToJson(String in, String out)
 	{
@@ -32,8 +32,7 @@ public class MapImageToJson
         //Dispose the Graphics
         g.dispose();
         
-        Rectangle r=new Rectangle(0,0,buffImage.getWidth(),buffImage.getHeight());
-        //MD.mapSize=r;
+        MD.mapSize=new Rectangle(0,0,buffImage.getWidth(),buffImage.getHeight());
         
         //Here 2 for loops used for iterate through each and every pixel in image
         for (int i = 0; i < buffImage.getHeight(); i++) 

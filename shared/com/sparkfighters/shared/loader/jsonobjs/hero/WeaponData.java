@@ -11,7 +11,7 @@ public class WeaponData
 	public float runSpeed;
 	public float jumpHeight;
 
-	public Rectangle left;
-	public Rectangle right;
+	public Rectangle left=new Rectangle();
+	public Rectangle right=new Rectangle();
 	
 }
