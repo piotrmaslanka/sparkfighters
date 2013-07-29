@@ -27,6 +27,14 @@ public class GeometrySet extends Moveable {
 		assert(geometries.length > 0);
 	}
 	
+	/**
+	 * Copying constructor
+	 * @param gs
+	 */
+	public GeometrySet(GeometrySet gs) {
+		this.geoms = gs.geoms.clone();
+	}
+	
 	
 	/**
 	 * Set this geometry to idle or jumping - anyway, actor

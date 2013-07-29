@@ -58,10 +58,11 @@ public class SmallMovingGeometry extends Moveable {
 	 * @return intersection test result
 	 */
 	public boolean intersects(Rectangle rect, double dt) {
-		if (!this.mbr.intersects_m(rect, this.velocity.multiply(dt).add(this.position)))
+		Vector our_update = this.velocity.multiply(dt).add(this.position);
+		if (!this.mbr.intersects_m(rect, our_update))
 			return false;
 		for (Rectangle r: this.rectangles)
-			if (r.intersects_m(rect, this.velocity.multiply(dt).add(this.position)))
+			if (r.intersects_m(rect, our_update))
 				return true;
 		return false;
 	}

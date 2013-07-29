@@ -65,6 +65,7 @@ final public class Rebound {
 		actor.set_position(actor.get_position().force_x(
 					fx - actor.get().get_mbr().x1 + Rebound.VERT_EPSILON
 				));
+		actor.set_velocity(actor.get_velocity().force_x(0));
 		actor.set_h_braked(true);
 	}
 	
@@ -76,6 +77,7 @@ final public class Rebound {
 		actor.set_position(actor.get_position().force_x(
 					fx - actor.get().get_mbr().x2 - Rebound.VERT_EPSILON
 				));
+		actor.set_velocity(actor.get_velocity().force_x(0));
 		actor.set_h_braked(true);
 			
 	}
@@ -159,14 +161,15 @@ final public class Rebound {
 		 */
 		actor.set_last_obstacle_collided(rect);
 		
-		Vector actor_pos = actor.get_position();
-		double h[] = new double[4];
-		
-		h[0] = actor_pos.add_y(actor.get().get_mbr().y2).y - rect.y2;
-		h[1] = actor_pos.add_y(actor.get().get_mbr().y1).y - rect.y1;
-		h[2] = actor_pos.add_x(actor.get().get_mbr().x1).x - rect.x1;
-		h[3] = actor_pos.add_x(actor.get().get_mbr().x2).x - rect.x2;
-		
+		Vector actor_pos = actor.get_position().add(actor.get_velocity().multiply(dt));
+		Rectangle actor_mbr = actor.get().get_mbr();
+		double h[] = {
+			actor_pos.y + actor_mbr.y1 - rect.y2,
+			actor_pos.y + actor_mbr.y2 - rect.y1,
+			actor_pos.x + actor_mbr.x2 - rect.x1,
+			actor_pos.x + actor_mbr.x1 - rect.x2
+		};
+
 		for (int i=0; i<4; i++) h[i] = Math.abs(h[i]);
 				
 		// now the question is - which of those is the smallest?

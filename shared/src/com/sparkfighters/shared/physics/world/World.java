@@ -7,75 +7,93 @@ import com.sparkfighters.shared.physics.gwobjects.*;
 /**
  * World, as seen by physics only.
  * 
- * This does not, at all, apply gravity!!!
+ * Cloning this object is responsibility of the owner. This object
+ * does not know how to clone itself
  * 
  * @author Henrietta
  */
-abstract public class World implements Cloneable {
-	private LargeStaticGeometry lsg = null;
-	private Vector<PhysicActor> actors = new Vector<>();
-	private Vector<HorizSegment> platforms = new Vector<>();
-	private Rectangle world_area = null;
+public class World {
+	public LargeStaticGeometry lsg = new LargeStaticGeometry(new Rectangle[0]);
+	public Vector<PhysicActor> actors = new Vector<>();
+	public Vector<HorizSegment> platforms = new Vector<>();
+	public Rectangle world_area = null;
 	
-	protected World(LargeStaticGeometry ls, Rectangle world_area) {
-		this.lsg = ls.clone();
+	private WorldCommand processor = null;
+	
+	static final double GRAVITY = -0.01;	// per 1 time unit, in delta y
+	
+	public World(Rectangle world_area) {
 		this.world_area = world_area.clone();
 	}
 	
-	protected void add_actor(PhysicActor ac) {
+	public World set_processor(WorldCommand p) { this.processor = p; return this; }
+	public WorldCommand get_processor() { return this.processor; }
+	
+	public World set_lsg(LargeStaticGeometry lsg) { this.lsg = lsg; return this; }
+	public LargeStaticGeometry get_lsg() { return this.lsg; }
+	
+	public void add_actor(PhysicActor ac) {
 		this.actors.add(ac);
 	}
 	
-	protected void remove_actor(PhysicActor ac) {
+	public void remove_actor(PhysicActor ac) {
 		this.actors.remove(ac);
 	}
 	
-	protected void add_platform(HorizSegment hs) {
+	public void add_platform(HorizSegment hs) {
 		this.platforms.add(hs);
 	}
 	
-	protected void remove_platform(HorizSegment hs) {
+	public void remove_platform(HorizSegment hs) {
 		this.platforms.remove(hs);
 	}
 	
 	/**
-	 * Advances the simulation by t steps
+	 * Detects collisions that were to happen if current (dx, dy) was maintained.
+	 * Higher layer needs to resolve collisions. Rebound class is on standby if
+	 * help with that is needed.
 	 * 
-	 * 1. Resolves collisions that were to happen if current (dx, dy) was maintained
-	 * 2. Moves actors
-	 * 
-	 * @param dt
+	 * @param dt time delta
 	 */
-	protected void advance(double dt) {
+	public void advance_collisions(double dt) {
 		for (PhysicActor actor : this.actors) {
 			
 			if (!actor.is_contained_by(this.world_area, dt))
-				this.on_actor_hits_world_area(actor, dt);
+				this.processor.on_actor_hits_world_area(actor, this.world_area, dt);
 			
 			// check collisions against LSG
 			if (this.lsg.intersects(actor, dt))
-				 this.on_actor_hits_obstacle(actor, this.lsg, dt);
+				 this.processor.on_actor_hits_obstacle(actor, this.lsg, dt);
 			
 			// check collisions against platforms
 			for (HorizSegment segm : this.platforms)
 				if (actor.intersects(segm, dt))
-					this.on_actor_hits_platform(actor, segm, dt);
-			
+					this.processor.on_actor_hits_platform(actor, segm, dt);			
 			
 			for (PhysicActor other : this.actors)
 				if (actor != other)
 					if (actor.intersects(other, dt))
-						this.on_actor_hits_actor(actor, other, dt);
+						this.processor.on_actor_hits_actor(actor, other, dt);
 		}
-		
-		// Advance people
+	}	
+	
+	/**
+	 * Advances actor movement by particular amount of time
+	 * @param dt time delta
+	 */
+	public void advance_movement(double dt) {
 		for (PhysicActor actor : this.actors) actor.move_by(dt);
 	}
 	
+	/**
+	 * Advances gravity by particular amount of time
+	 * @param dt time delta
+	 */
+	public void advance_gravity(double dt) {
+		for (PhysicActor actor : this.actors)
+			actor.set_velocity(actor.get_velocity().add_y(
+					World.GRAVITY*dt*actor.get_gravity_factor()
+					));
+	}
 	
-	// --------------- callbacks
-	abstract void on_actor_hits_world_area(PhysicActor ac, double dt);
-	abstract void on_actor_hits_obstacle(PhysicActor ac, LargeStaticGeometry lsg, double dt);
-	abstract void on_actor_hits_platform(PhysicActor ac, HorizSegment segm, double dt);
-	abstract void on_actor_hits_actor(PhysicActor a1, PhysicActor a2, double dt);
 }
