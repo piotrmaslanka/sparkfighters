@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.sparkfighters.client.game.enums.Debug;
 import com.sparkfighters.client.game.scene.Actor;
+import com.sparkfighters.client.game.scene.MapFragment;
 import com.sparkfighters.client.game.ultis.MapImageToJson;
 
 public enum GameEngine 
@@ -20,6 +21,8 @@ public enum GameEngine
 	public ArrayList<Actor> actors;
 	public int myHeroArrayActors;
 	
+	public MapFragment mapFragment;
+	
 	public long iteration;
 	
 	public void Init(int window_width,int window_height)
@@ -33,6 +36,8 @@ public enum GameEngine
 		iteration=0;
 		
 		actors=new ArrayList<Actor>();
+		
+		mapFragment=new MapFragment();
 		
 		Actor a=new Actor(0,0, 0, 100, 0);
 		actors.add(a);
@@ -52,19 +57,22 @@ public enum GameEngine
 		a=new Actor(5,2, 0, 100, 750);
 		actors.add(a);	
 		
-		MapImageToJson c=new MapImageToJson();
-		c.convert("p.png", "p_out.png");
+		//MapImageToJson c=new MapImageToJson();
+		//c.convert("p.png", "out.json");
 	}
 	
 	public void ProcessData()
 	{
 		Input.INSTANCE.processInput();
+		mapFragment.set(GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute(), GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute());
 		iteration++;
 	}
 	
 	public void Draw()
 	{	
 		DrawEngine.INSTANCE.ClearScreen();		
+		
+		mapFragment.Draw();
 		
 		for(int i=0;i<actors.size();i++)
 		{

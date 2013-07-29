@@ -4,10 +4,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.sparkfighters.client.game.HDD;
-import com.sparkfighters.shared.loader.jsonobjs.hero.MapData;
+import com.sparkfighters.shared.loader.jsonobjs.MapData;
 import com.sparkfighters.shared.physics.objects.HorizSegment;
 import com.sparkfighters.shared.physics.objects.Vector;
-import com.sparkfighters.shared.physics.objects.Rectangle;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +16,7 @@ public class MapImageToJson
 {
 	private MapData MD=new MapData();
 	
-	private void platformsToJson(String in, String out)
+	private void platformsToJson(String in)
 	{
         ImageIcon icon = new ImageIcon(in);
         Image image = icon.getImage();
@@ -66,7 +65,9 @@ public class MapImageToJson
         try 
         {
             //Write back modified file to file system
-            File file = new File(out);
+        	String name=in.substring(0,in.length()-4);
+        	String type=in.substring(in.length()-4,in.length());
+            File file = new File(name+"_out"+type);
             ImageIO.write(buffImage, "png", file);
         } 
         catch (Exception e) 
@@ -75,7 +76,7 @@ public class MapImageToJson
         }
 	}
 	
-	public void convert(String platformImagePath, String out)
+	public void convert(String platformImagePath, String out_json)
 	{
 		MD= new MapData();
 		MD.id=0;
@@ -86,9 +87,9 @@ public class MapImageToJson
 		MD.spawnPoints.add(new Vector(1000,1000));
 		
 		
-		platformsToJson(platformImagePath,out);
+		platformsToJson(platformImagePath);
 		
-		HDD.saveClass(out+".json", MD);
+		HDD.saveClass(out_json, MD);
     }
 	
 }

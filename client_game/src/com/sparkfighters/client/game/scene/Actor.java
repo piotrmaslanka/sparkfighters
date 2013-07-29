@@ -5,20 +5,45 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
+import com.sparkfighters.client.game.singletons.GameEngine;
 import com.sparkfighters.client.game.singletons.ResourcesManager;
 
 public class Actor 
 {
-	private int x,y;
+	private int x_absolute,y_absolute;
+	private int x_relative,y_relative;
+	
 	private int idHeroArrayResource,idWeaponArrayResource, pid;
 	private int idAnimation;
 	private float time;
 	
+	public void setX_absolute(int x)
+	{
+		this.x_absolute=x;
+		this.x_relative=this.x_absolute-GameEngine.INSTANCE.mapFragment.getX();
+	}
+	
+	public void setY_absolute(int y)
+	{
+		this.y_absolute=y;
+		this.y_relative=this.y_absolute-GameEngine.INSTANCE.mapFragment.getY();
+	}
+	
+	public int getX_absolute()
+	{
+		return this.x_absolute;
+	}
+	
+	public int getY_absolute()
+	{
+		return this.y_absolute;
+	}
+	
 	public Actor(int pid, int idHero, int idWeapon, int x, int y)
 	{
 		this.pid=pid;
-		this.x=x;
-		this.y=y;
+		this.x_absolute=x;
+		this.y_absolute=y;
 		
 		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.size();i++)
 		{
@@ -47,20 +72,22 @@ public class Actor
 		idAnimation=id;
 	}
 	
-
 	public void Draw()
 	{
 		//draw hero
+		setX_absolute(x_absolute);
+		setY_absolute(y_absolute);
+		
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
-		DrawEngine.INSTANCE.Draw(currentFrame, x,y);
+		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative);
 		
 		//draw weapon
 		int h_x=currentFrame.getRegionWidth()/2;
 		int h_y=currentFrame.getRegionHeight()/2;
 		
-		int x1=this.x+h_x;
-		int y1=this.y+h_y;
+		int x1=this.x_relative+h_x;
+		int y1=this.y_relative+h_y;
 		
 		if(idAnimation%2==0)
 		{
@@ -95,13 +122,13 @@ public class Actor
 			int y1=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y1;
 			int y2=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y2;
 			
-			DrawEngine.INSTANCE.DrawRectangle(this.x+x1, this.y+y1, this.x+x2, this.y+y2,2,Color.RED);
+			DrawEngine.INSTANCE.DrawRectangle(this.x_relative+x1, this.y_relative+y1, this.x_relative+x2, this.y_relative+y2,2,Color.RED);
 		}
 		
 		//draw synchro point
 		int x=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x;
 		int y=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y;
-		DrawEngine.INSTANCE.DrawPoint(this.x+x, this.y+y,5, Color.YELLOW);
+		DrawEngine.INSTANCE.DrawPoint(this.x_relative+x, this.y_relative+y,5, Color.YELLOW);
 		
 		//draw Data about hero
 		DrawEngine.INSTANCE.DrawText(x3,y3,color,font,
@@ -109,7 +136,8 @@ public class Actor
 				" HeroID="+ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).id+
 				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).id+
 				" AnimationID="+idAnimation+
-				" Relative(x,y)=("+this.x+","+this.y+")"
+				" Relative(x,y)=("+this.x_relative+","+this.y_relative+")"+
+				" Absolute(x,y)=("+this.x_absolute+","+this.y_absolute+")"
 				);
 	}
 	

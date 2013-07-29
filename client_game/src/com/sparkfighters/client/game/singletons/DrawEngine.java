@@ -68,6 +68,15 @@ public enum DrawEngine
 		shape.end();
 	}
 	
+	public void DrawLine(int x,int y,int x2,int y2, int size, Color color)
+	{
+		Gdx.gl10.glLineWidth(size);
+		shape.begin(ShapeType.Line);
+		shape.setColor(color);
+		shape.line(x, y, x2, y2);
+		shape.end();
+	}
+	
 	public void DrawText(int x, int y, Color color,BitmapFont font, String text)
 	{
 		font.setColor(color);
@@ -98,6 +107,8 @@ public enum DrawEngine
 			GameEngine.INSTANCE.actors.get(i).DrawDebugInfo(0,h,font,color);
 			h-=space_h;
 		}
-					
+			
+		//debug about map
+		GameEngine.INSTANCE.mapFragment.DrawDebugInfo();
 	}
 }

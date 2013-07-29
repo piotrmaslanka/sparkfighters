@@ -3,7 +3,7 @@ package com.sparkfighters.client.game.resources;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.sparkfighters.shared.loader.jsonobjs.hero.WeaponData;
+import com.sparkfighters.shared.loader.jsonobjs.WeaponData;
 
 public class WeaponDataClient extends WeaponData
 {

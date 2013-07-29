@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.client.game.resources.HeroDataClient;
+import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
 import com.sparkfighters.shared.loader.jsonobjs.hero.AnimationData;
 import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
@@ -28,16 +29,17 @@ public enum ResourcesManager
 	
 	public List<HeroDataClient> heroesData=new ArrayList<HeroDataClient>();
 	public List<WeaponDataClient> weaponsData=new ArrayList<WeaponDataClient>();
+	public MapDataClient map=new MapDataClient(); 
 	
 	public BitmapFont font;
 
 	public void LoadResources()
 	{
-		//Texture.setEnforcePotImages(false);
+		Texture.setEnforcePotImages(false);
 		LoadFonts();
 		LoadHeroes();
 		LoadWeapons();
-		
+		LoadMap();
 	}
 	
 	private void LoadFonts()
@@ -89,6 +91,13 @@ public enum ResourcesManager
 		
 	}
 	
+	private void LoadMap()
+	{
+		map=new MapDataClient();
+		String path="data/maps/0";
+		map=HDD.loadClass(path+"/data.json", MapDataClient.class);
+		map.loadTexture(path+"/data.png");
+	}
 	
 }
 
