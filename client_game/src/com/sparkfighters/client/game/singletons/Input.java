@@ -11,12 +11,12 @@ public enum Input
 {
 	INSTANCE;
 	
-	private int x;
-	private int y;
+	private int x_relative,y_relative;
+	private int x_absolute,y_absolute;
 	
-	public int getX() {return x;}
+	public int getX() {return x_absolute;}
 
-	public int getY() {return y;}
+	public int getY() {return y_absolute;}
 
 	public void processInput()
 	{
@@ -51,8 +51,11 @@ public enum Input
 	private void processMouse()
 	{
 		float zoom=(float)GameEngine.INSTANCE.orginal_width/(float)GameEngine.INSTANCE.window_width;
-		x=(int)(Gdx.input.getX()*zoom);
-		y=GameEngine.INSTANCE.orginal_height-(int)(Gdx.input.getY()*zoom);
+		x_relative=(int)(Gdx.input.getX()*zoom);
+		y_relative=GameEngine.INSTANCE.orginal_height-(int)(Gdx.input.getY()*zoom);
+		
+		x_absolute=x_relative+GameEngine.INSTANCE.mapFragment.getX();
+		y_absolute=y_relative+GameEngine.INSTANCE.mapFragment.getY();
 		
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) 
 		{
@@ -68,7 +71,10 @@ public enum Input
 	
 	public void DrawDebugInfo(int x, int y, BitmapFont font, Color color)
 	{
-		DrawEngine.INSTANCE.DrawText(x,y,color,font,"Mouse-relative(x,y)=("+getX()+","+getY()+")");
+		DrawEngine.INSTANCE.DrawText(x,y,color,font,
+				"Mouse-relative(x,y)=("+x_relative+","+y_relative+")"+
+				" Mouse-absolute(x,y)=("+x_absolute+","+y_absolute+")"		
+				);
 	}
 	
 

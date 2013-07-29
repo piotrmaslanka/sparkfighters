@@ -59,7 +59,7 @@ public class MapFragment
 
 	public void DrawDebugInfo(int x, int y, BitmapFont font, Color color) 
 	{
-		DrawEngine.INSTANCE.DrawText(x,y,color,font,"Map_fragment(x,y)=("+getX()+","+getY()+")");
+		DrawEngine.INSTANCE.DrawText(x,y,color,font,"Map-fragment(x,y)=("+getX()+","+getY()+")");
 		
 		//debug platforms
 		for(int i=0;i<ResourcesManager.INSTANCE.map.platforms.size();i++)
