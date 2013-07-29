@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.hero.MapData;
+import com.sparkfighters.shared.physics.objects.HorizSegment;
 import com.sparkfighters.shared.physics.objects.Vector;
 import com.sparkfighters.shared.physics.objects.Rectangle;
 
@@ -18,10 +19,8 @@ public class MapImageToJson
 	
 	private void platformsToJson(String in, String out)
 	{
-		// Get Image
         ImageIcon icon = new ImageIcon(in);
         Image image = icon.getImage();
-        // Create empty BufferedImage, sized to Image
         BufferedImage buffImage =
                 new BufferedImage(
                         image.getWidth(null),
@@ -29,35 +28,36 @@ public class MapImageToJson
                         BufferedImage.TYPE_INT_ARGB);
         Graphics g = buffImage.createGraphics();
         g.drawImage(image, 0, 0, null);
-        //Dispose the Graphics
         g.dispose();
         
-        MD.mapSize=new Rectangle(0,0,buffImage.getWidth(),buffImage.getHeight());
+        MD.mapSize.x1=0;
+        MD.mapSize.y1=0;
+        MD.mapSize.x2=buffImage.getWidth();
+        MD.mapSize.y2=buffImage.getHeight();
         
-        //Here 2 for loops used for iterate through each and every pixel in image
         for (int i = 0; i < buffImage.getHeight(); i++) 
         {
+        	boolean platform=false;
+        	int x1=-1,x2=-1;
+        	int y=buffImage.getHeight()-i;
+        	
             for (int j = 0; j < buffImage.getWidth(); j++) 
             {
-                //signed bit shift right
-                /*
-                How to extract different color components
-                blue = pix & 0xFF;
-                green = (pix>>8) & 0xFF;
-                red = (pix>>16) & 0xFF;
-                alpha = (pix>>24) & 0xFF;
-                 */
+
                 int alpha = (buffImage.getRGB(j, i) >> 24) & 0xff;
                 if (alpha == 0) 
                 {
-                   //Now we will have pixel with Alpha 0 (Transparent pixel)
-                   //As example If you need to fill transparent pixels with white color
-                   //use this code 
-                   //buffImage.setRGB(i, j, Color.white.getRGB());
-                   //buffImage.setRGB(i, j, 0);
+                	if(platform==true)
+                	{
+                		platform=false;     
+                		HorizSegment HS=new HorizSegment(x1,x2,y);
+                		MD.platforms.add(HS);
+                	}
                 } 
                 else 
                 {
+                	if(platform==false) {x1=j;platform=true;}
+                	x2=j;
                 	buffImage.setRGB(j, i, Color.red.getRGB());
                 }
             }
@@ -77,7 +77,7 @@ public class MapImageToJson
 	
 	public void convert(String platformImagePath, String out)
 	{
-		MapData MD= new MapData();
+		MD= new MapData();
 		MD.id=0;
 		MD.name="first map";
 		MD.sparkStart=new Vector(400,400);
@@ -88,7 +88,7 @@ public class MapImageToJson
 		
 		platformsToJson(platformImagePath,out);
 		
-		HDD.saveClass(out+".json", MapData.class);
+		HDD.saveClass(out+".json", MD);
     }
 	
 }
