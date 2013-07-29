@@ -2,9 +2,7 @@ package com.sparkfighters.client.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.sparkfighters.client.game.singletons.DrawEngine;
 import com.sparkfighters.client.game.singletons.GameEngine;
-import com.sparkfighters.client.game.singletons.ResourcesManager;
 
 public class GameListener implements ApplicationListener 
 {

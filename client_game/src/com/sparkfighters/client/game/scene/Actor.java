@@ -2,6 +2,7 @@ package com.sparkfighters.client.game.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
 import com.sparkfighters.client.game.singletons.ResourcesManager;
@@ -15,6 +16,7 @@ public class Actor
 	
 	public Actor(int pid, int idHero, int idWeapon, int x, int y)
 	{
+		this.pid=pid;
 		this.x=x;
 		this.y=y;
 		
@@ -83,7 +85,7 @@ public class Actor
 		}
 	}
 	
-	public void DrawDebugInfo()
+	public void DrawDebugInfo(int x3,int y3, BitmapFont font, Color color)
 	{
 		//draw hitboxes
 		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.size();i++)
@@ -93,13 +95,22 @@ public class Actor
 			int y1=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y1;
 			int y2=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y2;
 			
-			DrawEngine.INSTANCE.DrawRectangle(this.x+x1, this.y+y1, this.x+x2, this.y+y2, Color.RED);
+			DrawEngine.INSTANCE.DrawRectangle(this.x+x1, this.y+y1, this.x+x2, this.y+y2,2,Color.RED);
 		}
 		
 		//draw synchro point
 		int x=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x;
 		int y=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y;
 		DrawEngine.INSTANCE.DrawPoint(this.x+x, this.y+y,5, Color.YELLOW);
+		
+		//draw Data about hero
+		DrawEngine.INSTANCE.DrawText(x3,y3,color,font,
+				"PID="+pid+
+				" HeroID="+ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).id+
+				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).id+
+				" AnimationID="+idAnimation+
+				" Relative(x,y)=("+this.x+","+this.y+")"
+				);
 	}
 	
 

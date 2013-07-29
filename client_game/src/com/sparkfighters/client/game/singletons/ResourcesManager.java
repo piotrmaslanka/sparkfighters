@@ -43,7 +43,7 @@ public enum ResourcesManager
 	private void LoadFonts()
 	{
 		Texture texture = new Texture(HDD.getFileHandle("data/font.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		TextureRegion tr=new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
 		font = new BitmapFont(HDD.getFileHandle("data/font.fnt"), tr, false);
 	}

@@ -13,10 +13,13 @@ public enum GameEngine
 	public final int orginal_height=1080;
 	public int window_width;
 	public int window_height;
+	
 	public Debug debug=Debug.ALLMETHODS;	
 	
-	public ArrayList<Actor> actors=new ArrayList<Actor>();
+	public ArrayList<Actor> actors;
 	public int myHeroArrayActors;
+	
+	public long iteration;
 	
 	public void Init(int window_width,int window_height)
 	{
@@ -24,7 +27,11 @@ public enum GameEngine
 		this.window_height=window_height;	
 		
 		DrawEngine.INSTANCE.Init();
-		ResourcesManager.INSTANCE.LoadResources();		
+		ResourcesManager.INSTANCE.LoadResources();	
+		
+		iteration=0;
+		
+		actors=new ArrayList<Actor>();
 		
 		Actor a=new Actor(0,0, 0, 100, 0);
 		actors.add(a);
@@ -48,6 +55,7 @@ public enum GameEngine
 	public void ProcessData()
 	{
 		Input.INSTANCE.processInput();
+		iteration++;
 	}
 	
 	public void Draw()
@@ -57,8 +65,6 @@ public enum GameEngine
 		for(int i=0;i<actors.size();i++)
 		{
 			actors.get(i).Draw();
-			if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
-				actors.get(i).DrawDebugInfo();
 		}
 		
 		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 

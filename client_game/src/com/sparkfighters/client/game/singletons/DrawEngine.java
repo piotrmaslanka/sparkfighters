@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -49,32 +50,54 @@ public enum DrawEngine
 		batch.end();
 	}
 	
-	public void DrawRectangle(int x1,int y1,int x2,int y2, Color c)
+	public void DrawRectangle(int x1,int y1,int x2,int y2,int size, Color color)
 	{
+		Gdx.gl10.glLineWidth(size);
 		shape.begin(ShapeType.Line);
-		shape.setColor(c);
+		shape.setColor(color);
 		shape.rect(x1, y1, x2-x1, y2-y1);
 		shape.end();
 	}
 	
-	public void DrawPoint(int x,int y, int size, Color c)
+	public void DrawPoint(int x,int y, int size, Color color)
 	{
 		Gdx.gl10.glPointSize(size);
 		shape.begin(ShapeType.Point);
-		shape.setColor(c);
+		shape.setColor(color);
 		shape.point(x, y, 0);
 		shape.end();
 	}
 	
+	public void DrawText(int x, int y, Color color,BitmapFont font, String text)
+	{
+		font.setColor(color);
+		batch.begin();
+		font.draw(batch, text, x, y);
+		batch.end();
+	}
+	
+	
 	public void DrawDebugInfo()
 	{	
-		int w=GameEngine.INSTANCE.orginal_width;
+		//int w=GameEngine.INSTANCE.orginal_width;
 		int h=GameEngine.INSTANCE.orginal_height;
+		BitmapFont font=ResourcesManager.INSTANCE.font;
+		Color color=Color.GREEN;
+		int space_h=40;
 		
-		ResourcesManager.INSTANCE.font.setColor(Color.GREEN);
-		batch.begin();
-		//here debug info on screen	
-		ResourcesManager.INSTANCE.font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 0,h);
-		batch.end();
+		//FPS COUNTER
+		DrawText(0,h,color,font,"FPS: "+Gdx.graphics.getFramesPerSecond());
+		h-=space_h;
+		//Input
+		Input.INSTANCE.DrawDebugInfo(0, h, font, color);
+		h-=space_h;
+		
+		//debug about heroes
+		for(int i=0;i<GameEngine.INSTANCE.actors.size();i++)
+		{
+			GameEngine.INSTANCE.actors.get(i).DrawDebugInfo(0,h,font,color);
+			h-=space_h;
+		}
+					
 	}
 }

@@ -1,10 +1,5 @@
 package com.sparkfighters.client.patcher;
 
-import java.io.IOException;
-
-import com.sparkfighters.client.monitor.OS;
-
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
