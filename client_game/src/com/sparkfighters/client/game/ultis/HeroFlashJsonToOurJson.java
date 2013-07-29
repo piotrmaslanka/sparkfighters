@@ -12,7 +12,7 @@ import com.sparkfighters.shared.loader.jsonobjs.hero.HeroData;
 import com.sparkfighters.shared.physics.objects.Rectangle;
 import com.sparkfighters.shared.physics.objects.Vector;
 
-public class ConvertFlashJsonToOurJson 
+public class HeroFlashJsonToOurJson 
 {
 	public void convert(String loadPath, String savePath)
 	{

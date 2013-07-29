@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.sparkfighters.client.game.enums.Debug;
 import com.sparkfighters.client.game.scene.Actor;
-import com.sparkfighters.client.game.ultis.PlatformsImageToJson;
+import com.sparkfighters.client.game.ultis.MapImageToJson;
 
 public enum GameEngine 
 {
@@ -52,7 +52,7 @@ public enum GameEngine
 		a=new Actor(5,2, 0, 100, 750);
 		actors.add(a);	
 		
-		PlatformsImageToJson c=new PlatformsImageToJson();
+		MapImageToJson c=new MapImageToJson();
 		c.convert("p.png", "p_out.png");
 	}
 	

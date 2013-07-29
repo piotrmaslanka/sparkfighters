@@ -3,26 +3,21 @@ package com.sparkfighters.client.game.ultis;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.hero.MapData;
 import com.sparkfighters.shared.physics.objects.Vector;
+import com.sparkfighters.shared.physics.objects.Rectangle;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class PlatformsImageToJson 
+public class MapImageToJson 
 {
-
-	public void convert(String in, String out)
+	MapData MD;
+	
+	private void platformsToJson(String in, String out)
 	{
-		MapData MD= new MapData();
-		MD.id=0;
-		MD.name="first map";
-		MD.sparkStart=new Vector(400,400);
-		MD.spawnPoints.add(new Vector(600,600));
-		MD.spawnPoints.add(new Vector(800,800));
-		MD.spawnPoints.add(new Vector(1000,1000));
-		
 		// Get Image
         ImageIcon icon = new ImageIcon(in);
         Image image = icon.getImage();
@@ -36,10 +31,14 @@ public class PlatformsImageToJson
         g.drawImage(image, 0, 0, null);
         //Dispose the Graphics
         g.dispose();
+        
+        Rectangle r=new Rectangle(0,0,buffImage.getWidth(),buffImage.getHeight());
+        //MD.mapSize=r;
+        
         //Here 2 for loops used for iterate through each and every pixel in image
-        for (int i = 0; i < buffImage.getWidth(); i++) 
+        for (int i = 0; i < buffImage.getHeight(); i++) 
         {
-            for (int j = 0; j < buffImage.getHeight(); j++) 
+            for (int j = 0; j < buffImage.getWidth(); j++) 
             {
                 //signed bit shift right
                 /*
@@ -49,7 +48,7 @@ public class PlatformsImageToJson
                 red = (pix>>16) & 0xFF;
                 alpha = (pix>>24) & 0xFF;
                  */
-                int alpha = (buffImage.getRGB(i, j) >> 24) & 0xff;
+                int alpha = (buffImage.getRGB(j, i) >> 24) & 0xff;
                 if (alpha == 0) 
                 {
                    //Now we will have pixel with Alpha 0 (Transparent pixel)
@@ -60,10 +59,11 @@ public class PlatformsImageToJson
                 } 
                 else 
                 {
-                	buffImage.setRGB(i, j, Color.red.getRGB());
+                	buffImage.setRGB(j, i, Color.red.getRGB());
                 }
             }
         }
+        
         try 
         {
             //Write back modified file to file system
@@ -74,6 +74,22 @@ public class PlatformsImageToJson
         {
         	
         }
+	}
+	
+	public void convert(String platformImagePath, String out)
+	{
+		MapData MD= new MapData();
+		MD.id=0;
+		MD.name="first map";
+		MD.sparkStart=new Vector(400,400);
+		MD.spawnPoints.add(new Vector(600,600));
+		MD.spawnPoints.add(new Vector(800,800));
+		MD.spawnPoints.add(new Vector(1000,1000));
+		
+		
+		platformsToJson(platformImagePath,out);
+		
+		HDD.saveClass(out+".json", MapData.class);
     }
 	
 }
