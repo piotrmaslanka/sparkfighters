@@ -10,8 +10,8 @@ public class MapData
 {
 	public int id;
 	public String name;
-	public ArrayList<Vector> spawnPoints;
+	public ArrayList<Vector> spawnPoints=new ArrayList<Vector>();
 	public Vector sparkStart;
-	public ArrayList<HorizSegment> platforms;
-	public ArrayList<Rectangle> obstacles;
+	public ArrayList<HorizSegment> platforms=new ArrayList<HorizSegment>();
+	public ArrayList<Rectangle> obstacles=new  ArrayList<Rectangle>();
 }
