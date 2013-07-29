@@ -10,14 +10,18 @@ import com.sparkfighters.shared.physics.objects.HorizSegment;
  * 
  * @author Henrietta
  */
-public class PhysicActor extends GeometrySet {
-	
-	private int color = 0;
-	
+public class PhysicActor extends GeometrySet {	
+	private int color = 0;	
 	/**
 	 * Anchor controller
 	 */
 	private boolean collides_platforms = false;
+	
+	
+	/**
+	 * Gravity factor
+	 */
+	private double gravity_factor = 0;
 	
 	/**
 	 * Whether actor was forced to dy=0 on this turn
@@ -34,6 +38,8 @@ public class PhysicActor extends GeometrySet {
 	
 	private Rectangle last_obstacle_collided = null; 
 	
+	public boolean get_collides_platforms() { return this.collides_platforms; }
+	public double get_gravity_factor() { return this.gravity_factor; }
 	public boolean get_h_braked() { return this.h_braked; }
 	public boolean get_v_braked() { return this.v_braked; }
 	public boolean get_h_moving() { return this.h_moving; }
@@ -41,21 +47,23 @@ public class PhysicActor extends GeometrySet {
 		return this.last_obstacle_collided;
 	}
 	
+	public PhysicActor set_collides_platforms(boolean x) { this.collides_platforms = x; return this; }
 	public PhysicActor set_h_braked(boolean x) { this.h_braked = x; return this; }
 	public PhysicActor set_v_braked(boolean x) { this.v_braked = x; return this; }
 	public PhysicActor set_h_moving(boolean x) { this.h_moving = x; return this; }
+	public PhysicActor set_gravity_factor(double x) { this.gravity_factor = x; return this; }
 	
 	public PhysicActor set_last_obstacle_collided(Rectangle r) {
 		this.last_obstacle_collided = r;
 		return this;
 	}
 	
-	public PhysicActor(SmallMovingGeometry[] geometries, int color, boolean collides_platforms) {
-		super(geometries);
+	public PhysicActor(GeometrySet gs, int color, boolean collides_platforms) {
+		super(gs);
 		this.color = color;
-		this.collides_platforms = collides_platforms;
+		this.collides_platforms = collides_platforms;		
 	}
-	
+		
 	/**
 	 * Signals the actor that we are advancing to next round.
 	 * Call upon transition to new round
@@ -64,7 +72,7 @@ public class PhysicActor extends GeometrySet {
 		this.h_braked = false;
 		this.v_braked = false;
 	}
-	
+
 	/**
 	 * Checks whether this actor intersects with another actor
 	 * @param a other actor
@@ -110,6 +118,7 @@ public class PhysicActor extends GeometrySet {
 		ps.color = this.color;
 		ps.h_braked = this.h_braked;
 		ps.v_braked = this.v_braked;	
+		ps.gravity_factor = this.gravity_factor;
 		if (this.last_obstacle_collided != null)
 			ps.last_obstacle_collided = this.last_obstacle_collided;
 		else

@@ -17,7 +17,7 @@ import com.sparkfighters.shared.physics.objects.Rectangle;
  * 
  * @author Henrietta
  */
-public class LargeStaticGeometry implements GameWorldObject, Iterable<Rectangle> {
+public class LargeStaticGeometry implements Iterable<Rectangle> {
 	private Rectangle[] rectangles;
 	
 	/**

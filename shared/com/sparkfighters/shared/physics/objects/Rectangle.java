@@ -27,6 +27,8 @@ public class Rectangle implements Cloneable {
 	 */
 	public double y2;
 	
+	public Rectangle() {}
+	
 	/**
 	 * Constructs a rectangle from coordinates. (x1, y1) is the bottom-left corner,
 	 * and (x2, y2) is the top-right corner.
