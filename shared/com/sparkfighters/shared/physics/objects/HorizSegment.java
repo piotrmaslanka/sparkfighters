@@ -10,6 +10,8 @@ public class HorizSegment implements Cloneable {
 	public double x2;
 	public double y;
 	
+	public HorizSegment() {}
+	
 	/**
 	 * Creates a horizontal segment
 	 * @param x1 Starting X. Less than x2

@@ -12,6 +12,8 @@ public class Vector implements Cloneable {
 	public double x;
 	public double y;
 	
+	public Vector() {} 
+	
 	/**
 	 * Creates the vector from raw coordinates
 	 * @param x X coordinate
