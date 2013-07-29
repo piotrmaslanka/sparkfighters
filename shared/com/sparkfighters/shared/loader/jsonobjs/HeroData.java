@@ -1,9 +1,11 @@
 package com.sparkfighters.shared.loader.jsonobjs;
 
-public class HeroData {
+import java.util.ArrayList;
 
-	public HeroData() {
-		// TODO Auto-generated constructor stub
-	}
+public class HeroData 
+{
+	public int id;
+	public String name;
+	public ArrayList<AnimationData> Animations=new ArrayList<AnimationData>();
 
 }
