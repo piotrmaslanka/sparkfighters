@@ -1,6 +1,7 @@
 package com.sparkfighters.client.game.scene;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
 import com.sparkfighters.client.game.singletons.GameEngine;
@@ -40,8 +41,8 @@ public class MapFragment
 		if(this.x>ResourcesManager.INSTANCE.map.mapSize.x2-width) this.x=(int) (ResourcesManager.INSTANCE.map.mapSize.x2-width);
 		
 		this.y=this.y_center-(height/2);
-		//if(this.y<0) this.y=0;
-		//if(this.y>ResourcesManager.INSTANCE.map.mapSize.y2-height) this.y=(int) (ResourcesManager.INSTANCE.map.mapSize.y2);
+		if(this.y<0) this.y=0;
+		if(this.y>ResourcesManager.INSTANCE.map.mapSize.y2-height) this.y=(int) (ResourcesManager.INSTANCE.map.mapSize.y2-height);
 		
 	}
 	
@@ -49,21 +50,24 @@ public class MapFragment
 	{
 		int width=GameEngine.INSTANCE.orginal_width;
 		int height=GameEngine.INSTANCE.orginal_height;
+		int height_map=(int)ResourcesManager.INSTANCE.map.mapSize.y2;
 		
 		TextureRegion tr=new TextureRegion(ResourcesManager.INSTANCE.map.texture);
-		tr.setRegion(x, height-y, width, height);
+		tr.setRegion(x, height_map-y-height, width, height);
 		DrawEngine.INSTANCE.Draw(tr, 0, 0);
 	}
 
-	public void DrawDebugInfo() 
+	public void DrawDebugInfo(int x, int y, BitmapFont font, Color color) 
 	{
+		DrawEngine.INSTANCE.DrawText(x,y,color,font,"Map_fragment(x,y)=("+getX()+","+getY()+")");
+		
 		//debug platforms
 		for(int i=0;i<ResourcesManager.INSTANCE.map.platforms.size();i++)
 		{
-			int x1=(int) ResourcesManager.INSTANCE.map.platforms.get(i).x1;
-			int x2=(int) ResourcesManager.INSTANCE.map.platforms.get(i).x2;
-			int y1=(int) ResourcesManager.INSTANCE.map.platforms.get(i).y;
-			int y2=(int) ResourcesManager.INSTANCE.map.platforms.get(i).y;
+			int x1=(int) ResourcesManager.INSTANCE.map.platforms.get(i).x1-this.x;
+			int x2=(int) ResourcesManager.INSTANCE.map.platforms.get(i).x2-this.x;
+			int y1=(int) ResourcesManager.INSTANCE.map.platforms.get(i).y-this.y;
+			int y2=(int) ResourcesManager.INSTANCE.map.platforms.get(i).y-this.y;
 			
 			DrawEngine.INSTANCE.DrawLine(x1, y1, x2, y2, 1, Color.ORANGE);
 		}

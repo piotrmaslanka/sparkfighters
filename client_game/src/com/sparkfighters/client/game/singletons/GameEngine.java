@@ -76,6 +76,9 @@ public enum GameEngine
 		
 		for(int i=0;i<actors.size();i++)
 		{
+			actors.get(i).setX_absolute(actors.get(i).getX_absolute());
+			actors.get(i).setY_absolute(actors.get(i).getY_absolute());
+			
 			actors.get(i).Draw();
 		}
 		

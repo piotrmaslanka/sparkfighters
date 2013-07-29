@@ -100,7 +100,9 @@ public enum DrawEngine
 		//Input
 		Input.INSTANCE.DrawDebugInfo(0, h, font, color);
 		h-=space_h;
-		
+		//debug about map
+		GameEngine.INSTANCE.mapFragment.DrawDebugInfo(0,h,font,color);
+		h-=space_h;
 		//debug about heroes
 		for(int i=0;i<GameEngine.INSTANCE.actors.size();i++)
 		{
@@ -108,7 +110,6 @@ public enum DrawEngine
 			h-=space_h;
 		}
 			
-		//debug about map
-		GameEngine.INSTANCE.mapFragment.DrawDebugInfo();
+
 	}
 }

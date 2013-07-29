@@ -42,8 +42,8 @@ public class Actor
 	public Actor(int pid, int idHero, int idWeapon, int x, int y)
 	{
 		this.pid=pid;
-		this.x_absolute=x;
-		this.y_absolute=y;
+		setX_absolute(x);
+		setY_absolute(y);
 		
 		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.size();i++)
 		{
@@ -75,9 +75,6 @@ public class Actor
 	public void Draw()
 	{
 		//draw hero
-		setX_absolute(x_absolute);
-		setY_absolute(y_absolute);
-		
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
 		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative);
