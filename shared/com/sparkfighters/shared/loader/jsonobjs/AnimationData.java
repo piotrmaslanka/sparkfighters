@@ -8,7 +8,7 @@ import com.sparkfighters.shared.physics.objects.Vector;
 public class AnimationData
 {
 	public int id;
-	public Vector synchroPoint;
+	public Vector synchroPoint=new Vector();
 	public float speedOfAnimation;
 	public ArrayList<Rectangle> hitboxes=new ArrayList<Rectangle>();
 	public ArrayList<Rectangle> frames=new ArrayList<Rectangle>();
