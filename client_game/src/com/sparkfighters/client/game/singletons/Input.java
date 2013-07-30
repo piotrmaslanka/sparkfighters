@@ -42,22 +42,22 @@ public enum Input
 	{
 		 if(Gdx.input.isKeyPressed(Keys.W))
 		 {
-			 GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setY_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute()+10);
+			 //GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setY_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute()+10);
 		 }
 		
 		 if(Gdx.input.isKeyPressed(Keys.S))
 		 {
-			 GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setY_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute()-10);
+			// GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setY_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute()-10);
 		 }
 		 
 		 if(Gdx.input.isKeyPressed(Keys.A)) 
 		 {
-		    GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setX_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute()-10);
+		    //GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setX_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute()-10);
 		 }
 		 
 		 if(Gdx.input.isKeyPressed(Keys.D)) 
 		 {
-		    GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setX_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute()+10);
+		    //GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setX_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute()+10);
 		 }
 		
 	}
@@ -83,7 +83,7 @@ public enum Input
 	       
 		}
 			
-		GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setWeaponRotate(x_absolute, y_absolute);
+		//GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setWeaponRotate(x_absolute, y_absolute);
 		
 	}
 	/**

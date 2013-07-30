@@ -6,6 +6,9 @@ import com.sparkfighters.client.game.enums.Debug;
 import com.sparkfighters.client.game.scene.Actor;
 import com.sparkfighters.client.game.scene.MapFragment;
 import com.sparkfighters.client.game.ultis.MapImageToJson;
+import com.sparkfighters.shared.blueprints.ActorBlueprint;
+import com.sparkfighters.shared.loader.jsonobjs.HeroData;
+import com.sparkfighters.shared.loader.jsonobjs.WeaponData;
 /**
  * Singleton to hold all needed information about game and scene.
  * @author Kamil Iwiñski
@@ -27,8 +30,6 @@ public enum GameEngine
 	
 	public MapFragment mapFragment;
 	
-	public long iteration;
-	
 	/**
 	 * Function to configure GameEngine parameters
 	 * @param window_width
@@ -41,34 +42,22 @@ public enum GameEngine
 		
 		DrawEngine.INSTANCE.Init();
 		ResourcesManager.INSTANCE.LoadResources();	
-		
-		iteration=0;
-		
+			
+		CreateScene();
+	}
+	
+	/**
+	 * Prepare scene and feed shared
+	 */
+	private void CreateScene()
+	{
 		actors=new ArrayList<Actor>();
-		
-		mapFragment=new MapFragment();
-		
-		Actor a=new Actor(0,0, 0, 100, 0);
-		actors.add(a);
+		mapFragment=new MapFragment();	
 		myHeroArrayActors=0;
 		
-		a=new Actor(1,1, 1, 100, 150);
-		a.setAnimation(1);
-		actors.add(a);
-		
-		a=new Actor(2,2, 2, 100, 300);
-		actors.add(a);
-		a=new Actor(3,2, 3, 100, 450);
-		actors.add(a);
-		
-		a=new Actor(4,2, 4, 100, 600);
-		actors.add(a);	
-		a=new Actor(5,2, 0, 100, 750);
-		actors.add(a);	
-		
-		//MapImageToJson c=new MapImageToJson();
-		//c.convert("p.png", "out.json");
+		ActorBlueprint actor=new ActorBlueprint((WeaponData)ResourcesManager.INSTANCE.weaponsData.get(0), (HeroData)ResourcesManager.INSTANCE.heroesData.get(0));
 	}
+	
 	/**
 	 * Function which hold all process data 
 	 */
@@ -76,7 +65,6 @@ public enum GameEngine
 	{
 		Input.INSTANCE.processInput();
 		mapFragment.set(GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute(), GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute());
-		iteration++;
 	}
 	/**
 	 * Function draw proccesed data on screen
