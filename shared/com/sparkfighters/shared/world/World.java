@@ -11,13 +11,13 @@ import com.sparkfighters.shared.physics.gwobjects.PhysicActor;
  */
 public class World implements Cloneable {
 
-	private com.sparkfighters.shared.physics.world.World physics_world = null;
-	private HashMap<Integer, Actor> actor_by_id = null;
+	public com.sparkfighters.shared.physics.world.World physics_world = null;
+	public HashMap<Integer, Actor> actor_by_id = null;
 	
 	/**
 	 * Number of current iteration. May be fractional, if invoked with fractional dt's.
 	 */
-	private double iteration = 0;
+	public double iteration = 0;
 	
 	/**
 	 * Initializes the world

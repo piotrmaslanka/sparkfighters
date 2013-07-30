@@ -19,6 +19,8 @@ import com.sparkfighters.shared.physics.objects.*;
  */
 final public class ActorBlueprint {
 	
+	public GeometrySet gs = null;
+	
 	/**
 	 * For some reason character info was split into two JSON
 	 * classes. They need to specified right here for proper
@@ -27,7 +29,20 @@ final public class ActorBlueprint {
 	 * @param hd hero data part
 	 */
 	public ActorBlueprint(WeaponData wd, HeroData hd) {
+		SmallMovingGeometry[] smgs = new SmallMovingGeometry[hd.Animations.size()];
+		for (int i=0; i<smgs.length; i++)
+			smgs[i] = ActorBlueprint.animationdata_to_smg(hd.Animations.get(i));
 		
+		this.gs = new GeometrySet(smgs);
+	}
+	
+	
+	static private SmallMovingGeometry animationdata_to_smg(AnimationData ad) {
+		Rectangle hitboxes[] = (Rectangle[]) ad.hitboxes.toArray();
+		for (int i=0; i<hitboxes.length; i++)
+			hitboxes[i] = hitboxes[i].translate(ad.synchroPoint.negative());
+		
+		return new SmallMovingGeometry(hitboxes);
 	}
 	
 }
