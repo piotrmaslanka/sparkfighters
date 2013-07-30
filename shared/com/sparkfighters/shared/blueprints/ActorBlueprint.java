@@ -17,9 +17,12 @@ import com.sparkfighters.shared.physics.objects.*;
  * 
  * @author Henrietta
  */
-final public class ActorBlueprint {
+final public class ActorBlueprint implements Cloneable {
 	
 	public GeometrySet gs = null;
+	
+	public double runSpeed;
+	public double jumpSpeed;
 	
 	/**
 	 * For some reason character info was split into two JSON
@@ -34,6 +37,20 @@ final public class ActorBlueprint {
 			smgs[i] = ActorBlueprint.animationdata_to_smg(hd.Animations.get(i));
 		
 		this.gs = new GeometrySet(smgs);
+		
+		this.runSpeed = (double) wd.runSpeed;
+		this.jumpSpeed = (double) wd.jumpHeight;
+	}
+	
+	/**
+	 * Creates a new PhysicActor from the blueprint
+	 * @return new Physicactor
+	 */
+	public PhysicActor create_physicactor(int color) {
+		PhysicActor pa = new PhysicActor(this.gs.clone(), color, true);
+		pa.set_gravity_factor(1);
+		return pa;
+		
 	}
 	
 	
@@ -45,4 +62,8 @@ final public class ActorBlueprint {
 		return new SmallMovingGeometry(hitboxes);
 	}
 	
+	/**
+	 * PRIVATE
+	 */
+	public ActorBlueprint clone() { return this; }
 }

@@ -67,16 +67,16 @@ public class Actor implements Cloneable {
 		
 		if (this._kbd_up)
 			if (this.physical.get_v_braked())
-				this.physical.set_velocity(this.physical.get_velocity().add_y(5));
-		
+				this.physical.set_velocity(this.physical.get_velocity().force_y(
+						this.actor_blueprint.jumpSpeed));
 		
 		if (this._kbd_left)
-			if (this.physical.get_velocity().x > -10)
-				this.physical.set_velocity(this.physical.get_velocity().add_x(-3));
+			this.physical.set_velocity(this.physical.get_velocity().force_x(
+					-this.actor_blueprint.runSpeed));
 
 		if (this._kbd_right)
-			if (this.physical.get_velocity().x < 10)
-				this.physical.set_velocity(this.physical.get_velocity().add_x(3));
+			this.physical.set_velocity(this.physical.get_velocity().force_x(
+					this.actor_blueprint.runSpeed));
 		
 		this.physical.set_collides_platforms(this._kbd_down);
 	}
@@ -90,7 +90,7 @@ public class Actor implements Cloneable {
 	 * This will not clone .physical
 	 */
 	public Actor clone() {
-		Actor nac = new Actor(this.id, this.actor_blueprint);
+		Actor nac = new Actor(this.id, this.actor_blueprint.clone());
 		nac._cached_controller = null;
 		return nac;
 	}
