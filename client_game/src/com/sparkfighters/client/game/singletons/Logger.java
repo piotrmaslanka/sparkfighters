@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+/**
+ * Singleton to handle logging information to file
+ * @author Kamil Iwiñski
+ *
+ */
 public enum Logger 
 {
 	INSTANCE;
@@ -36,13 +40,21 @@ public enum Logger
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Types of LogType
+	 * @author Kamil Iwiñski
+	 *
+	 */
 	public enum LogType
 	{
 		INFO, DEBUG, WARNING, ERROR, FATALERROR;
 	}
-	
-	public void write(String text, LogType lt)
+	/**
+	 * Function writes to file text with LogType
+	 * @param text
+	 * @param logtype
+	 */
+	public void write(String text, LogType logtype)
 	{
 		try 
 		{
@@ -50,7 +62,7 @@ public enum Logger
 			Date date = new Date();
 			
 			FileWriter fw = new FileWriter(fileName,true);
-			fw.write(dateFormat.format(date)+" "+lt+" "+text+"\r\n");
+			fw.write(dateFormat.format(date)+" "+logtype+" "+text+"\r\n");
 			fw.close();
 		} 
 		catch (IOException e) 

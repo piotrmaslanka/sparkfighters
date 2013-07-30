@@ -6,24 +6,38 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
-
+/**
+ * Singleton to hold input data from mouse and keyboard
+ * @author Kamil Iwiñski
+ *
+ */
 public enum Input 
 {
 	INSTANCE;
 	
 	private int x_relative,y_relative;
 	private int x_absolute,y_absolute;
-	
-	public int getX() {return x_absolute;}
-
-	public int getY() {return y_absolute;}
-
+	/**
+	 * 
+	 * @return x_absolute
+	 */
+	public int getX_absolute() {return x_absolute;}
+	/**
+	 * 
+	 * @return y_absolute
+	 */
+	public int getY_absolute() {return y_absolute;}
+	/**
+	 * Function to process data from mouse and keyboard
+	 */
 	public void processInput()
 	{
 		processMouse();
 		processKeyboard();
 	}
-	
+	/**
+	 * Function to process keyboard
+	 */
 	private void processKeyboard() 
 	{
 		 if(Gdx.input.isKeyPressed(Keys.W))
@@ -47,7 +61,9 @@ public enum Input
 		 }
 		
 	}
-
+	/**
+	 * Function to process mouse
+	 */
 	private void processMouse()
 	{
 		float zoom=(float)GameEngine.INSTANCE.orginal_width/(float)GameEngine.INSTANCE.window_width;
@@ -68,7 +84,13 @@ public enum Input
 		}
 			
 	}
-	
+	/**
+	 * Draw debug information on screen
+	 * @param x
+	 * @param y
+	 * @param font
+	 * @param color
+	 */
 	public void DrawDebugInfo(int x, int y, BitmapFont font, Color color)
 	{
 		DrawEngine.INSTANCE.DrawText(x,y,color,font,

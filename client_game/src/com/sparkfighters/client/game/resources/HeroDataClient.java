@@ -7,15 +7,21 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.shared.loader.jsonobjs.HeroData;
-
-
-
+/**
+ * Class extend HeroData.
+ * @author Kamil Iwiñski
+ *
+ */
 public class HeroDataClient extends HeroData
 {
 
 	public Texture texture;
 	public ArrayList<Animation> animationsDrawable;
 	
+	/**
+	 * Load texture and prepare animationsDrawable
+	 * @param filePath String to texture
+	 */
 	public void loadTexture(String filePath)
 	{
 		texture=new Texture(filePath);

@@ -2,7 +2,8 @@ package com.sparkfighters.shared.loader;
 
 import com.sparkfighters.shared.physics.objects.Rectangle;
 import com.sparkfighters.shared.physics.gwobjects.*;
-import com.sparkfighters.shared.loader.jsonobjs.hero.*;
+import com.sparkfighters.shared.loader.jsonobjs.AnimationData;
+import com.sparkfighters.shared.loader.jsonobjs.*;
 
 /**
  * Collection of functions that transform hero raw data

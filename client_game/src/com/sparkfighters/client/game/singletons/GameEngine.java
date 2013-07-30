@@ -6,7 +6,11 @@ import com.sparkfighters.client.game.enums.Debug;
 import com.sparkfighters.client.game.scene.Actor;
 import com.sparkfighters.client.game.scene.MapFragment;
 import com.sparkfighters.client.game.ultis.MapImageToJson;
-
+/**
+ * Singleton to hold all needed information about game and scene.
+ * @author Kamil Iwiñski
+ *
+ */
 public enum GameEngine 
 {
 	INSTANCE;
@@ -25,6 +29,11 @@ public enum GameEngine
 	
 	public long iteration;
 	
+	/**
+	 * Function to configure GameEngine parameters
+	 * @param window_width
+	 * @param window_height
+	 */
 	public void Init(int window_width,int window_height)
 	{
 		this.window_width=window_width;
@@ -60,14 +69,18 @@ public enum GameEngine
 		//MapImageToJson c=new MapImageToJson();
 		//c.convert("p.png", "out.json");
 	}
-	
+	/**
+	 * Function which hold all process data 
+	 */
 	public void ProcessData()
 	{
 		Input.INSTANCE.processInput();
 		mapFragment.set(GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute(), GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute());
 		iteration++;
 	}
-	
+	/**
+	 * Function draw proccesed data on screen
+	 */
 	public void Draw()
 	{	
 		DrawEngine.INSTANCE.ClearScreen();		
@@ -84,5 +97,11 @@ public enum GameEngine
 		
 		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
 			DrawEngine.INSTANCE.DrawDebugInfo();
+		
+		//run garbage collector FPS drop form 60 to 30
+		//when using on each frame framerate: 60 FPS
+		//Runtime r = Runtime.getRuntime();
+		//r.gc();
+
 	}
 }

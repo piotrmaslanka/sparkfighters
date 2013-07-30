@@ -3,40 +3,57 @@ package com.sparkfighters.client.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.sparkfighters.client.game.singletons.GameEngine;
-
+/**
+ * ApplicationListener for game loop
+ * @author Kamil Iwiñski
+ *
+ */
 public class GameListener implements ApplicationListener 
 {
-	@Override
+	
+	/**
+	 * Function call when application is created 
+	 */
 	public void create() 
 	{
 		GameEngine.INSTANCE.Init(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 	}
 
-	@Override
+	/**
+	 * Function call when application is closed
+	 */
 	public void dispose() 
 	{
 		
 	}
 
-	@Override
+	/**
+	 * Main loop
+	 */
 	public void render() 
 	{		
 		GameEngine.INSTANCE.ProcessData();
 		GameEngine.INSTANCE.Draw();
 	}
 
-	@Override
+	/**
+	 * Function to resize window
+	 */
 	public void resize(int width, int height) 
 	{
 	}
 
-	@Override
+	/**
+	 * Function to pause
+	 */
 	public void pause() 
 	{
 		
 	}
 
-	@Override
+	/**
+	 * Function to resume
+	 */
 	public void resume() 
 	{
 		

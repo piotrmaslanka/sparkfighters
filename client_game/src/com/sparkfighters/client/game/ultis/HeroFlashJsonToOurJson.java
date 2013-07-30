@@ -11,7 +11,11 @@ import com.sparkfighters.shared.loader.jsonobjs.AnimationData;
 import com.sparkfighters.shared.loader.jsonobjs.HeroData;
 import com.sparkfighters.shared.physics.objects.Rectangle;
 import com.sparkfighters.shared.physics.objects.Vector;
-
+/**
+ * Class to convert data about heroes/bodies from Flash Json to Our Json type 
+ * @author Kamil Iwiñski
+ *
+ */
 public class HeroFlashJsonToOurJson 
 {
 	public void convert(String loadPath, String savePath)

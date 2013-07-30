@@ -4,13 +4,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.shared.loader.jsonobjs.WeaponData;
-
+/**
+ * Class extend WeaponData.
+ * @author Kamil Iwiñski
+ *
+ */
 public class WeaponDataClient extends WeaponData
 {
 	public Texture texture;
 	public TextureRegion right_region;
 	public TextureRegion left_region;
 	
+	/**
+	 * Load texture and prepare right_region, left_region
+	 * @param filePath String to texture
+	 */
 	public void loadTexture(String filePath)
 	{
 		texture=new Texture(filePath);

@@ -10,9 +10,17 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.sparkfighters.client.game.singletons.Logger;
 import com.sparkfighters.client.monitor.Monitor;
 
-
+/**
+ * Main for Spark Fighters Game
+ * @author Kamil Iwiñski
+ *
+ */
 public class Main {
-	
+	/**
+	 * 
+	 * @param filename path to file
+	 * @return String with context of file
+	 */
 	public static String readFile(String filename)
 	{
 	   String content = null;

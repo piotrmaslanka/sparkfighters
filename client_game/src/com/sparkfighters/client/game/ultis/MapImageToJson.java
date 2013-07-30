@@ -11,7 +11,11 @@ import com.sparkfighters.shared.physics.objects.Vector;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
+/**
+ * Class to create map json from platforms image
+ * @author Kamil Iwiñski
+ *
+ */
 public class MapImageToJson 
 {
 	private MapData MD=new MapData();

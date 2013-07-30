@@ -10,14 +10,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
+/**
+ * Singleton to manage draw data.
+ * @author Kamil Iwiñski
+ *
+ */
 public enum DrawEngine 
 {
 	INSTANCE;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
-	
+	/**
+	 * Function to configure DrawEngine parameters
+	 */
 	public void Init()
 	{
 		camera = new OrthographicCamera();
@@ -30,26 +36,47 @@ public enum DrawEngine
 		shape.setProjectionMatrix(camera.combined);
 	}
 	
+	/**
+	 * Function clear screen 
+	 */
 	public void ClearScreen()
 	{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
-	
-	public void Draw(TextureRegion t, int x, int y)
+	/**
+	 * Function draw TextureRegion in position x, y
+	 * @param textureRegion
+	 * @param x
+	 * @param y
+	 */
+	public void Draw(TextureRegion textureRegion, int x, int y)
 	{	
 		batch.begin();
-		batch.draw(t, x, y);		
+		batch.draw(textureRegion, x, y);		
 		batch.end();
 	}
-	
-	public void Draw(Texture t, int x, int y)
+	/**
+	 * Function draw Texture in position x, y
+	 * @param texture
+	 * @param x
+	 * @param y
+	 */
+	public void Draw(Texture texture, int x, int y)
 	{	
 		batch.begin();
-		batch.draw(t, x, y);		
+		batch.draw(texture, x, y);		
 		batch.end();
 	}
-	
+	/**
+	 * Function draw rectangle
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @param size
+	 * @param color
+	 */
 	public void DrawRectangle(int x1,int y1,int x2,int y2,int size, Color color)
 	{
 		Gdx.gl10.glLineWidth(size);
@@ -58,7 +85,13 @@ public enum DrawEngine
 		shape.rect(x1, y1, x2-x1, y2-y1);
 		shape.end();
 	}
-	
+	/**
+	 * Function draw point in position x, y
+	 * @param x
+	 * @param y
+	 * @param size
+	 * @param color
+	 */
 	public void DrawPoint(int x,int y, int size, Color color)
 	{
 		Gdx.gl10.glPointSize(size);
@@ -67,7 +100,15 @@ public enum DrawEngine
 		shape.point(x, y, 0);
 		shape.end();
 	}
-	
+	/**
+	 * Function draw line
+	 * @param x
+	 * @param y
+	 * @param x2
+	 * @param y2
+	 * @param size
+	 * @param color
+	 */
 	public void DrawLine(int x,int y,int x2,int y2, int size, Color color)
 	{
 		Gdx.gl10.glLineWidth(size);
@@ -76,7 +117,14 @@ public enum DrawEngine
 		shape.line(x, y, x2, y2);
 		shape.end();
 	}
-	
+	/**
+	 * Function draw text in position x, y
+	 * @param x
+	 * @param y
+	 * @param color
+	 * @param font
+	 * @param text
+	 */
 	public void DrawText(int x, int y, Color color,BitmapFont font, String text)
 	{
 		font.setColor(color);
@@ -85,7 +133,9 @@ public enum DrawEngine
 		batch.end();
 	}
 	
-	
+	/**
+	 * Function draw debug info on screen from all classes
+	 */
 	public void DrawDebugInfo()
 	{	
 		//int w=GameEngine.INSTANCE.orginal_width;
