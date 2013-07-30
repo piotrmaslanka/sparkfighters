@@ -3,6 +3,7 @@ package com.sparkfighters.client.game.scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
 import com.sparkfighters.client.game.singletons.GameEngine;
@@ -16,6 +17,7 @@ public class Actor
 {
 	private int x_absolute,y_absolute;
 	private int x_relative,y_relative;
+	private int x_mouse_absolute,y_mouse_absolute;
 	
 	private int idHeroArrayResource,idWeaponArrayResource, pid;
 	private int idAnimation;
@@ -102,6 +104,16 @@ public class Actor
 		idAnimation=id;
 	}
 	/**
+	 * Rotate weapon to target mouse x,y
+	 * @param x_mouse_aboslute
+	 * @param y_mouse_absolute
+	 */
+	public void setWeaponRotate(int x_mouse_aboslute, int y_mouse_absolute)
+	{
+		this.x_mouse_absolute=x_mouse_aboslute;
+		this.y_mouse_absolute=y_mouse_absolute;
+	}
+	/**
 	 * Function draw Actor: body, weapon
 	 */
 	public void Draw()
@@ -109,7 +121,7 @@ public class Actor
 		//draw hero
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
-		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative);
+		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
 		
 		//draw weapon
 		int h_x=currentFrame.getRegionWidth()/2;
@@ -126,7 +138,14 @@ public class Actor
 			x1=x1-w_x;
 			y1=y1-w_y;
 			
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region, x1,y1);	
+			double C=Math.sqrt((x_mouse_absolute-x_absolute)*(x_mouse_absolute-x_absolute)+(y_mouse_absolute-y_absolute)*(y_mouse_absolute-y_absolute));
+			double A=Math.sqrt((x_mouse_absolute-x_absolute)*(x_mouse_absolute-x_absolute)+(y_absolute-y_absolute)*(y_absolute-y_absolute));
+			
+			double radians=Math.tan(C/A);
+			float degrees=(float)(radians*180/Math.PI);
+			
+	
+			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region, x1,y1,degrees);	
 		}
 
 		if(idAnimation%2==1)
@@ -137,7 +156,7 @@ public class Actor
 			x1=x1-w_x;
 			y1=y1-w_y;
 			
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region, x1,y1);	
+			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region, x1,y1,0);	
 		}
 	}
 	

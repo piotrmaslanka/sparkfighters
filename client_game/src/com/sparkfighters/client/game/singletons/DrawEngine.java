@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -49,11 +50,17 @@ public enum DrawEngine
 	 * @param textureRegion
 	 * @param x
 	 * @param y
+	 * @param rotate degrees
 	 */
-	public void Draw(TextureRegion textureRegion, int x, int y)
+	public void Draw(TextureRegion textureRegion, int x, int y, float rotate)
 	{	
+		Sprite sprite=new Sprite(textureRegion);
+		sprite.rotate(rotate);
+		sprite.setX(x);
+		sprite.setY(y);
 		batch.begin();
-		batch.draw(textureRegion, x, y);		
+		sprite.draw(batch);
+		//batch.draw(textureRegion, x, y);
 		batch.end();
 	}
 	/**
@@ -68,6 +75,7 @@ public enum DrawEngine
 		batch.draw(texture, x, y);		
 		batch.end();
 	}
+	
 	/**
 	 * Function draw rectangle
 	 * @param x1

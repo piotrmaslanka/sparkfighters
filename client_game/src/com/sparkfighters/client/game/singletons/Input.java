@@ -83,6 +83,8 @@ public enum Input
 	       
 		}
 			
+		GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setWeaponRotate(x_absolute, y_absolute);
+		
 	}
 	/**
 	 * Draw debug information on screen

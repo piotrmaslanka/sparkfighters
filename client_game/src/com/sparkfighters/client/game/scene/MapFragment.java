@@ -67,7 +67,7 @@ public class MapFragment
 		
 		TextureRegion tr=new TextureRegion(ResourcesManager.INSTANCE.map.texture);
 		tr.setRegion(x, height_map-y-height, width, height);
-		DrawEngine.INSTANCE.Draw(tr, 0, 0);
+		DrawEngine.INSTANCE.Draw(tr, 0, 0,0);
 	}
 	/**
 	 * Function draw debug info on screen
