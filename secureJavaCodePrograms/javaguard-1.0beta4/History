@@ -1,0 +1,45 @@
+$Id: History,v 1.1 2002/05/12 15:47:30 glurk Exp $
+
+
+The history of JavaGuard
+========================
+
+JavaGuard is based on the well-known RetroGuard bytecode obfuscator (see
+http://www.retrologic.com) which is also under the LGPL but doesn't seem
+to be continued developing anymore.
+
+Both applications allow the user to specify a script file that influences
+how a given Jar file is obfuscated. After some month of working with
+RetroGuard I had to discover that it isn't as powerful as I originally
+expected:
+
+1) It doesn't have a special processing mechanism for serializable
+   classes so that the obfuscated application isn't then guaranteed to
+   work correctly. Therefore the creation of a script file to avoid this
+   is quite complex, especially on large source trees.
+
+2) The syntax in the script file is quite simple and not very much
+   powerful; regular expressions for example are not possible. Script
+   files will become quite long and not very well maintainable.
+
+3) Resource files are completely ignored from the obfuscation step.
+
+4) It is not possible to tell RetroGuard to completely exclude some
+   classes from being obfuscated.
+
+These are the main reasons why I began working on the source code; to
+enhance it and to implement the above mentioned features. To avoid naming
+conflicts I gave the project a new name, JavaGuard.
+
+
+When testing the new JavaGuard code I even encountered some bugs inside
+RetroGuard which cause exceptions when writing out the obfuscated code:
+
+* Resources for inner classes were assigned wrong output names. This
+  caused an error when writing out the obfuscated Jar file when there
+  were two or more such resource files.
+
+* Very long lines in the Manifest file are truncated.
+
+* RetroGuard ignores the "Main-Class" setting in the Manifest file.
+

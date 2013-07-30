@@ -31,8 +31,7 @@ public class Main extends Application implements EventHandler<WindowEvent>
 	    	  //Init layout
 	    	  
 	          // Load the root layout from the fxml file
-	          FXMLLoader loader = new FXMLLoader();
-	          anchorPane = (AnchorPane) loader.load(Main.class.getResource("layout.fxml"));
+	          anchorPane = (AnchorPane) FXMLLoader.load(Main.class.getResource("layout.fxml"));
 	          Scene scene = new Scene(anchorPane);
 	          this.primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo.png" ))); 
 	          this.primaryStage.setScene(scene);
@@ -57,17 +56,17 @@ public class Main extends Application implements EventHandler<WindowEvent>
 
 	
 	public static void main(String[] args) 
-	{       
+	{   
+		Monitor m=new Monitor();
 		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
-		
-		if(Monitor.launch(jarName, Main.class,"Spark Fighters Patcher")==true)
+		if(m.launch(jarName, Main.class,"Spark Fighters Patcher")==true)
 		{
 			launch(args);
 		}
-		else
+		/*else
 		{
 			Platform.exit();
-		}
+		}*/
 	}
 
 

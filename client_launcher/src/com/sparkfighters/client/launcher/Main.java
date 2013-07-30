@@ -9,7 +9,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -27,8 +26,8 @@ public class Main extends Application
 		  this.primaryStage = primaryStage;	      
 	      try 
 	      {
-	          FXMLLoader loader = new FXMLLoader();
-	          anchorPane = (AnchorPane) loader.load(Main.class.getResource("layouts/LoginScreen.fxml"));
+	          //FXMLLoader loader = new FXMLLoader();
+	          anchorPane = (AnchorPane) FXMLLoader.load(Main.class.getResource("layouts/LoginScreen.fxml"));
 	          Scene scene = new Scene(anchorPane);
 	          this.primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("logo.png" ))); 
 	          this.primaryStage.setScene(scene);
@@ -55,9 +54,9 @@ public class Main extends Application
 
 	public static void main(String[] args) 
 	{
+		Monitor m=new Monitor();
 		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
-		
-		if(Monitor.launch(jarName, Main.class,"Spark Fighters Launcher")==true)
+		if(m.launch(jarName, Main.class,"Spark Fighters Launcher")==true)
 		{
 			launch(args);
 		}

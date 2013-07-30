@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project client_game with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="../bin/data/SparkFightersGame.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.sparkfighters.client.game.Main"/>
+                <attribute name="Class-Path" value=". libraries/gdx.jar libraries/bodyeditor-loader.jar libraries/tween-engine-api.jar libraries/gson-2.2.4.jar libraries/gdx-backend-lwjgl-natives.jar libraries/gdx-backend-lwjgl.jar libraries/gdx-natives.jar libraries/tools.jar"/>
+            </manifest>
+            <fileset dir="../client_game/bin"/>
+            <fileset dir="../shared/bin"/>
+            <fileset dir="../lnx/bin"/>
+            <fileset dir="../monitor/bin"/>
+        </jar>
+
+        <copy file="../client_game/libs/gdx.jar" todir="../bin/data/libraries"/>
+        <copy file="../client_game/libs/bodyeditor-loader.jar" todir="../bin/data/libraries"/>
+        <copy file="../client_game/libs/tween-engine-api.jar" todir="../bin/data/libraries"/>
+        <copy file="../client_game/libs/gson-2.2.4.jar" todir="../bin/data/libraries"/>
+        <copy file="../client_game/libs/gdx-backend-lwjgl-natives.jar" todir="../bin/data/libraries"/>
+        <copy file="../client_game/libs/gdx-backend-lwjgl.jar" todir="../bin/data/libraries"/>
+        <copy file="../client_game/libs/gdx-natives.jar" todir="../bin/data/libraries"/>
+        
+        <copydir src="../client_game/data" dest="../bin/data/data/"/>
+        
+         <taskdef resource="proguard/ant/task.properties"
+         classpath="proguard/proguard.jar" />
+		<proguard configuration="proguard/client_game.pro"/>
+		
+		<move file="../bin/data/SparkFightersGame_proguard.jar" tofile="../bin/data/SparkFightersGame.jar" verbose="true" overwrite="true" />
+    </target>
+   
+</project>
