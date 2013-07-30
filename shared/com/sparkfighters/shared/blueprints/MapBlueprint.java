@@ -31,9 +31,9 @@ final public class MapBlueprint {
 	private final Vector spark_start;
 	
 	public MapBlueprint(MapData md) {
-		this.lsg = new LargeStaticGeometry((Rectangle[]) md.obstacles.toArray());
+		this.lsg = new LargeStaticGeometry(md.obstacles.toArray(new Rectangle[0]));
 		
-		this.platforms = (HorizSegment[]) md.platforms.toArray();
+		this.platforms = md.platforms.toArray(new HorizSegment[0]);
 		
 		this.spawnpoints[0] = md.spawnPoints.get(0);
 		this.spawnpoints[1] = md.spawnPoints.get(1);
