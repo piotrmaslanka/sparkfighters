@@ -1,8 +1,8 @@
 package com.sparkfighters.shared.blueprints;
 
-import com.sparkfighters.shared.physics.world.World;
+import com.sparkfighters.shared.loader.jsonobjs.MapData;
 import com.sparkfighters.shared.physics.gwobjects.LargeStaticGeometry;
-import com.sparkfighters.shared.physics.objects.HorizSegment;
+import com.sparkfighters.shared.physics.objects.*;
 
 /**
  * This object alone contains enough information to 
@@ -12,19 +12,36 @@ import com.sparkfighters.shared.physics.objects.HorizSegment;
  * object that can be readed by a World and provide
  * information on map construction.
  * 
- * Idea is simple - loader outputs a MapBlueprint object,
- * then you use it to construct a world.
+ * This object is able to load a JSON data object and 
+ * parse it to a map.
+ * 
+ * Immutable
  * 
  * @author Henrietta
  */
-public class MapBlueprint {
+final public class MapBlueprint {
 
-	private LargeStaticGeometry lsg;
-	private HorizSegment[] platforms;
+	private final LargeStaticGeometry lsg;
+	private final HorizSegment[] platforms;
+	private final Rectangle world_box;
 	
-	public MapBlueprint(LargeStaticGeometry lsg, HorizSegment[] platforms) {
-		this.lsg = lsg.clone();
-		this.platforms = platforms.clone();
+	private final Vector spawnpoints[] = new Vector[3];
+	
+	@SuppressWarnings("unused")
+	private final Vector spark_start;
+	
+	public MapBlueprint(MapData md) {
+		this.lsg = new LargeStaticGeometry((Rectangle[]) md.obstacles.toArray());
+		
+		this.platforms = (HorizSegment[]) md.platforms.toArray();
+		
+		this.spawnpoints[0] = md.spawnPoints.get(0);
+		this.spawnpoints[1] = md.spawnPoints.get(1);
+		this.spawnpoints[2] = md.spawnPoints.get(2);
+		
+		this.spark_start = md.sparkStart;
+		
+		this.world_box = md.mapSize;
 	}
 	
 	/**
@@ -32,10 +49,11 @@ public class MapBlueprint {
 	 * accept map represented by this object
 	 * @return 
 	 */
-	public void feed_to_physics_world(World world) {
+	public void feed_to_physics_world(com.sparkfighters.shared.physics.world.World world) {
 		for (HorizSegment hs : this.platforms)
 			world.add_platform(hs);
 		world.set_lsg(this.lsg);
+		world.set_world_area(this.world_box);
 	}
 
 }
