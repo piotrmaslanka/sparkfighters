@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="" name="Build client_all">
+     	<ant antfile="1_build_client_patcher.xml" target="create_run_jar" />
+     	<ant antfile="2_build_client_launcher.xml" target="create_run_jar" />
+     	<ant antfile="3_build_client_game.xml" target="create_run_jar" />
+</project>

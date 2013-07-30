@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project client_patcher with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="../bin/Spark Fighters Patcher.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.sparkfighters.client.patcher.Main"/>
+                <attribute name="Class-Path" value=". data/libraries/jfxrt.jar data/libraries/tools.jar"/>
+            </manifest>
+            <fileset dir="../client_patcher/bin"/>
+            <fileset dir="../monitor/bin"/>
+        </jar>
+        <delete dir="../bin/data"/>
+        <mkdir dir="../bin/data"/>
+        <mkdir dir="../bin/data/libraries"/>
+        <copy file="C:/Program Files (x86)/Java/jre7/lib/jfxrt.jar" todir="../bin/data/libraries"/>
+        <copy file="../monitor/libs/tools.jar" todir="../bin/data/libraries"/>
+        
+        <taskdef resource="proguard/ant/task.properties"
+         classpath="proguard/proguard.jar" />
+		<proguard configuration="proguard/client_patcher.pro"/>
+		
+		<move file="../bin/Spark Fighters Patcher_proguard.jar" tofile="../bin/Spark Fighters Patcher.jar" verbose="true" overwrite="true" />
+    </target>
+</project>
