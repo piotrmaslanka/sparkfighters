@@ -55,7 +55,7 @@ final public class ActorBlueprint implements Cloneable {
 	
 	
 	static private SmallMovingGeometry animationdata_to_smg(AnimationData ad) {
-		Rectangle hitboxes[] = (Rectangle[]) ad.hitboxes.toArray();
+		Rectangle hitboxes[] = ad.hitboxes.toArray(new Rectangle[0]);
 		for (int i=0; i<hitboxes.length; i++)
 			hitboxes[i] = hitboxes[i].translate(ad.synchroPoint.negative());
 		
