@@ -1,4 +1,4 @@
-package com.sparkfighters.client.game.scene;
+package com.sparkfighters.client.game.clientWorld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
 import com.sparkfighters.client.game.singletons.GameEngine;
 import com.sparkfighters.client.game.singletons.ResourcesManager;
+import com.sparkfighters.client.game.singletons.WorldManager;
 /**
  * Class to manage Actor on scene
  * @author Kamil Iwiñski
@@ -19,9 +20,11 @@ public class Actor
 	private int x_relative,y_relative;
 	private int x_mouse_absolute,y_mouse_absolute;
 	
-	private int idHeroArrayResource,idWeaponArrayResource, pid;
+	private int idHeroArrayResource,idWeaponArrayResource, id;
 	private int idAnimation;
 	private float time;
+	
+	public int getId(){return id;}
 	/**
 	 * Function set X absolute on map
 	 * Calculate X relative
@@ -30,7 +33,7 @@ public class Actor
 	public void setX_absolute(int x)
 	{
 		this.x_absolute=x;
-		this.x_relative=this.x_absolute-GameEngine.INSTANCE.mapFragment.getX();
+		this.x_relative=this.x_absolute-WorldManager.INSTANCE.clientWorld.mapFragment.getX();
 	}
 	
 	/**
@@ -41,7 +44,7 @@ public class Actor
 	public void setY_absolute(int y)
 	{
 		this.y_absolute=y;
-		this.y_relative=this.y_absolute-GameEngine.INSTANCE.mapFragment.getY();
+		this.y_relative=this.y_absolute-WorldManager.INSTANCE.clientWorld.mapFragment.getY();
 	}
 	/**
 	 * 
@@ -61,17 +64,13 @@ public class Actor
 	}
 	/**
 	 * Constructor to create Actor
-	 * @param pid to identify Actor across all map
+	 * @param id to identify Actor across all map
 	 * @param idHero Actor need body to exist
 	 * @param idWeapon Actor need a weapon to exist
-	 * @param x absolute of actor on map
-	 * @param y absolute of actor on map
 	 */
-	public Actor(int pid, int idHero, int idWeapon, int x, int y)
+	public Actor(int id, int idHero, int idWeapon)
 	{
-		this.pid=pid;
-		setX_absolute(x);
-		setY_absolute(y);
+		this.id=id;
 		
 		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.size();i++)
 		{
@@ -187,7 +186,7 @@ public class Actor
 		
 		//draw Data about hero
 		DrawEngine.INSTANCE.DrawText(x,y,color,font,
-				"PID="+pid+
+				"PID="+id+
 				" HeroID="+ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).id+
 				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).id+
 				" AnimationID="+idAnimation+

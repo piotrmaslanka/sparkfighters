@@ -159,12 +159,12 @@ public enum DrawEngine
 		Input.INSTANCE.DrawDebugInfo(0, h, font, color);
 		h-=space_h;
 		//debug about map
-		GameEngine.INSTANCE.mapFragment.DrawDebugInfo(0,h,font,color);
+		WorldManager.INSTANCE.clientWorld.mapFragment.DrawDebugInfo(0,h,font,color);
 		h-=space_h;
 		//debug about heroes
-		for(int i=0;i<GameEngine.INSTANCE.actors.size();i++)
+		for(int i=0;i<WorldManager.INSTANCE.clientWorld.actors.size();i++)
 		{
-			GameEngine.INSTANCE.actors.get(i).DrawDebugInfo(0,h,font,color);
+			WorldManager.INSTANCE.clientWorld.actors.get(i).DrawDebugInfo(0,h,font,color);
 			h-=space_h;
 		}
 			

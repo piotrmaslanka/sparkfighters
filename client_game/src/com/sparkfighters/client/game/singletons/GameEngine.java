@@ -1,16 +1,9 @@
 package com.sparkfighters.client.game.singletons;
 
-import java.util.ArrayList;
-
+import com.badlogic.gdx.Gdx;
 import com.sparkfighters.client.game.enums.Debug;
-import com.sparkfighters.client.game.scene.Actor;
-import com.sparkfighters.client.game.scene.MapFragment;
-import com.sparkfighters.client.game.ultis.MapImageToJson;
-import com.sparkfighters.shared.blueprints.ActorBlueprint;
-import com.sparkfighters.shared.loader.jsonobjs.HeroData;
-import com.sparkfighters.shared.loader.jsonobjs.WeaponData;
 /**
- * Singleton to hold all needed information about game and scene.
+ * Singleton to hold information about game.
  * @author Kamil Iwiñski
  *
  */
@@ -24,12 +17,7 @@ public enum GameEngine
 	public int window_height;
 	
 	public Debug debug=Debug.ALLMETHODS;	
-	
-	public ArrayList<Actor> actors;
-	public int myHeroArrayActors;
-	
-	public MapFragment mapFragment;
-	
+		
 	/**
 	 * Function to configure GameEngine parameters
 	 * @param window_width
@@ -42,20 +30,7 @@ public enum GameEngine
 		
 		DrawEngine.INSTANCE.Init();
 		ResourcesManager.INSTANCE.LoadResources();	
-			
-		CreateScene();
-	}
-	
-	/**
-	 * Prepare scene and feed shared
-	 */
-	private void CreateScene()
-	{
-		actors=new ArrayList<Actor>();
-		mapFragment=new MapFragment();	
-		myHeroArrayActors=0;
-		
-		ActorBlueprint actor=new ActorBlueprint((WeaponData)ResourcesManager.INSTANCE.weaponsData.get(0), (HeroData)ResourcesManager.INSTANCE.heroesData.get(0));
+		WorldManager.INSTANCE.Init();
 	}
 	
 	/**
@@ -63,8 +38,20 @@ public enum GameEngine
 	 */
 	public void ProcessData()
 	{
+		WorldManager.INSTANCE.sharedWorld.worldLogic.advance(Gdx.graphics.getDeltaTime());
+		
 		Input.INSTANCE.processInput();
-		mapFragment.set(GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute(), GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute());
+		WorldManager.INSTANCE.clientWorld.mapFragment.set(WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getY_absolute());
+		
+		
+		for(int i=0;i<WorldManager.INSTANCE.clientWorld.actors.size();i++)
+		{
+			int id=WorldManager.INSTANCE.clientWorld.actors.get(i).getId();
+			int x=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().x;
+			int y=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().y;
+			WorldManager.INSTANCE.clientWorld.actors.get(i).setX_absolute(x);
+			WorldManager.INSTANCE.clientWorld.actors.get(i).setY_absolute(y);
+		}
 	}
 	/**
 	 * Function draw proccesed data on screen
@@ -73,14 +60,11 @@ public enum GameEngine
 	{	
 		DrawEngine.INSTANCE.ClearScreen();		
 		
-		mapFragment.Draw();
+		WorldManager.INSTANCE.clientWorld.mapFragment.Draw();
 		
-		for(int i=0;i<actors.size();i++)
+		for(int i=0;i<WorldManager.INSTANCE.clientWorld.actors.size();i++)
 		{
-			actors.get(i).setX_absolute(actors.get(i).getX_absolute());
-			actors.get(i).setY_absolute(actors.get(i).getY_absolute());
-			
-			actors.get(i).Draw();
+			WorldManager.INSTANCE.clientWorld.actors.get(i).Draw();
 		}
 		
 		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 

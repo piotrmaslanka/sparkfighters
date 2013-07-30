@@ -40,25 +40,29 @@ public enum Input
 	 */
 	private void processKeyboard() 
 	{
+		
+		 boolean up=false,down=false,right=false,left=false;
 		 if(Gdx.input.isKeyPressed(Keys.W))
 		 {
-			 //GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setY_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute()+10);
+			up=true;
 		 }
 		
 		 if(Gdx.input.isKeyPressed(Keys.S))
 		 {
-			// GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setY_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getY_absolute()-10);
+			down=true;
 		 }
 		 
 		 if(Gdx.input.isKeyPressed(Keys.A)) 
 		 {
-		    //GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setX_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute()-10);
+		    left=true;
 		 }
 		 
 		 if(Gdx.input.isKeyPressed(Keys.D)) 
 		 {
-		    //GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setX_absolute( GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).getX_absolute()+10);
+		    right=true;
 		 }
+		 int id= WorldManager.INSTANCE.clientWorld.actors.get( WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getId();
+		 WorldManager.INSTANCE.sharedWorld.worldLogic.actor_by_id.get(id).controller().set_keyboard_status(up, right, down, left);
 		
 	}
 	/**
@@ -70,8 +74,8 @@ public enum Input
 		x_relative=(int)(Gdx.input.getX()*zoom);
 		y_relative=GameEngine.INSTANCE.orginal_height-(int)(Gdx.input.getY()*zoom);
 		
-		x_absolute=x_relative+GameEngine.INSTANCE.mapFragment.getX();
-		y_absolute=y_relative+GameEngine.INSTANCE.mapFragment.getY();
+		x_absolute=x_relative+WorldManager.INSTANCE.clientWorld.mapFragment.getX();
+		y_absolute=y_relative+WorldManager.INSTANCE.clientWorld.mapFragment.getY();
 		
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) 
 		{
@@ -83,7 +87,7 @@ public enum Input
 	       
 		}
 			
-		//GameEngine.INSTANCE.actors.get(GameEngine.INSTANCE.myHeroArrayActors).setWeaponRotate(x_absolute, y_absolute);
+		//WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).setWeaponRotate(x_absolute, y_absolute);
 		
 	}
 	/**
