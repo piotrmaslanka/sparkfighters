@@ -26,7 +26,7 @@ final public class Rebound {
 	/**
 	 * Amount of friction in px^2/t
 	 */
-	final static public double FRICTION = 0.001;
+	final static public double FRICTION = 10;
 	
 	/**
 	 * Vertical comparision epsilon
@@ -135,11 +135,12 @@ final public class Rebound {
 		
 		actor.set_position(new Vector(actor_x, actor_y));
 		
+		actor.set_velocity(actor.get_velocity().force_y(0));
+		
 		// Friction??
 		if (actor.get_h_moving()) return; // Actor wants to move, no friction
 		
 		Vector vel = actor.get_velocity();
-		vel.y = 0;
 		
 		if (Math.abs(vel.x) < Rebound.FRICTION * dt) 
 			vel.x = 0;
