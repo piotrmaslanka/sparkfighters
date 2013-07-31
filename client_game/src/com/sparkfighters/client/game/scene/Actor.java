@@ -97,8 +97,11 @@ public class Actor
 	 */
 	public void setAnimation(int id)
 	{
-		time=0f;
-		idAnimation=id;
+		if(this.id!=id)
+		{
+			time=0f;
+			idAnimation=id;
+		}
 	}
 	/**
 	 * Rotate weapon to target mouse x,y
