@@ -2,7 +2,7 @@ package com.sparkfighters.client.game.singletons;
 
 import java.util.ArrayList;
 
-import com.sparkfighters.client.game.clientWorld.MapFragment;
+import com.sparkfighters.client.game.scene.MapFragment;
 import com.sparkfighters.shared.blueprints.ActorBlueprint;
 import com.sparkfighters.shared.blueprints.MapBlueprint;
 import com.sparkfighters.shared.physics.objects.Vector;
@@ -12,7 +12,7 @@ public enum WorldManager
 {
 	INSTANCE;
 	
-	public ArrayList<com.sparkfighters.client.game.clientWorld.Actor> actors=new ArrayList<com.sparkfighters.client.game.clientWorld.Actor>();
+	public ArrayList<com.sparkfighters.client.game.scene.Actor> actors=new ArrayList<com.sparkfighters.client.game.scene.Actor>();
 	public int myHeroArrayActors=-1;
 	public MapFragment mapFragment=new MapFragment();
 	
@@ -22,7 +22,7 @@ public enum WorldManager
 	{
 
 		
-		actors.add(new com.sparkfighters.client.game.clientWorld.Actor(0,0,0));
+		actors.add(new com.sparkfighters.client.game.scene.Actor(0,0,0));
 		myHeroArrayActors=0;
 
 		//Create Blueprints

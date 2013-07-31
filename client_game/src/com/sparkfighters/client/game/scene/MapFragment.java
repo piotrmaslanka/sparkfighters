@@ -1,4 +1,4 @@
-package com.sparkfighters.client.game.clientWorld;
+package com.sparkfighters.client.game.scene;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
