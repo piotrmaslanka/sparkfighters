@@ -3,10 +3,8 @@ package com.sparkfighters.client.game.clientWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
-import com.sparkfighters.client.game.singletons.GameEngine;
 import com.sparkfighters.client.game.singletons.ResourcesManager;
 import com.sparkfighters.client.game.singletons.WorldManager;
 /**
