@@ -22,6 +22,14 @@ public class GeometrySet extends Moveable {
 	private SmallMovingGeometry[] geoms;
 	private int currentlyPicked = 0;
 	
+	/**
+	 * Returns current geometry identifier
+	 * @return current geometry identifier
+	 */
+	public int get_geom_id() {
+		return this.currentlyPicked;
+	}
+	
 	public GeometrySet(SmallMovingGeometry[] geometries) {
 		this.geoms = geometries.clone();
 		assert(geometries.length > 0);
