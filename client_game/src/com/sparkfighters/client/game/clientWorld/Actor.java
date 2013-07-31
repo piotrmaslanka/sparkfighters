@@ -31,7 +31,7 @@ public class Actor
 	public void setX_absolute(int x)
 	{
 		this.x_absolute=x;
-		this.x_relative=this.x_absolute-WorldManager.INSTANCE.clientWorld.mapFragment.getX();
+		this.x_relative=this.x_absolute-WorldManager.INSTANCE.mapFragment.getX();
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class Actor
 	public void setY_absolute(int y)
 	{
 		this.y_absolute=y;
-		this.y_relative=this.y_absolute-WorldManager.INSTANCE.clientWorld.mapFragment.getY();
+		this.y_relative=this.y_absolute-WorldManager.INSTANCE.mapFragment.getY();
 	}
 	/**
 	 * 

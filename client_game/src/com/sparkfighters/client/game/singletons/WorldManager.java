@@ -1,5 +1,8 @@
 package com.sparkfighters.client.game.singletons;
 
+import java.util.ArrayList;
+
+import com.sparkfighters.client.game.clientWorld.MapFragment;
 import com.sparkfighters.shared.blueprints.ActorBlueprint;
 import com.sparkfighters.shared.blueprints.MapBlueprint;
 import com.sparkfighters.shared.physics.objects.Vector;
@@ -9,37 +12,38 @@ public enum WorldManager
 {
 	INSTANCE;
 	
-	public com.sparkfighters.client.game.world.ClientWorld clientWorld;
-	public com.sparkfighters.client.game.world.SharedWorld sharedWorld;
+	public ArrayList<com.sparkfighters.client.game.clientWorld.Actor> actors=new ArrayList<com.sparkfighters.client.game.clientWorld.Actor>();
+	public int myHeroArrayActors=-1;
+	public MapFragment mapFragment=new MapFragment();
+	
+	public com.sparkfighters.shared.world.World worldLogic;
 	
 	public void Init()
 	{
-		clientWorld=new com.sparkfighters.client.game.world.ClientWorld();
-		sharedWorld=new com.sparkfighters.client.game.world.SharedWorld();
 
 		
-		clientWorld.actors.add(new com.sparkfighters.client.game.clientWorld.Actor(0,0,0));
-		clientWorld.myHeroArrayActors=0;
+		actors.add(new com.sparkfighters.client.game.clientWorld.Actor(0,0,0));
+		myHeroArrayActors=0;
 
 		//Create Blueprints
-		sharedWorld.mapBlueprint=new MapBlueprint(ResourcesManager.INSTANCE.map);
-		sharedWorld.actorsBluePrint.add(new ActorBlueprint(ResourcesManager.INSTANCE.weaponsData.get(0), ResourcesManager.INSTANCE.heroesData.get(0)));
+		MapBlueprint mapBlueprint=new MapBlueprint(ResourcesManager.INSTANCE.map);
+		ActorBlueprint actorsBlueprint=new ActorBlueprint(ResourcesManager.INSTANCE.weaponsData.get(0), ResourcesManager.INSTANCE.heroesData.get(0));
 	
 		//create logic actors
-		sharedWorld.actorsLogic=new com.sparkfighters.shared.world.Actor[1];
-		sharedWorld.actorsLogic[0]=new com.sparkfighters.shared.world.Actor(0, sharedWorld.actorsBluePrint.get(0));
-		sharedWorld.actorsLogic[0].physical=sharedWorld.actorsLogic[0].actor_blueprint.create_physicactor(0);
-		sharedWorld.actorsLogic[0].physical.set_position(new Vector(1900,2600));
+		com.sparkfighters.shared.world.Actor actorsLogic[]=new com.sparkfighters.shared.world.Actor[1];
+		actorsLogic[0]=new com.sparkfighters.shared.world.Actor(0, actorsBlueprint);
+		actorsLogic[0].physical=actorsLogic[0].actor_blueprint.create_physicactor(0);
+		actorsLogic[0].physical.set_position(new Vector(1900,2600));
 		
 		//create physic world
-		sharedWorld.worldPhysics=new com.sparkfighters.shared.physics.world.World(ResourcesManager.INSTANCE.map.mapSize);
-		sharedWorld.worldPhysics.add_actor(sharedWorld.actorsLogic[0].physical);
+		com.sparkfighters.shared.physics.world.World worldPhysics=new com.sparkfighters.shared.physics.world.World(ResourcesManager.INSTANCE.map.mapSize);
+		worldPhysics.add_actor(actorsLogic[0].physical);
 		
 		//feed physic world
-		sharedWorld.mapBlueprint.feed_to_physics_world(sharedWorld.worldPhysics);
+		mapBlueprint.feed_to_physics_world(worldPhysics);
 
 		//Create logic world
-		sharedWorld.worldLogic=new com.sparkfighters.shared.world.World(sharedWorld.worldPhysics,sharedWorld.actorsLogic);
+		worldLogic=new com.sparkfighters.shared.world.World(worldPhysics,actorsLogic);
 	}
 	
 }
