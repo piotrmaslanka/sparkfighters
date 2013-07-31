@@ -52,7 +52,8 @@ public class MapImageToJson
                 {
                 	if(platform==true)
                 	{
-                		platform=false;     
+                		platform=false;  
+               
                 		HorizSegment HS=new HorizSegment(x1,x2,y);
                 		MD.platforms.add(HS);
                 	}
@@ -65,6 +66,22 @@ public class MapImageToJson
                 }
             }
         }
+        
+
+        	
+	        for(int i=MD.platforms.size()-1;i>0;i--)
+	        {       
+	        	 for(int j=MD.platforms.size()-1;j>0;j--)
+	        	 {
+	        		 if(MD.platforms.get(i).y==MD.platforms.get(j).y-1)
+	        		 {
+	        			 MD.platforms.remove(i);
+	        			 break;
+	        		 }
+	        	 
+	        	 }
+	        }
+
         
         try 
         {
