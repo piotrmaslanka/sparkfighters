@@ -64,6 +64,7 @@ public enum GameEngine
 			int y2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().y;
 			WorldManager.INSTANCE.actors.get(i).setWeaponRotate(x2, y2);
 			
+			WorldManager.INSTANCE.actors.get(i).setAnimation(WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_geom_id());		
 		}
 	}
 	/**
