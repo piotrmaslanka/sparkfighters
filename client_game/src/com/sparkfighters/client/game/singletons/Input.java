@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+import com.sparkfighters.shared.physics.objects.Vector;
 /**
  * Singleton to hold input data from mouse and keyboard
  * @author Kamil Iwiñski
@@ -61,8 +61,8 @@ public enum Input
 		 {
 		    right=true;
 		 }
-		 int id= WorldManager.INSTANCE.clientWorld.actors.get( WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getId();
-		 WorldManager.INSTANCE.sharedWorld.worldLogic.actor_by_id.get(id).controller().set_keyboard_status(up, right, down, left);
+		 int id= WorldManager.INSTANCE.actors.get( WorldManager.INSTANCE.myHeroArrayActors).getId();
+		 WorldManager.INSTANCE.worldLogic.actor_by_id.get(id).controller().set_keyboard_status(up, right, down, left);
 		
 	}
 	/**
@@ -74,8 +74,8 @@ public enum Input
 		x_relative=(int)(Gdx.input.getX()*zoom);
 		y_relative=GameEngine.INSTANCE.orginal_height-(int)(Gdx.input.getY()*zoom);
 		
-		x_absolute=x_relative+WorldManager.INSTANCE.clientWorld.mapFragment.getX();
-		y_absolute=y_relative+WorldManager.INSTANCE.clientWorld.mapFragment.getY();
+		x_absolute=x_relative+WorldManager.INSTANCE.mapFragment.getX();
+		y_absolute=y_relative+WorldManager.INSTANCE.mapFragment.getY();
 		
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) 
 		{
@@ -87,7 +87,8 @@ public enum Input
 	       
 		}
 			
-		//WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).setWeaponRotate(x_absolute, y_absolute);
+		 int id= WorldManager.INSTANCE.actors.get( WorldManager.INSTANCE.myHeroArrayActors).getId();
+		 WorldManager.INSTANCE.worldLogic.actor_by_id.get(id).controller().set_mouse_position(new Vector(x_absolute,y_absolute));
 		
 	}
 	/**
