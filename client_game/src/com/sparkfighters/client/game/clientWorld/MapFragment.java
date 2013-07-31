@@ -88,7 +88,7 @@ public class MapFragment
 			int y1=(int) ResourcesManager.INSTANCE.map.platforms.get(i).y-this.y;
 			int y2=(int) ResourcesManager.INSTANCE.map.platforms.get(i).y-this.y;
 			
-			DrawEngine.INSTANCE.DrawLine(x1, y1, x2, y2, 1, Color.ORANGE);
+			DrawEngine.INSTANCE.DrawLine(x1, y1, x2, y2, 3, Color.ORANGE);
 		}
 	}
 }
