@@ -97,7 +97,7 @@ public class Actor
 	 */
 	public void setAnimation(int id)
 	{
-		if(this.id!=id)
+		if(idAnimation!=id)
 		{
 			time=0f;
 			idAnimation=id;
