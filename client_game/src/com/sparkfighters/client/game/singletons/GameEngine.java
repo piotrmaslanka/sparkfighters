@@ -49,6 +49,7 @@ public enum GameEngine
 			int id=WorldManager.INSTANCE.clientWorld.actors.get(i).getId();
 			int x=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().x;
 			int y=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().y;
+			//int idAnimation=WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id)
 			WorldManager.INSTANCE.clientWorld.actors.get(i).setX_absolute(x);
 			WorldManager.INSTANCE.clientWorld.actors.get(i).setY_absolute(y);
 		}

@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 /**
  * Singleton to hold input data from mouse and keyboard
  * @author Kamil Iwiñski
