@@ -140,7 +140,6 @@ final public class Rebound {
 		if (actor.get_h_moving()) return; // Actor wants to move, no friction
 		
 		Vector vel = actor.get_velocity();
-		vel.y = 0;
 		
 		if (Math.abs(vel.x) < Rebound.FRICTION * dt) 
 			vel.x = 0;

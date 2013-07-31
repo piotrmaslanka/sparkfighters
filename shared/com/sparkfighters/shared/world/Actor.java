@@ -79,6 +79,13 @@ public class Actor implements Cloneable {
 					this.actor_blueprint.runSpeed));
 		
 		this.physical.set_collides_platforms(!this._kbd_down);
+		this.physical.set_h_moving(this._kbd_right || this._kbd_left);
+		
+		// Determine which side is the player looking at
+		boolean is_left = this._mouse_position.x < this.physical.get().get_position().x;
+		int gid = this.physical.get_geom_id() & 254;
+		if (is_left) gid++;
+		this.physical.set(gid);
 	}
 	
 	public Actor(int id, ActorBlueprint abp) {
