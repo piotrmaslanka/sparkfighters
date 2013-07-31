@@ -146,6 +146,7 @@ public class Actor
 			
 			double radians=Math.tan(A/C);
 			float degrees=(float)(radians*180/Math.PI);
+			if(y_absolute-y_mouse_absolute>0) degrees=-degrees;
 			
 	
 			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region, x1,y1,degrees);	
@@ -159,7 +160,14 @@ public class Actor
 			x1=x1-w_x;
 			y1=y1-w_y;
 			
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region, x1,y1,0);	
+			double C=Math.sqrt((x_mouse_absolute-x_absolute)*(x_mouse_absolute-x_absolute)+(y_mouse_absolute-y_absolute)*(y_mouse_absolute-y_absolute));
+			double A=Math.sqrt((x_mouse_absolute-x_mouse_absolute)*(x_mouse_absolute-x_mouse_absolute)+(y_absolute-y_mouse_absolute)*(y_absolute-y_mouse_absolute));
+			
+			double radians=Math.tan(A/C);
+			float degrees=(float)(radians*180/Math.PI);
+			if(y_absolute-y_mouse_absolute<0) degrees=-degrees;
+			
+			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region, x1,y1,degrees);	
 		}
 	}
 	
