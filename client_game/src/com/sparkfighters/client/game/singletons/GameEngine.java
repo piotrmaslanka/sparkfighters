@@ -38,20 +38,25 @@ public enum GameEngine
 	 */
 	public void ProcessData()
 	{
+		Input.INSTANCE.processInput();
+		
 		WorldManager.INSTANCE.sharedWorld.worldLogic.advance(Gdx.graphics.getDeltaTime());
 		
-		Input.INSTANCE.processInput();
 		WorldManager.INSTANCE.clientWorld.mapFragment.set(WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getY_absolute());
 		
 		
 		for(int i=0;i<WorldManager.INSTANCE.clientWorld.actors.size();i++)
 		{
 			int id=WorldManager.INSTANCE.clientWorld.actors.get(i).getId();
+			
 			int x=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().x;
 			int y=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().y;
-			//int idAnimation=WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id)
 			WorldManager.INSTANCE.clientWorld.actors.get(i).setX_absolute(x);
 			WorldManager.INSTANCE.clientWorld.actors.get(i).setY_absolute(y);
+			
+			int x2=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).controller().get_mouse_position().x;
+			int y2=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).controller().get_mouse_position().y;
+			WorldManager.INSTANCE.clientWorld.actors.get(i).setWeaponRotate(x2, y2);
 		}
 	}
 	/**
