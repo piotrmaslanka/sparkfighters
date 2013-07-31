@@ -78,7 +78,7 @@ public class Actor implements Cloneable {
 			this.physical.set_velocity(this.physical.get_velocity().force_x(
 					this.actor_blueprint.runSpeed));
 		
-		this.physical.set_collides_platforms(this._kbd_down);
+		this.physical.set_collides_platforms(!this._kbd_down);
 	}
 	
 	public Actor(int id, ActorBlueprint abp) {

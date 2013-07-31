@@ -23,7 +23,7 @@ public class World implements Cloneable {
 	
 	private WorldCommand processor = null;
 	
-	static final double GRAVITY = -0.01;	// per 1 time unit, in delta y
+	static final double GRAVITY = -1;	// per 1 time unit, in delta y
 	
 	public World clone() {
 		World wrld = new World(this.world_area);
