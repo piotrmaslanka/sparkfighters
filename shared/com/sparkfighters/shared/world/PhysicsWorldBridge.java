@@ -27,7 +27,7 @@ public class PhysicsWorldBridge implements WorldCommand {
 	public PhysicsWorldBridge(World world) {
 		this.world = world;
 	}
-	
+
 	public void on_actor_hits_world_area(PhysicActor ac, Rectangle wa, double dt) {
 		Rebound.rebound(ac, wa, dt);
 	}
