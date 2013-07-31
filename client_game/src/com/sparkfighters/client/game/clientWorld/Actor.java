@@ -3,10 +3,8 @@ package com.sparkfighters.client.game.clientWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sparkfighters.client.game.singletons.DrawEngine;
-import com.sparkfighters.client.game.singletons.GameEngine;
 import com.sparkfighters.client.game.singletons.ResourcesManager;
 import com.sparkfighters.client.game.singletons.WorldManager;
 /**
@@ -33,7 +31,7 @@ public class Actor
 	public void setX_absolute(int x)
 	{
 		this.x_absolute=x;
-		this.x_relative=this.x_absolute-WorldManager.INSTANCE.clientWorld.mapFragment.getX();
+		this.x_relative=this.x_absolute-WorldManager.INSTANCE.mapFragment.getX();
 	}
 	
 	/**
@@ -44,7 +42,7 @@ public class Actor
 	public void setY_absolute(int y)
 	{
 		this.y_absolute=y;
-		this.y_relative=this.y_absolute-WorldManager.INSTANCE.clientWorld.mapFragment.getY();
+		this.y_relative=this.y_absolute-WorldManager.INSTANCE.mapFragment.getY();
 	}
 	/**
 	 * 
@@ -118,6 +116,9 @@ public class Actor
 	public void Draw()
 	{
 		//draw hero
+		int x_relative=this.x_relative-(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x;
+		int y_relative=this.y_relative-(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y;
+		
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
 		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
@@ -126,8 +127,8 @@ public class Actor
 		int h_x=currentFrame.getRegionWidth()/2;
 		int h_y=currentFrame.getRegionHeight()/2;
 		
-		int x1=this.x_relative+h_x;
-		int y1=this.y_relative+h_y;
+		int x1=x_relative+h_x;
+		int y1=y_relative+h_y;
 		
 		if(idAnimation%2==0)
 		{
@@ -168,6 +169,9 @@ public class Actor
 	 */
 	public void DrawDebugInfo(int x,int y, BitmapFont font, Color color)
 	{
+		int x_relative=this.x_relative-(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x;
+		int y_relative=this.y_relative-(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y;
+		
 		//draw hitboxes
 		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.size();i++)
 		{
@@ -176,13 +180,13 @@ public class Actor
 			int y1=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y1;
 			int y2=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y2;
 			
-			DrawEngine.INSTANCE.DrawRectangle(this.x_relative+x1, this.y_relative+y1, this.x_relative+x2, this.y_relative+y2,2,Color.RED);
+			DrawEngine.INSTANCE.DrawRectangle(x_relative+x1, y_relative+y1, x_relative+x2, y_relative+y2,2,Color.RED);
 		}
 		
 		//draw synchro point
 		int x3=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x;
 		int y3=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y;
-		DrawEngine.INSTANCE.DrawPoint(this.x_relative+x3, this.y_relative+y3,5, Color.YELLOW);
+		DrawEngine.INSTANCE.DrawPoint(x_relative+x3, y_relative+y3,5, Color.YELLOW);
 		
 		//draw Data about hero
 		DrawEngine.INSTANCE.DrawText(x,y,color,font,

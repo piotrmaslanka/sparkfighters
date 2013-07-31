@@ -2,7 +2,6 @@ package com.sparkfighters.client.game.singletons;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,17 +9,11 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
-import com.sparkfighters.shared.loader.jsonobjs.AnimationData;
-import com.sparkfighters.shared.loader.jsonobjs.HeroData;
-import com.sparkfighters.shared.physics.objects.Rectangle;
-import com.sparkfighters.shared.physics.objects.Vector;
+
 /**
  * Singleton to hold all data information from HDD.
  * @author Kamil Iwiñski

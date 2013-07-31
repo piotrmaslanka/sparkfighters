@@ -38,19 +38,26 @@ public enum GameEngine
 	 */
 	public void ProcessData()
 	{
-		WorldManager.INSTANCE.sharedWorld.worldLogic.advance(Gdx.graphics.getDeltaTime());
-		
 		Input.INSTANCE.processInput();
-		WorldManager.INSTANCE.clientWorld.mapFragment.set(WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.clientWorld.actors.get(WorldManager.INSTANCE.clientWorld.myHeroArrayActors).getY_absolute());
+		
+		WorldManager.INSTANCE.worldLogic.advance(Gdx.graphics.getDeltaTime());
+		
+		WorldManager.INSTANCE.mapFragment.set(WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getY_absolute());
 		
 		
-		for(int i=0;i<WorldManager.INSTANCE.clientWorld.actors.size();i++)
+		for(int i=0;i<WorldManager.INSTANCE.actors.size();i++)
 		{
-			int id=WorldManager.INSTANCE.clientWorld.actors.get(i).getId();
-			int x=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().x;
-			int y=(int)WorldManager.INSTANCE.sharedWorld.worldLogic.get_actor(id).physical.get_position().y;
-			WorldManager.INSTANCE.clientWorld.actors.get(i).setX_absolute(x);
-			WorldManager.INSTANCE.clientWorld.actors.get(i).setY_absolute(y);
+			int id=WorldManager.INSTANCE.actors.get(i).getId();
+			
+			int x=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_position().x;
+			int y=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_position().y;
+			WorldManager.INSTANCE.actors.get(i).setX_absolute(x);
+			WorldManager.INSTANCE.actors.get(i).setY_absolute(y);
+			
+			int x2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().x;
+			int y2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().y;
+			WorldManager.INSTANCE.actors.get(i).setWeaponRotate(x2, y2);
+			
 		}
 	}
 	/**
@@ -60,11 +67,11 @@ public enum GameEngine
 	{	
 		DrawEngine.INSTANCE.ClearScreen();		
 		
-		WorldManager.INSTANCE.clientWorld.mapFragment.Draw();
+		WorldManager.INSTANCE.mapFragment.Draw();
 		
-		for(int i=0;i<WorldManager.INSTANCE.clientWorld.actors.size();i++)
+		for(int i=0;i<WorldManager.INSTANCE.actors.size();i++)
 		{
-			WorldManager.INSTANCE.clientWorld.actors.get(i).Draw();
+			WorldManager.INSTANCE.actors.get(i).Draw();
 		}
 		
 		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
