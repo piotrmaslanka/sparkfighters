@@ -26,7 +26,7 @@ final public class Rebound {
 	/**
 	 * Amount of friction in px^2/t
 	 */
-	final static public double FRICTION = 0.001;
+	final static public double FRICTION = 10;
 	
 	/**
 	 * Vertical comparision epsilon
