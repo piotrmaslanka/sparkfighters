@@ -134,7 +134,8 @@ final public class Rebound {
 		double actor_y = hs.y - actor.get().get_mbr().y1 + Rebound.GRAVITY_EPSILON;
 		
 		actor.set_position(new Vector(actor_x, actor_y));
-		
+		actor.set_velocity(actor.get_velocity().force_y(0));
+
 		// Friction??
 		if (actor.get_h_moving()) return; // Actor wants to move, no friction
 		
