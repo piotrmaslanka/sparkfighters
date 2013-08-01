@@ -46,7 +46,7 @@ public enum GameEngine
 	{
 		Input.INSTANCE.processInput();
 		
-		WorldManager.INSTANCE.worldLogic.advance(Gdx.graphics.getDeltaTime());
+		WorldManager.INSTANCE.worldLogic.advance(10.0*Gdx.graphics.getDeltaTime());
 		
 		WorldManager.INSTANCE.mapFragment.set(WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getY_absolute());
 		
