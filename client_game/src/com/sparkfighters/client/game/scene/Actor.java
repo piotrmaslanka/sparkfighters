@@ -17,6 +17,7 @@ public class Actor
 	private int x_absolute,y_absolute;
 	private int x_relative,y_relative;
 	private int x_mouse_absolute,y_mouse_absolute;
+	private int x_mouse_relative,y_mouse_relative;
 	
 	private int idHeroArrayResource,idWeaponArrayResource, id;
 	private int idAnimation;
@@ -112,6 +113,9 @@ public class Actor
 	{
 		this.x_mouse_absolute=x_mouse_aboslute;
 		this.y_mouse_absolute=y_mouse_absolute;
+		
+		this.x_mouse_relative=this.x_mouse_absolute-WorldManager.INSTANCE.mapFragment.getX();
+		this.y_mouse_relative=this.y_mouse_absolute-WorldManager.INSTANCE.mapFragment.getY();
 	}
 	/**
 	 * Function draw Actor: body, weapon
@@ -133,6 +137,7 @@ public class Actor
 		int x1=x_relative+h_x;
 		int y1=y_relative+h_y;
 		
+		float degrees=0.0f;
 		if(idAnimation%2==0)
 		{
 			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region.getRegionWidth()/2;
@@ -145,7 +150,7 @@ public class Actor
 			double A=Math.sqrt((x_mouse_absolute-x_mouse_absolute)*(x_mouse_absolute-x_mouse_absolute)+(y_absolute-y_mouse_absolute)*(y_absolute-y_mouse_absolute));
 			
 			double radians=Math.tan(A/C);
-			float degrees=(float)(radians*180/Math.PI);
+			degrees=(float)(radians*180/Math.PI);
 			if(y_absolute-y_mouse_absolute>0) degrees=-degrees;
 			
 	
@@ -164,11 +169,13 @@ public class Actor
 			double A=Math.sqrt((x_mouse_absolute-x_mouse_absolute)*(x_mouse_absolute-x_mouse_absolute)+(y_absolute-y_mouse_absolute)*(y_absolute-y_mouse_absolute));
 			
 			double radians=Math.tan(A/C);
-			float degrees=(float)(radians*180/Math.PI);
+			degrees=(float)(radians*180/Math.PI);
 			if(y_absolute-y_mouse_absolute<0) degrees=-degrees;
 			
 			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region, x1,y1,degrees);	
 		}
+		
+		
 	}
 	
 	/**

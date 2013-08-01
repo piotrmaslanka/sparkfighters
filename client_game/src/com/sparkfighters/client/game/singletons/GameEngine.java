@@ -2,7 +2,6 @@ package com.sparkfighters.client.game.singletons;
 
 import com.badlogic.gdx.Gdx;
 import com.sparkfighters.client.game.enums.Debug;
-import com.sparkfighters.client.game.ultis.MapImageToJson;
 /**
  * Singleton to hold information about game.
  * @author Kamil Iwiñski
@@ -25,11 +24,7 @@ public enum GameEngine
 	 * @param window_height
 	 */
 	public void Init(int window_width,int window_height)
-	{
-		//MapImageToJson c=new MapImageToJson();
-		//c.convert("p.png", "data/maps/0/data.json");
-		
-		
+	{	
 		this.window_width=window_width;
 		this.window_height=window_height;	
 		
