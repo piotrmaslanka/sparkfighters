@@ -87,7 +87,7 @@ public enum DrawEngine
 	 */
 	public void DrawRectangle(int x1,int y1,int x2,int y2,int size, Color color)
 	{
-		Gdx.gl10.glLineWidth(size);
+		//Gdx.gl10.glLineWidth(size);
 		shape.begin(ShapeType.Line);
 		shape.setColor(color);
 		shape.rect(x1, y1, x2-x1, y2-y1);
@@ -102,7 +102,7 @@ public enum DrawEngine
 	 */
 	public void DrawPoint(int x,int y, int size, Color color)
 	{
-		Gdx.gl10.glPointSize(size);
+		//Gdx.gl10.glPointSize(size);
 		shape.begin(ShapeType.Point);
 		shape.setColor(color);
 		shape.point(x, y, 0);
@@ -119,7 +119,7 @@ public enum DrawEngine
 	 */
 	public void DrawLine(int x,int y,int x2,int y2, int size, Color color)
 	{
-		Gdx.gl10.glLineWidth(size);
+		//Gdx.gl10.glLineWidth(size);
 		shape.begin(ShapeType.Line);
 		shape.setColor(color);
 		shape.line(x, y, x2, y2);

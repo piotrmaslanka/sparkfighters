@@ -56,7 +56,7 @@ public class Main {
 			
 			LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 			cfg.title = "Spark Fighters Game";
-			cfg.useGL20 = false;
+			cfg.useGL20 = true;
 			
 			cfg.fullscreen=fullscreen;
 			cfg.width = window_width;

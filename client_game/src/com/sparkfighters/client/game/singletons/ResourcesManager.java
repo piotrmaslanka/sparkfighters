@@ -31,7 +31,7 @@ public enum ResourcesManager
 	public BitmapFont font;
 	
 	/**
-	 * Function to load resources form hdd
+	 * Function to load resources from hdd
 	 */
 	public void LoadResources()
 	{
@@ -100,6 +100,21 @@ public enum ResourcesManager
 		String path="data/maps/0";
 		map=HDD.loadClass(path+"/data.json", MapDataClient.class);
 		map.loadTexture(path+"/data.png");
+	}
+	
+	public void setTextureFilter(TextureFilter tf)
+	{
+		for(int i=0;i<heroesData.size();i++)
+		{
+			heroesData.get(i).texture.setFilter(tf, tf);
+		}
+		
+		for(int i=0;i<weaponsData.size();i++)
+		{
+			weaponsData.get(i).texture.setFilter(tf, tf);
+		}
+		
+		map.texture.setFilter(tf, tf);
 	}
 	
 }
