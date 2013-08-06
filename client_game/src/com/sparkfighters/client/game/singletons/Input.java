@@ -64,22 +64,6 @@ public enum Input
 		 }
 		 int id= WorldManager.INSTANCE.actors.get( WorldManager.INSTANCE.myHeroArrayActors).getId();
 		 WorldManager.INSTANCE.worldLogic.actor_by_id.get(id).controller().set_keyboard_status(up, right, down, left);
-		 
-		 
-		 if(Gdx.input.isKeyPressed(Keys.Z))
-		 {
-			 ResourcesManager.INSTANCE.setTextureFilter(TextureFilter.Linear);
-		 }
-		 
-		 if(Gdx.input.isKeyPressed(Keys.X))
-		 {
-			 ResourcesManager.INSTANCE.setTextureFilter(TextureFilter.Nearest);
-		 }
-		 
-		 if(Gdx.input.isKeyPressed(Keys.C))
-		 {
-			 ResourcesManager.INSTANCE.setTextureFilter(TextureFilter.MipMap);
-		 }
 		
 	}
 	/**

@@ -20,7 +20,7 @@ public class MapDataClient extends MapData
 	public void loadTexture(String filePath)
 	{
 		texture=new Texture(filePath);
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texture.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		
 		texture.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(texture.getTextureData().consumePixmap(), 

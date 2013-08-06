@@ -15,6 +15,7 @@ public enum GameEngine
 	public final int orginal_height=1080;
 	public int window_width;
 	public int window_height;
+	public boolean loadResources=true;
 	
 	public Debug debug=Debug.ALLMETHODS;	
 		
@@ -38,7 +39,7 @@ public enum GameEngine
 	 * Function which hold all process data 
 	 */
 	public void ProcessData()
-	{
+	{				
 		Input.INSTANCE.processInput();
 		
 		WorldManager.INSTANCE.worldLogic.advance(10.0*Gdx.graphics.getDeltaTime());

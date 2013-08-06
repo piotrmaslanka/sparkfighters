@@ -195,7 +195,6 @@ public class Actor
 		
 		
 	}
-	
 	/**
 	 * Function draw debug information on screen
 	 * @param x int

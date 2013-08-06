@@ -2,13 +2,14 @@ package com.sparkfighters.client.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.sparkfighters.client.game.singletons.GameEngine;
 /**
  * ApplicationListener for game loop
  * @author Kamil Iwiñski
  *
  */
-public class GameListener implements ApplicationListener 
+public class GameListener implements ApplicationListener
 {
 	
 	/**
@@ -31,7 +32,7 @@ public class GameListener implements ApplicationListener
 	 * Main loop
 	 */
 	public void render() 
-	{		
+	{
 		GameEngine.INSTANCE.ProcessData();
 		GameEngine.INSTANCE.Draw();
 	}
@@ -58,4 +59,5 @@ public class GameListener implements ApplicationListener
 	{
 		
 	}
+
 }
