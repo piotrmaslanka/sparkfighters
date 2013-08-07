@@ -30,9 +30,8 @@ public enum GameEngine
 		this.window_height=window_height;	
 		
 		DrawEngine.INSTANCE.Init();
-		ResourcesManager.INSTANCE.LoadResources();	
-		WorldManager.INSTANCE.Init();
-			
+		//ResourcesManager.INSTANCE.LoadResources();
+		//WorldManager.INSTANCE.Init();		
 	}
 	
 	/**

@@ -22,66 +22,114 @@ import com.sparkfighters.client.game.resources.WeaponDataClient;
  *
  */
 
-public enum ResourcesManager 
+public enum ResourcesManager
 {
 	INSTANCE;
+		
 	
 	public List<HeroDataClient> heroesData=new ArrayList<HeroDataClient>();
 	public List<WeaponDataClient> weaponsData=new ArrayList<WeaponDataClient>();
 	public MapDataClient map=new MapDataClient(); 
 	
-	public BitmapFont font;
-	public Texture loadingScreen;
+	public BitmapFont debugFont;
 	
-	/**
-	 * Function to load resources from hdd
-	 */
+	
+	public Texture loadingScreen;	
+	public BitmapFont loadingFont;
+
+	private int progress=0;
+	private String progressText="";
+	private int step=0;
+	
 	public void LoadResources()
-	{
-		Texture.setEnforcePotImages(false);
-		LoadFonts();
-		LoadLoadingScreen();
+	{	
+		switch (step)
+		{
+			case 0: 
+					progress=0;
+					progressText="";		
+					Texture.setEnforcePotImages(false);
+					LoadLoadingScreen();
+					progress+=10;
+					break;
+			
+			case 1:
+					progressText="Loading fonts...";
+					break;
+			case 2: 
+					LoadFonts();
+					progress+=10;
+					break;
+			
+			case 3:
+					progressText="Loading heroes...";
+					break;
+				
+			case 4:
+					LoadHeroes();
+					progress+=20;
+					break;
+			
+			case 5:
+					progressText="Loading weapons...";				
+					break;
+			case 6:
+					LoadWeapons();
+					progress+=20;
+					break;
+			
+			case 7:
+					progressText="Loading map...";
+					break;
+			
+			case 8: 
+					LoadMap();
+					progress=100;
+					progressText="";
+					break;	
+		}
 		
-		LoadHeroes();
-		LoadWeapons();
-		LoadMap();
+		step++;
 	}
 	
 	public void DrawLoadingScreen(String text)
 	{
 		DrawEngine.INSTANCE.ClearScreen();
 		DrawEngine.INSTANCE.Draw(loadingScreen, 0, 0);
-		DrawEngine.INSTANCE.DrawText(100, 100, Color.ORANGE, font, text);
+		DrawEngine.INSTANCE.DrawText(100, 100, Color.ORANGE, loadingFont, text);
 	}
 	
 	private void LoadLoadingScreen() 
-	{
+	{		
 		loadingScreen = new Texture(HDD.getFileHandle("data/loadingScreen.png"));
 		loadingScreen.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		loadingScreen.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(loadingScreen.getTextureData().consumePixmap(), 
-				loadingScreen.getWidth(), loadingScreen.getHeight(), true);		
-	}
-	/**
-	 * Function load fonts from HDD
-	 */
-	private void LoadFonts()
-	{
-		Texture texture = new Texture(HDD.getFileHandle("data/font.png"));
+				loadingScreen.getWidth(), loadingScreen.getHeight(), true);	
+		
+		
+		Texture texture = new Texture(HDD.getFileHandle("data/fonts/loadingfont.png"));
 		texture.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		texture.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(texture.getTextureData().consumePixmap(), 
 				texture.getWidth(), texture.getHeight(), true);
 		TextureRegion tr=new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
-		font = new BitmapFont(HDD.getFileHandle("data/font.fnt"), tr, false);
+		loadingFont = new BitmapFont(HDD.getFileHandle("data/fonts/loadingfont.fnt"), tr, false);
 	}
-	/**
-	 * Function load heroes/bodies from HDD
-	 */
-	private void LoadHeroes()
+	
+	private void LoadFonts()
 	{
-		DrawLoadingScreen("Loading heroes...");
-		
+		Texture texture = new Texture(HDD.getFileHandle("data/fonts/debugfont.png"));
+		texture.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
+		texture.getTextureData().prepare();
+		MipMapGenerator.generateMipMap(texture.getTextureData().consumePixmap(), 
+				texture.getWidth(), texture.getHeight(), true);
+		TextureRegion tr=new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
+		debugFont = new BitmapFont(HDD.getFileHandle("data/fonts/debugfont.fnt"), tr, false);
+	}
+
+	private void LoadHeroes()
+	{		
 		heroesData=new ArrayList<HeroDataClient>();
 		
 		FileHandle[] list=HDD.getDirContent("data/heroes");
@@ -96,14 +144,11 @@ public enum ResourcesManager
 			heroesData.add(HD);
 		}
 		
-
 	}
-	/**
-	 * Function load weapons form HDD
-	 */
+
 	private void LoadWeapons()
 	{
-		DrawLoadingScreen("Loading weapons...");
+		progressText="Loading weapons...";
 		
 		weaponsData=new ArrayList<WeaponDataClient>();
 		
@@ -119,17 +164,29 @@ public enum ResourcesManager
 		}
 		
 	}
-	/**
-	 * Function to load map from hdd
-	 */
+
 	private void LoadMap()
-	{
-		DrawLoadingScreen("Loading map...");
-		
+	{		
 		map=new MapDataClient();
 		String path="data/maps/0";
 		map=HDD.loadClass(path+"/data.json", MapDataClient.class);
 		map.loadTexture(path+"/data.png");
+	}
+
+	public boolean finished()
+	{
+		if(progress==100) return true;
+		return false;
+	}
+	
+	public int getProgress()
+	{
+		return progress;
+	}
+	
+	public String getProgressText()
+	{
+		return progressText;		
 	}
 	
 }

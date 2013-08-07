@@ -68,7 +68,7 @@ public class Main {
 			
 			//cfg.addIcon("logo.png", FileType.Internal);
 			
-			new LwjglApplication(new GameListener(), cfg);
+			new LwjglApplication(new SparkFightersGame(), cfg);
 		}
 		else
 		{

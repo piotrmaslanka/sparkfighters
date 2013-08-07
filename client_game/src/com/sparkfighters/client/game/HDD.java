@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
  * @author Kamil Iwiñski
  * 
  */
-public class HDD 
+public class HDD
 {
 	/**
 	 * @param path to file as String
@@ -41,6 +41,7 @@ public class HDD
 		//}
 		return dirHandle.list();
 	}
+	
 	
 	/**
 	 * Function save class to json file

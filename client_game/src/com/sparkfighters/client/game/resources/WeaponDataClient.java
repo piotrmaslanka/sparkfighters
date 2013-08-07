@@ -12,6 +12,7 @@ import com.sparkfighters.shared.loader.jsonobjs.WeaponData;
  */
 public class WeaponDataClient extends WeaponData
 {
+
 	public Texture texture;
 	public TextureRegion right_region;
 	public TextureRegion left_region;

@@ -2,7 +2,6 @@ package com.sparkfighters.client.game.singletons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -150,7 +149,7 @@ public enum DrawEngine
 	{	
 		//int w=GameEngine.INSTANCE.orginal_width;
 		int h=GameEngine.INSTANCE.orginal_height;
-		BitmapFont font=ResourcesManager.INSTANCE.font;
+		BitmapFont font=ResourcesManager.INSTANCE.debugFont;
 		Color color=Color.GREEN;
 		int space_h=40;
 		

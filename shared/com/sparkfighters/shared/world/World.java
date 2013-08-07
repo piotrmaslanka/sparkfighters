@@ -1,8 +1,6 @@
 package com.sparkfighters.shared.world;
 
 import java.util.HashMap;
-import java.util.Vector;
-
 import com.sparkfighters.shared.physics.gwobjects.PhysicActor;
 
 /**

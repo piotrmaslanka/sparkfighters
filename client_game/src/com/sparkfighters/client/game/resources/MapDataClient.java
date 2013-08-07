@@ -2,7 +2,6 @@ package com.sparkfighters.client.game.resources;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.MipMapGenerator;
 import com.sparkfighters.shared.loader.jsonobjs.MapData;
 /**
