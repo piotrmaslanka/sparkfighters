@@ -1,6 +1,7 @@
-package com.sparkfighters.client.game;
+package com.sparkfighters.client.game.screens;
 
 import com.badlogic.gdx.Screen;
+import com.sparkfighters.client.game.SparkFightersGame;
 import com.sparkfighters.client.game.singletons.GameEngine;
 
 public class GameScreen implements Screen

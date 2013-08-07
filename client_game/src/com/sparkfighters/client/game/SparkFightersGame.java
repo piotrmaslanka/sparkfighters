@@ -2,6 +2,7 @@ package com.sparkfighters.client.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.sparkfighters.client.game.screens.LoadingScreen;
 import com.sparkfighters.client.game.singletons.GameEngine;
 /**
  * ApplicationListener for game loop
