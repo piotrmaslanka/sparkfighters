@@ -19,7 +19,7 @@ public class Actor
 	private Vector actorPositionRelative=new Vector();
 	private Vector mousePositionAbsolute=new Vector();
 	
-	private int idHeroArrayResource,idWeaponArrayResource, id;
+	private int idHero,idWeapon, id;
 	private int idAnimation;
 	private float time;
 	
@@ -69,25 +69,9 @@ public class Actor
 	public Actor(int id, int idHero, int idWeapon)
 	{
 		this.id=id;
-		
-		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.size();i++)
-		{
-			if(idHero==ResourcesManager.INSTANCE.heroesData.get(i).id)
-			{
-				this.idHeroArrayResource=i;
-				break;
-			}
-		}
-		
-		for(int i=0;i<ResourcesManager.INSTANCE.weaponsData.size();i++)
-		{
-			if(idWeapon==ResourcesManager.INSTANCE.weaponsData.get(i).id)
-			{
-				this.idWeaponArrayResource=i;
-				break;
-			}
-		}
-		
+		this.idHero=idHero;
+		this.idWeapon=idWeapon;
+			
 		setAnimation(0);
 	}
 	/**
@@ -118,11 +102,11 @@ public class Actor
 	public void Draw()
 	{
 		//draw hero
-		int x_relative=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x);
-		int y_relative=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y);
+		int x_relative=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
+		int y_relative=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
 		
 		time += Gdx.graphics.getDeltaTime(); 
-		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
+		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
 		//DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
 		
 		//draw weapon
@@ -135,8 +119,8 @@ public class Actor
 		float degrees=0.0f;
 		if(idAnimation%2==0)
 		{
-			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region.getRegionWidth()/2;
-			int w_y=ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region.getRegionHeight()/2;
+			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).right_region.getRegionWidth()/2;
+			int w_y=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).right_region.getRegionHeight()/2;
 			
 			x1=x1-w_x;
 			y1=y1-w_y;
@@ -152,20 +136,20 @@ public class Actor
 			if(degrees>45.0f)
 			{
 				idAnimation=idAnimation+2;
-				currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
+				currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
 				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
 			}
 			else
 			{
 				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
 			}
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).right_region, x1,y1,degrees);	
+			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).right_region, x1,y1,degrees);	
 		}
 
 		if(idAnimation%2==1)
 		{
-			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region.getRegionWidth()/2;
-			int w_y=ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region.getRegionHeight()/2;
+			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).left_region.getRegionWidth()/2;
+			int w_y=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).left_region.getRegionHeight()/2;
 			
 			x1=x1-w_x;
 			y1=y1-w_y;
@@ -178,7 +162,7 @@ public class Actor
 			if(degrees>45.0f)
 			{
 				idAnimation=idAnimation+2;
-				currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
+				currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
 				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
 			}
 			else
@@ -189,7 +173,7 @@ public class Actor
 			
 			
 			
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).left_region, x1,y1,degrees);	
+			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).left_region, x1,y1,degrees);	
 		}
 		
 		
@@ -204,30 +188,30 @@ public class Actor
 	 */
 	public void DrawDebugInfo(int x,int y, BitmapFont font, Color color)
 	{
-		int x_relative=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x);
-		int y_relative=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y);
+		int x_relative=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
+		int y_relative=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
 		
 		//draw hitboxes
-		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.size();i++)
+		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.size();i++)
 		{
-			int x1=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).x1;
-			int x2=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).x2;
-			int y1=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y1;
-			int y2=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).hitboxes.get(i).y2;
+			int x1=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.get(i).x1;
+			int x2=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.get(i).x2;
+			int y1=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.get(i).y1;
+			int y2=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.get(i).y2;
 			
 			DrawEngine.INSTANCE.DrawRectangle(x_relative+x1, y_relative+y1, x_relative+x2, y_relative+y2,2,Color.RED);
 		}
 		
 		//draw synchro point
-		int x3=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.x;
-		int y3=(int)ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).Animations.get(idAnimation).synchroPoint.y;
+		int x3=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x;
+		int y3=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y;
 		DrawEngine.INSTANCE.DrawPoint(x_relative+x3, y_relative+y3,5, Color.YELLOW);
 		
 		//draw Data about hero
 		DrawEngine.INSTANCE.DrawText(x,y,color,font,
 				"PID="+id+
-				" HeroID="+ResourcesManager.INSTANCE.heroesData.get(idHeroArrayResource).id+
-				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeaponArrayResource).id+
+				" HeroID="+ResourcesManager.INSTANCE.heroesData.get(idHero).id+
+				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeapon).id+
 				" AnimationID="+idAnimation+
 				" Relative(x,y)=("+this.actorPositionRelative.x+","+this.actorPositionRelative.y+")"+
 				" Absolute(x,y)=("+this.actorPositionAbsolute.x+","+this.actorPositionAbsolute.y+")"

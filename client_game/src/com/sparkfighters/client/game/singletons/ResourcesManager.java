@@ -1,7 +1,6 @@
 package com.sparkfighters.client.game.singletons;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -26,10 +25,10 @@ public enum ResourcesManager
 {
 	INSTANCE;
 		
+	public HashMap<Integer, HeroDataClient> heroesData;
+	public HashMap<Integer, WeaponDataClient> weaponsData;
 	
-	public List<HeroDataClient> heroesData=new ArrayList<HeroDataClient>();
-	public List<WeaponDataClient> weaponsData=new ArrayList<WeaponDataClient>();
-	public MapDataClient map=new MapDataClient(); 
+	public MapDataClient map; 
 	
 	public BitmapFont debugFont;
 		
@@ -104,6 +103,7 @@ public enum ResourcesManager
 					WorldManager.INSTANCE.Init();	
 					progress=100;
 					progressText="";
+					step=0;
 					break;
 				
 		}
@@ -149,7 +149,7 @@ public enum ResourcesManager
 
 	private void LoadHeroes()
 	{		
-		heroesData=new ArrayList<HeroDataClient>();
+		heroesData=new HashMap<Integer, HeroDataClient>();
 		
 		FileHandle[] list=HDD.getDirContent("data/heroes");
 		
@@ -160,7 +160,7 @@ public enum ResourcesManager
 			HeroDataClient HD=new HeroDataClient();
 			HD= HDD.loadClass("data/heroes/"+i+"/data.json", HeroDataClient.class);
 			HD.loadTexture(list[i]+"/data.png");
-			heroesData.add(HD);
+			heroesData.put(HD.id, HD);
 		}
 		
 	}
@@ -169,7 +169,7 @@ public enum ResourcesManager
 	{
 		progressText="Loading weapons...";
 		
-		weaponsData=new ArrayList<WeaponDataClient>();
+		weaponsData=new HashMap<Integer, WeaponDataClient>();
 		
 		FileHandle[] list=HDD.getDirContent("data/weapons");
 		
@@ -179,7 +179,8 @@ public enum ResourcesManager
 			WeaponDataClient WD=new WeaponDataClient();
 			WD=HDD.loadClass("data/weapons/"+i+"/data.json", WeaponDataClient.class);
 			WD.loadTexture("data/weapons/"+i+"/data.png");
-			weaponsData.add(WD);
+			
+			weaponsData.put(WD.id, WD);
 		}
 		
 	}

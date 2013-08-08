@@ -23,7 +23,7 @@ public class Main {
 	public static String readFile(String filename)
 	{
 	   String content = null;
-	   File file = new File(filename); //for ex foo.txt
+	   File file = new File(filename); 
 	   try 
 	   {
 	       FileReader reader = new FileReader(file);

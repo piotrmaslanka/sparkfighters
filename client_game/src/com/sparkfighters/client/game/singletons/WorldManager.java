@@ -20,8 +20,7 @@ public enum WorldManager
 	
 	public void Init()
 	{
-
-		
+	
 		actors.add(new com.sparkfighters.client.game.scene.Actor(0,0,0));
 		myHeroArrayActors=0;
 
