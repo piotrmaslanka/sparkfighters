@@ -32,8 +32,7 @@ public enum ResourcesManager
 	public MapDataClient map=new MapDataClient(); 
 	
 	public BitmapFont debugFont;
-	
-	
+		
 	public Texture loadingScreen;	
 	public BitmapFont loadingFont;
 
@@ -50,43 +49,63 @@ public enum ResourcesManager
 					progressText="";		
 					Texture.setEnforcePotImages(false);
 					LoadLoadingScreen();
-					progress+=10;
+					progress=10;
 					break;
 			
-			case 1:
-					progressText="Loading fonts...";
-					break;
-			case 2: 
-					LoadFonts();
-					progress+=10;
+			case 1: 
+					progressText="Connecting to server...";
 					break;
 			
-			case 3:
-					progressText="Loading heroes...";
+			
+			case 2:
+					//here init UDP and authorize connection
+					progress=20;
 					break;
 				
-			case 4:
-					LoadHeroes();
-					progress+=20;
+			case 3:
+					progressText="Loading fonts...";
+					break;
+			case 4: 
+					LoadFonts();
+					progress=30;
 					break;
 			
 			case 5:
-					progressText="Loading weapons...";				
+					progressText="Loading heroes...";
 					break;
+				
 			case 6:
-					LoadWeapons();
-					progress+=20;
+					LoadHeroes();
+					progress=50;
 					break;
 			
 			case 7:
+					progressText="Loading weapons...";				
+					break;
+			case 8:
+					LoadWeapons();
+					progress=70;
+					break;
+			
+			case 9:
 					progressText="Loading map...";
 					break;
 			
-			case 8: 
+			case 10: 
 					LoadMap();
+					progress=90;
+					break;	
+					
+			case 11:
+					progressText="Generating world...";
+					break;
+					
+			case 12:
+					WorldManager.INSTANCE.Init();	
 					progress=100;
 					progressText="";
-					break;	
+					break;
+				
 		}
 		
 		step++;

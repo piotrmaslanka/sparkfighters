@@ -15,7 +15,6 @@ public enum GameEngine
 	public final int orginal_height=1080;
 	public int window_width;
 	public int window_height;
-	public boolean loadResources=true;
 	
 	public Debug debug=Debug.ALLMETHODS;	
 		
@@ -29,9 +28,7 @@ public enum GameEngine
 		this.window_width=window_width;
 		this.window_height=window_height;	
 		
-		DrawEngine.INSTANCE.Init();
-		//ResourcesManager.INSTANCE.LoadResources();
-		//WorldManager.INSTANCE.Init();		
+		DrawEngine.INSTANCE.Init();	
 	}
 	
 	/**
