@@ -14,8 +14,6 @@ import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
-import com.sparkfighters.client.game.ultis.HeroFlashJsonToOurJson;
-
 /**
  * Singleton to hold all data information from HDD.
  * @author Kamil Iwiñski

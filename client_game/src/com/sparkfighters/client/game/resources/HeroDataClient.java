@@ -46,6 +46,15 @@ public class HeroDataClient extends HeroData
 			    int h=(int)Animations.get(i).frames.get(j).y2-y;
 				TextureRegion tr=new TextureRegion(texture);
 				tr.setRegion(x,y, w, h);
+				if(i%2==0)
+				{
+					//right animation
+				}
+				else
+				{
+					//left animation
+					tr.flip(true, false);
+				}
 				frames[j]=tr;
 			}
 			Animation a=new Animation(Animations.get(i).speedOfAnimation,frames);

@@ -107,9 +107,9 @@ public class Actor
 		
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
-		//DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
+		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
 		
-		//draw weapon
+		/*//draw weapon
 		int h_x=currentFrame.getRegionWidth()/2;
 		int h_y=currentFrame.getRegionHeight()/2;
 		
@@ -177,7 +177,7 @@ public class Actor
 		}
 		
 		
-		
+		*/
 	}
 	/**
 	 * Function draw debug information on screen
