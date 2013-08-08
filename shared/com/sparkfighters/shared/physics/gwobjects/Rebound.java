@@ -48,13 +48,16 @@ final public class Rebound {
 		
 		if (actor_mbr.y2 >= rect.y2) {
 			Rebound.actor_hit_roof(actor, rect.y2, dt);
-		} else if (actor_mbr.y1 <= rect.y1) {
+		}
+		if (actor_mbr.y1 <= rect.y1) {
 			Rebound.actor_hit_floor(actor, rect.y1, dt);
-		} else if (actor_mbr.x1 <= rect.x1) {
+		}
+		if (actor_mbr.x1 <= rect.x1) {
 			Rebound.actor_hit_leftside(actor, rect.x1, dt);
-		} else if (actor_mbr.x2 >= rect.x2) {
+		}
+		if (actor_mbr.x2 >= rect.x2) {
 			Rebound.actor_hit_rightside(actor, rect.x2, dt);
-		} else assert(false); // this is invalid
+		}
 	}
 	
 	/**
