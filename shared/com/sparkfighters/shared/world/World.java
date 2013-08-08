@@ -71,7 +71,7 @@ public class World implements Cloneable {
 		// prepare teams. We WILL creates actors, by the way
 		Team[] new_teams = new Team[this.teams.length];
 		for(int i=0; i<new_teams.length; i++) {
-			Actor[] actors_for_this_team = new Actor[this.teams[i].actors.length];
+			new_teams[i] = this.teams[i].clone();
 			
 			int j=0;
 			for (Actor old_actor : this.teams[i].actors) {
@@ -83,11 +83,9 @@ public class World implements Cloneable {
 					new_actor.physical = pca;
 				}
 				// Store them into array
-				actors_for_this_team[j] = new_actor;
+				new_teams[i].actors[j] = new_actor;
 				j++;
 			}
-			
-			new_teams[i] = new Team(this.teams[i].id, actors_for_this_team);			
 		}
 
 		//prepare logic world
