@@ -18,7 +18,7 @@ import com.sparkfighters.shared.physics.objects.Vector;
  */
 public class HeroFlashJsonToOurJson 
 {
-	public void convert(String loadPath, String savePath)
+	public static void convert(String loadPath, String savePath)
 	{
 		HeroData HD=new HeroData();
 		HD.name=loadPath;
@@ -46,11 +46,12 @@ public class HeroFlashJsonToOurJson
 				if(Animation.frames.size()>0)					
 				{
 					HD.Animations.add(Animation);
+					HD.Animations.add(leftAnimation(Animation));
 					Animation=new AnimationData();
 				}
 				
 				Animation.speedOfAnimation=0.1f;
-				if(nameAnimation.equals("death_left")) Animation.id=13;
+				/*if(nameAnimation.equals("death_left")) Animation.id=13;
 				if(nameAnimation.equals("death_right")) Animation.id=12;
 				if(nameAnimation.equals("idle_left")) Animation.id=1;
 				if(nameAnimation.equals("idle_left_45")) Animation.id=3;
@@ -63,7 +64,14 @@ public class HeroFlashJsonToOurJson
 				if(nameAnimation.equals("run_left")) Animation.id=5;
 				if(nameAnimation.equals("run_left _45")) Animation.id=7;
 				if(nameAnimation.equals("run_right")) Animation.id=4;
-				if(nameAnimation.equals("run_right_45")) Animation.id=6;
+				if(nameAnimation.equals("run_right_45")) Animation.id=6;*/
+				
+
+				
+				if(nameAnimation.equals("idle_right")) Animation.id=0;
+				if(nameAnimation.equals("run_right")) Animation.id=2;	
+				if(nameAnimation.equals("jump_right")) Animation.id=4;	
+				if(nameAnimation.equals("death_right")) Animation.id=6;
 				
 				int w=j4.get("w").getAsInt();
 				int h=j4.get("h").getAsInt();
@@ -84,7 +92,9 @@ public class HeroFlashJsonToOurJson
 		}	
 		
 		HD.Animations.add(Animation);
+		HD.Animations.add(leftAnimation(Animation));
 		
+		//sort animations
 		for(int i=0;i<HD.Animations.size();i++)
 		{
 			for(int j=0;j<HD.Animations.size();j++)
@@ -102,5 +112,26 @@ public class HeroFlashJsonToOurJson
 		
 		HDD.saveClass(savePath, HD);
 		
+	}
+	
+	private static AnimationData leftAnimation(AnimationData rightAnimation)
+	{
+		AnimationData left=new AnimationData();
+		
+		left.id=rightAnimation.id+1;
+		left.speedOfAnimation=rightAnimation.speedOfAnimation;
+		left.synchroPoint=rightAnimation.synchroPoint.clone();
+		
+		for(int i=0;i<rightAnimation.hitboxes.size();i++)
+		{	
+			left.hitboxes.add(rightAnimation.hitboxes.get(i).clone());
+		}
+		
+		for(int i=0;i<rightAnimation.frames.size();i++)
+		{	
+			left.frames.add(rightAnimation.frames.get(i).clone());
+		}
+		
+		return left;
 	}
 }

@@ -14,6 +14,7 @@ import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
+import com.sparkfighters.client.game.ultis.HeroFlashJsonToOurJson;
 
 /**
  * Singleton to hold all data information from HDD.
@@ -156,7 +157,7 @@ public enum ResourcesManager
 		//Directory of hero
 		for(int i=0;i<list.length;i++)
 		{
-			//ConvertFlashJsonToOurJson(list[i]+"/data.json","data/"+list[i].name()+"_new.json");
+			//HeroFlashJsonToOurJson.convert(list[i]+"/data.json","data/"+list[i].name()+"_new.json");
 			HeroDataClient HD=new HeroDataClient();
 			HD= HDD.loadClass("data/heroes/"+i+"/data.json", HeroDataClient.class);
 			HD.loadTexture(list[i]+"/data.png");
