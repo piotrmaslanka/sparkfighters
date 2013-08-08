@@ -1,0 +1,1 @@
+RBG 255 0 240 okreœla po³o¿enie œrodka pliku g³owy
