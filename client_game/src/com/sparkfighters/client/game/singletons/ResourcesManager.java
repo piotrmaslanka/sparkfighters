@@ -158,8 +158,8 @@ public enum ResourcesManager
 			//HeroFlashJsonToOurJson.convert(list[i]+"/data.json","data/"+list[i].name()+"_new.json");
 			HeroDataClient HD=new HeroDataClient();
 			HD= HDD.loadClass("data/heroes/"+i+"/data.json", HeroDataClient.class);
-			HD.loadTexture(list[i]+"/data.png");
-			heroesData.put(HD.id, HD);
+			HD.loadTextures(list[i]+"/body.png",list[i]+"/head.png");
+			heroesData.put(new Integer(HD.id), HD);
 		}
 		
 	}
@@ -179,7 +179,7 @@ public enum ResourcesManager
 			WD=HDD.loadClass("data/weapons/"+i+"/data.json", WeaponDataClient.class);
 			WD.loadTexture("data/weapons/"+i+"/data.png");
 			
-			weaponsData.put(WD.id, WD);
+			weaponsData.put(new Integer(WD.id), WD);
 		}
 		
 	}

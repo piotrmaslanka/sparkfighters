@@ -14,8 +14,7 @@ public class WeaponDataClient extends WeaponData
 {
 
 	public Texture texture;
-	public TextureRegion right_region;
-	public TextureRegion left_region;
+	public TextureRegion[] animations;
 	
 	/**
 	 * Load texture and prepare right_region, left_region
@@ -29,11 +28,11 @@ public class WeaponDataClient extends WeaponData
 		MipMapGenerator.generateMipMap(texture.getTextureData().consumePixmap(), 
 				texture.getWidth(), texture.getHeight(), true);
 		
-		right_region=new TextureRegion(texture);
-		right_region.setRegion((int)right.x1, (int)right.y1,(int)(right.x2-right.x1),(int) (right.y2-right.y1));
+		animations=new TextureRegion[2];
 		
-		left_region=new TextureRegion(texture);
-		left_region.setRegion((int)left.x1, (int)left.y1,(int)(left.x2-left.x1),(int)(left.y2-left.y1));
+		animations[0]=new TextureRegion(texture);
+		animations[1]=new TextureRegion(texture);
+		animations[1].flip(true, false);
 	}
 	
 }

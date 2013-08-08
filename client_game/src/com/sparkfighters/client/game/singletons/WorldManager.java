@@ -20,18 +20,22 @@ public enum WorldManager
 	
 	public void Init()
 	{
+		int id=0;
+		int idHero=0;
+		int idWeapon=4;
+		
 	
-		actors.add(new com.sparkfighters.client.game.scene.Actor(0,0,0));
+		actors.add(new com.sparkfighters.client.game.scene.Actor(id,idHero,idWeapon));
 		myHeroArrayActors=0;
 
 		//Create Blueprints
 		MapBlueprint mapBlueprint=new MapBlueprint(ResourcesManager.INSTANCE.map);
-		ActorBlueprint actorsBlueprint=new ActorBlueprint(ResourcesManager.INSTANCE.weaponsData.get(0), ResourcesManager.INSTANCE.heroesData.get(0));
+		ActorBlueprint actorsBlueprint=new ActorBlueprint(ResourcesManager.INSTANCE.weaponsData.get(idWeapon), ResourcesManager.INSTANCE.heroesData.get(idHero));
 	
 		//create logic actors
 		com.sparkfighters.shared.world.Actor actorsLogic[]=new com.sparkfighters.shared.world.Actor[1];
-		actorsLogic[0]=new com.sparkfighters.shared.world.Actor(0, actorsBlueprint);
-		actorsLogic[0].physical=actorsLogic[0].actor_blueprint.create_physicactor(0);
+		actorsLogic[0]=new com.sparkfighters.shared.world.Actor(id, actorsBlueprint);
+		actorsLogic[0].physical=actorsLogic[0].actor_blueprint.create_physicactor(id);
 		actorsLogic[0].physical.set_position(new Vector(1900,2600));
 		
 		//create physic world
