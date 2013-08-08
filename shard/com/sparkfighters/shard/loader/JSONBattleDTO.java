@@ -7,4 +7,7 @@ public class JSONBattleDTO {
 	public String map;
 	
 	public String content_fs_path;
+	
+	public String netifc;
+	public int netport;
 }
