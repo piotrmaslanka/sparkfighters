@@ -87,7 +87,7 @@ final public class Rebound {
 	 */
 	static private void actor_hit_roof(PhysicActor actor, double fy, double dt) {
 		actor.set_velocity(actor.get_velocity().force_y(0));
-		actor.set_v_braked(true).on_vbrake();
+		actor.set_v_braked(true).on_vbrake(actor.get_h_moving());
 		actor.set_position(actor.get_position().force_y(
 					fy - actor.get().get_mbr().y2 - Rebound.GRAVITY_EPSILON
 				));		
@@ -97,7 +97,7 @@ final public class Rebound {
 	 * Modify the actor, as it has hit the floor
 	 */
 	static private void actor_hit_floor(PhysicActor actor, double fy, double dt) {
-		actor.on_vbrake();
+		actor.on_vbrake(actor.get_h_moving());
 		actor.set_v_braked(true).set_velocity(actor.get_velocity().force_y(0));
 		
 		actor.set_position(actor.get_position().force_y(
@@ -128,7 +128,7 @@ final public class Rebound {
 	 */
 	static public void rebound(PhysicActor actor, HorizSegment hs, double dt) {
 		
-		actor.set_v_braked(true).on_vbrake();
+		actor.set_v_braked(true).on_vbrake(actor.get_h_moving());
 		
 		double actor_x = actor.get_position().x;
 		double actor_y = hs.y - actor.get().get_mbr().y1 + Rebound.GRAVITY_EPSILON;

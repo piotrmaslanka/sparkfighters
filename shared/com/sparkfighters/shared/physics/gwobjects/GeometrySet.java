@@ -67,9 +67,10 @@ public class GeometrySet extends Moveable {
 	 * 
 	 * Only changes geometry.
 	 */
-	public void on_vbrake() {
+	public void on_vbrake(boolean was_moving) {
 		int current_dir = ((this.currentlyPicked % 2)==1) ? 1 : 0;
-		this.set(GeometrySet.IDLE_RIGHT + current_dir);
+		current_dir = was_moving ? GeometrySet.RUN_RIGHT : GeometrySet.IDLE_RIGHT;
+		this.set(current_dir);
 	}
 	
 	/**
