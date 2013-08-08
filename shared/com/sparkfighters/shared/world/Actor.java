@@ -1,5 +1,6 @@
 package com.sparkfighters.shared.world;
 
+import com.sparkfighters.shared.physics.gwobjects.GeometrySet;
 import com.sparkfighters.shared.physics.gwobjects.PhysicActor;
 import com.sparkfighters.shared.blueprints.ActorBlueprint;
 import com.sparkfighters.shared.physics.objects.*;
@@ -66,9 +67,11 @@ public class Actor implements Cloneable {
 		if (this.physical == null) return;
 		
 		if (this._kbd_up)
-			if (this.physical.get_v_braked())
+			if (this.physical.get_v_braked()) {
 				this.physical.set_velocity(this.physical.get_velocity().force_y(
 						this.actor_blueprint.jumpSpeed));
+				this.physical.set(GeometrySet.JUMP_LEFT);
+			}
 		
 		if (this._kbd_left)
 			this.physical.set_velocity(this.physical.get_velocity().force_x(

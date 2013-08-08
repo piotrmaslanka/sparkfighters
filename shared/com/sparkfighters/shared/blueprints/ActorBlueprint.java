@@ -33,8 +33,8 @@ final public class ActorBlueprint implements Cloneable {
 	 */
 	public ActorBlueprint(WeaponData wd, HeroData hd) {
 		SmallMovingGeometry[] smgs = new SmallMovingGeometry[hd.Animations.size()];
-		for (int i=0; i<smgs.length; i++)
-			smgs[i] = ActorBlueprint.animationdata_to_smg(hd.Animations.get(i));
+		for (int i=0; i<smgs.length; i+=2)
+			smgs[i] = ActorBlueprint.animationdata_to_smg(hd.Animations.get(i), false);
 		
 		this.gs = new GeometrySet(smgs);
 		
@@ -53,9 +53,15 @@ final public class ActorBlueprint implements Cloneable {
 		
 	}
 	
-	
-	static private SmallMovingGeometry animationdata_to_smg(AnimationData ad) {
+	/**
+	 * @param reflect Whether rectangles should be reflected along Y axis
+	 */
+	static private SmallMovingGeometry animationdata_to_smg(AnimationData ad, boolean reflect) {
 		Rectangle hitboxes[] = ad.hitboxes.toArray(new Rectangle[0]);
+		if (reflect)
+			for (int i=0; i<hitboxes.length; i++)
+				hitboxes[i] = hitboxes[i].reflect_y();
+	
 		for (int i=0; i<hitboxes.length; i++)
 			hitboxes[i] = hitboxes[i].translate(ad.synchroPoint.negative());
 		

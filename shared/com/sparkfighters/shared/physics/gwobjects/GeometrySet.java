@@ -12,12 +12,12 @@ import com.sparkfighters.shared.physics.objects.Vector;
  */
 public class GeometrySet extends Moveable {
 	
-	final static int IDLE_RIGHT = 0;
-	final static int IDLE_LEFT = 1;
-	final static int RUN_RIGHT = 4;
-	final static int RUN_LEFT = 5;
-	final static int JUMP_RIGHT = 8;
-	final static int JUMP_LEFT = 9;
+	public final static int IDLE_RIGHT = 0;
+	public final static int IDLE_LEFT = 1;
+	public final static int RUN_RIGHT = 2;
+	public final static int RUN_LEFT = 3;
+	public final static int JUMP_RIGHT = 4;
+	public final static int JUMP_LEFT = 5;
 	
 	private SmallMovingGeometry[] geoms;
 	private int currentlyPicked = 0;
