@@ -16,23 +16,23 @@ import com.sparkfighters.shared.loader.jsonobjs.HeroData;
 public class HeroDataClient extends HeroData
 {
 
-	public Texture texture;
-	public ArrayList<Animation> animationsDrawable;
+	public Texture textureBody;
+	public Texture textureHead;
 	
-	/**
-	 * Load texture and prepare animationsDrawable
-	 * @param filePath String to texture
-	 */
-	public void loadTexture(String filePath)
+	public ArrayList<Animation> animationsDrawableBody;
+	public TextureRegion[] animationsDrawableHead;
+	
+
+	public void loadTextures(String filePathBody, String filePathHead)
 	{
-		texture=new Texture(filePath);
-		texture.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
+		textureBody=new Texture(filePathBody);
+		textureBody.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		
-		texture.getTextureData().prepare();
-		MipMapGenerator.generateMipMap(texture.getTextureData().consumePixmap(), 
-				texture.getWidth(), texture.getHeight(), true);
+		textureBody.getTextureData().prepare();
+		MipMapGenerator.generateMipMap(textureBody.getTextureData().consumePixmap(), 
+				textureBody.getWidth(), textureBody.getHeight(), true);
 		
-		animationsDrawable=new ArrayList<Animation>();
+		animationsDrawableBody=new ArrayList<Animation>();
 		
 		for(int i=0;i<Animations.size();i++)
 		{
@@ -44,7 +44,7 @@ public class HeroDataClient extends HeroData
 			    int y=(int)Animations.get(i).frames.get(j).y1;
 			    int w=(int)Animations.get(i).frames.get(j).x2-x;
 			    int h=(int)Animations.get(i).frames.get(j).y2-y;
-				TextureRegion tr=new TextureRegion(texture);
+				TextureRegion tr=new TextureRegion(textureBody);
 				tr.setRegion(x,y, w, h);
 				if(i%2==0)
 				{
@@ -58,8 +58,21 @@ public class HeroDataClient extends HeroData
 				frames[j]=tr;
 			}
 			Animation a=new Animation(Animations.get(i).speedOfAnimation,frames);
-			animationsDrawable.add(a);
+			animationsDrawableBody.add(a);
 		}
+		
+		
+		textureHead=new Texture(filePathHead);
+		textureHead.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);	
+		textureHead.getTextureData().prepare();
+		MipMapGenerator.generateMipMap(textureHead.getTextureData().consumePixmap(), 
+				textureHead.getWidth(), textureHead.getHeight(), true);
+		
+		animationsDrawableHead=new TextureRegion[2];
+		animationsDrawableHead[0]=new TextureRegion(textureHead);
+		animationsDrawableHead[1]=new TextureRegion(textureHead);
+		animationsDrawableHead[1].flip(true, false);
+		
 	}
 	
 }

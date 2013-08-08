@@ -1,20 +1,8 @@
 {
   "id": 2,
   "name": "Weapon 2",
-  "health": 0.0,
-  "shield": 0.0,
-  "runSpeed": 0.0,
-  "jumpHeight": 0.0,
-  "left": {
-    "x1": 256.0,
-    "y1": 0.0,
-    "x2": 512.0,
-    "y2": 63.0
-  },
-  "right": {
-    "x1": 0.0,
-    "y1": 0.0,
-    "x2": 256.0,
-    "y2": 63.0
-  }
+  "health": 100.0,
+  "shield": 20.0,
+  "runSpeed": 20.0,
+  "jumpHeight": 25.0
 }

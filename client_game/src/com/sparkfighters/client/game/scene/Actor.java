@@ -18,6 +18,7 @@ public class Actor
 	private Vector actorPositionAbsolute=new Vector();
 	private Vector actorPositionRelative=new Vector();
 	private Vector mousePositionAbsolute=new Vector();
+	private Vector mousePositionRelative=new Vector();
 	
 	private int idHero,idWeapon, id;
 	private int idAnimation;
@@ -95,89 +96,61 @@ public class Actor
 	{
 		this.mousePositionAbsolute.x=x_mouse_aboslute;
 		this.mousePositionAbsolute.y=y_mouse_absolute;
+		
+		this.mousePositionRelative.x=this.mousePositionAbsolute.x-WorldManager.INSTANCE.mapFragment.getX();
+		this.mousePositionRelative.y=this.mousePositionAbsolute.y-WorldManager.INSTANCE.mapFragment.getY();
 	}
 	/**
 	 * Function draw Actor: body, weapon
 	 */
 	public void Draw()
 	{
-		//draw hero
-		int x_relative=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
-		int y_relative=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
+		//calculate body
+		int x_body=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
+		int y_body=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
+		int direction=idAnimation%2;
 		
 		time += Gdx.graphics.getDeltaTime(); 
-		TextureRegion currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
-		DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
+		TextureRegion currentFrameBody=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrame(time, true);
 		
-		/*//draw weapon
-		int h_x=currentFrame.getRegionWidth()/2;
-		int h_y=currentFrame.getRegionHeight()/2;
+		//calculate head	
+		int x_head=(int) (x_body-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/6.0f);
+		int y_head=(int) (y_body+currentFrameBody.getRegionHeight()-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight()/3.0f);
 		
-		int x1=x_relative+h_x;
-		int y1=y_relative+h_y;
 		
-		float degrees=0.0f;
-		if(idAnimation%2==0)
+		//calculate weapon
+		int h_x=0;
+		if(currentFrameBody.getRegionWidth()>ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())
 		{
-			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).right_region.getRegionWidth()/2;
-			int w_y=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).right_region.getRegionHeight()/2;
-			
-			x1=x1-w_x;
-			y1=y1-w_y;
-			
-			double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
-			double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));
-			
-			double radians=Math.tan(A/C);
-			degrees=(float)(radians*180/Math.PI);
+			h_x=currentFrameBody.getRegionWidth()/2;
+		}
+		else
+		{
+			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2;
+		}
+		int h_y=(currentFrameBody.getRegionHeight()+ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight())/2;
+		
+		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2;
+		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
+		
+		double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
+		double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));	
+		double radians=Math.tan(A/C);
+		float degrees=(float)(radians*180/Math.PI);
+		if(direction==0)
+		{
 			if(actorPositionAbsolute.y-mousePositionAbsolute.y>0) degrees=-degrees;
-			
-	
-			if(degrees>45.0f)
-			{
-				idAnimation=idAnimation+2;
-				currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
-				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
-			}
-			else
-			{
-				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
-			}
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).right_region, x1,y1,degrees);	
 		}
-
-		if(idAnimation%2==1)
+		else
 		{
-			int w_x=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).left_region.getRegionWidth()/2;
-			int w_y=ResourcesManager.INSTANCE.weaponsData.get(idWeapon).left_region.getRegionHeight()/2;
-			
-			x1=x1-w_x;
-			y1=y1-w_y;
-			
-			double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
-			double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));
-			
-			double radians=Math.tan(A/C);
-			degrees=(float)(radians*180/Math.PI);
-			if(degrees>45.0f)
-			{
-				idAnimation=idAnimation+2;
-				currentFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawable.get(idAnimation).getKeyFrame(time, true);
-				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
-			}
-			else
-			{
-				DrawEngine.INSTANCE.Draw(currentFrame, x_relative,y_relative,0);
-			}
 			if(actorPositionAbsolute.y-mousePositionAbsolute.y<0) degrees=-degrees;
-			
-			
-			
-			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).left_region, x1,y1,degrees);	
 		}
 		
+		//draw body, head, weapon
+		DrawEngine.INSTANCE.Draw(currentFrameBody, x_body,y_body,0);
+		DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction], x_head, y_head,degrees);
+		DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction], x_weapon,y_weapon,degrees);
 		
-		*/
 	}
 	/**
 	 * Function draw debug information on screen
