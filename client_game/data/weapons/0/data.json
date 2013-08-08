@@ -4,7 +4,7 @@
   "health": 100.0,
   "shield": 20.0,
   "runSpeed": 20.0,
-  "jumpHeight": 6.0,
+  "jumpHeight": 25.0,
   "left": {
     "x1": 256.0,
     "y1": 0.0,

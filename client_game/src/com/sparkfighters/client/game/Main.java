@@ -23,7 +23,7 @@ public class Main {
 	public static String readFile(String filename)
 	{
 	   String content = null;
-	   File file = new File(filename); //for ex foo.txt
+	   File file = new File(filename); 
 	   try 
 	   {
 	       FileReader reader = new FileReader(file);
@@ -56,7 +56,7 @@ public class Main {
 			
 			LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 			cfg.title = "Spark Fighters Game";
-			cfg.useGL20 = false;
+			cfg.useGL20 = true;
 			
 			cfg.fullscreen=fullscreen;
 			cfg.width = window_width;
@@ -68,7 +68,7 @@ public class Main {
 			
 			//cfg.addIcon("logo.png", FileType.Internal);
 			
-			new LwjglApplication(new GameListener(), cfg);
+			new LwjglApplication(new SparkFightersGame(), cfg);
 		}
 		else
 		{
