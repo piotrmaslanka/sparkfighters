@@ -1,11 +1,15 @@
 package com.sparkfighters.shared.world;
 
 /**
- * Class symbolizing a single team
+ * Class symbolizing a single team.
+ * 
+ * This class has only a limited capability to clone itself. It does not clone it's 
+ * actors field - only empty array of the same size will be initialized
+ * 
  * @author Henrietta
  *
  */
-public class Team {
+public class Team implements Cloneable {
 
 	/**
 	 * Team ID [TID]
@@ -20,6 +24,11 @@ public class Team {
 	public Team(int id, Actor[] actors) {
 		this.id = id;
 		this.actors = actors;
+	}
+	
+	
+	public Team clone() {
+		return new Team(this.id, new Actor[this.actors.length]);
 	}
 
 }
