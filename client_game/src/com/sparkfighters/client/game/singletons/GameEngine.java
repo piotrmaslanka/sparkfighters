@@ -2,7 +2,6 @@ package com.sparkfighters.client.game.singletons;
 
 import com.badlogic.gdx.Gdx;
 import com.sparkfighters.client.game.enums.Debug;
-import com.sparkfighters.client.game.ultis.MapImageToJson;
 /**
  * Singleton to hold information about game.
  * @author Kamil Iwiñski
@@ -25,25 +24,18 @@ public enum GameEngine
 	 * @param window_height
 	 */
 	public void Init(int window_width,int window_height)
-	{
-		//MapImageToJson c=new MapImageToJson();
-		//c.convert("p.png", "data/maps/0/data.json");
-		
-		
+	{	
 		this.window_width=window_width;
 		this.window_height=window_height;	
 		
-		DrawEngine.INSTANCE.Init();
-		ResourcesManager.INSTANCE.LoadResources();	
-		WorldManager.INSTANCE.Init();
-			
+		DrawEngine.INSTANCE.Init();	
 	}
 	
 	/**
 	 * Function which hold all process data 
 	 */
 	public void ProcessData()
-	{
+	{				
 		Input.INSTANCE.processInput();
 		
 		WorldManager.INSTANCE.worldLogic.advance(10.0*Gdx.graphics.getDeltaTime());
@@ -62,7 +54,7 @@ public enum GameEngine
 			
 			int x2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().x;
 			int y2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().y;
-			WorldManager.INSTANCE.actors.get(i).setWeaponRotate(x2, y2);
+			WorldManager.INSTANCE.actors.get(i).setMouseTarget(x2, y2);
 			
 			WorldManager.INSTANCE.actors.get(i).setAnimation(WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_geom_id());		
 		}
