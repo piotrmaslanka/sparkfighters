@@ -10,7 +10,8 @@ import com.sparkfighters.shared.physics.gwobjects.PhysicActor;
 public class World implements Cloneable {
 
 	public com.sparkfighters.shared.physics.world.World physics_world = null;
-	public HashMap<Integer, Actor> actor_by_id = null;
+	public HashMap<Integer, Actor> actor_by_id = null; // by Actor ID
+	public Team[] teams = null; // by Team ID
 	
 	/**
 	 * Number of current iteration. May be fractional, if invoked with fractional dt's.
@@ -20,18 +21,20 @@ public class World implements Cloneable {
 	/**
 	 * Initializes the world
 	 * @param physics_world A blueprint-loaded physics world
-	 * @param actors array of logical actors. Seeing as they are logical, not physical,
-	 * they can be specified at the initialization.
+	 * @param teams Array of teams. Borrows reference.
 	 */
 	public World(com.sparkfighters.shared.physics.world.World physics_world,
-				 Actor[] actors) {
+				 Team[] teams) {
 		this.physics_world = physics_world;
 		
 		PhysicsWorldBridge bridge = new PhysicsWorldBridge(this);
 		this.physics_world.set_processor(bridge);
 		
+		this.teams = teams;
 		this.actor_by_id = new HashMap<>();
-		for (Actor actor : actors) this.actor_by_id.put(actor.id, actor);
+		for (Team team : teams)
+			for (Actor actor : team.actors)
+				this.actor_by_id.put(actor.id, actor);
 	}
 	
 	/**
@@ -65,19 +68,30 @@ public class World implements Cloneable {
 		
 		for (PhysicActor new_pactor : pailut.values()) physworld.add_actor(new_pactor);
 
-		// prepare logic actors
-		Actor[] new_actors = new Actor[this.actor_by_id.size()];
-		int i=0;
-		for (Actor act : this.actor_by_id.values()) {
-			Actor na = act.clone();
-			PhysicActor pca = pailut.get(act.physical);
-			if (pca == null) pca = act.physical.clone();
-			na.physical = pca;
-			new_actors[i++] = na;
+		// prepare teams. We WILL creates actors, by the way
+		Team[] new_teams = new Team[this.teams.length];
+		for(int i=0; i<new_teams.length; i++) {
+			Actor[] actors_for_this_team = new Actor[this.teams[i].actors.length];
+			
+			int j=0;
+			for (Actor old_actor : this.teams[i].actors) {
+				// Clone an actor
+				Actor new_actor = old_actor.clone();
+				if (new_actor.physical != null) {
+					PhysicActor pca = pailut.get(new_actor.physical);
+					if (pca == null) throw new RuntimeException("What allocated this?");
+					new_actor.physical = pca;
+				}
+				// Store them into array
+				actors_for_this_team[j] = new_actor;
+				j++;
+			}
+			
+			new_teams[i] = new Team(this.teams[i].id, actors_for_this_team);			
 		}
-		
+
 		//prepare logic world
-		World nworld = new World(physworld, new_actors);
+		World nworld = new World(physworld, new_teams);
 
 		return nworld;
 	}
