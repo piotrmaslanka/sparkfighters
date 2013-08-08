@@ -25,6 +25,9 @@ public class Actor implements Cloneable {
 	 */
 	public PhysicActor physical;
 	public ActorBlueprint actor_blueprint;
+	/**
+	 * Actor ID [AID]
+	 */
 	public int id;
 	
 	/**
@@ -120,5 +123,4 @@ public class Actor implements Cloneable {
 		nac._cached_controller = null;
 		return nac;
 	}
-	
 }
