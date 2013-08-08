@@ -68,17 +68,8 @@ public class GeometrySet extends Moveable {
 	 * Only changes geometry.
 	 */
 	public void on_vbrake() {
-		Vector velocity = this.get().get_velocity();
-		
-		if (Math.abs(velocity.x) < Rebound.VERT_EPSILON) {
-			// not moving at all
-			int current_dir = this.currentlyPicked & 1;
-			this.set(current_dir);
-		} else {
-			// moving
-			int direction = (velocity.x < 0) ? 1 : 0;
-			this.set(GeometrySet.RUN_RIGHT + direction);
-		}		
+		int current_dir = ((this.currentlyPicked % 2)==1) ? 1 : 0;
+		this.set(GeometrySet.IDLE_RIGHT + current_dir);
 	}
 	
 	/**

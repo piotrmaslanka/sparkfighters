@@ -33,8 +33,10 @@ final public class ActorBlueprint implements Cloneable {
 	 */
 	public ActorBlueprint(WeaponData wd, HeroData hd) {
 		SmallMovingGeometry[] smgs = new SmallMovingGeometry[hd.Animations.size()];
-		for (int i=0; i<smgs.length; i+=2)
+		for (int i=0; i<smgs.length; i++)
 			smgs[i] = ActorBlueprint.animationdata_to_smg(hd.Animations.get(i), false);
+		
+		assert(smgs.length >= 5);
 		
 		this.gs = new GeometrySet(smgs);
 		

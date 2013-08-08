@@ -2,6 +2,7 @@ package com.sparkfighters.shared.world;
 
 import com.sparkfighters.shared.physics.gwobjects.GeometrySet;
 import com.sparkfighters.shared.physics.gwobjects.PhysicActor;
+import com.sparkfighters.shared.physics.gwobjects.Rebound;
 import com.sparkfighters.shared.blueprints.ActorBlueprint;
 import com.sparkfighters.shared.physics.objects.*;
 
@@ -70,12 +71,12 @@ public class Actor implements Cloneable {
 			if (this.physical.get_v_braked()) {
 				this.physical.set_velocity(this.physical.get_velocity().force_y(
 						this.actor_blueprint.jumpSpeed));
-				this.physical.set(GeometrySet.JUMP_LEFT);
 			}
 		
-		if (this._kbd_left)
+		if (this._kbd_left) {
 			this.physical.set_velocity(this.physical.get_velocity().force_x(
 					-this.actor_blueprint.runSpeed));
+		}
 
 		if (this._kbd_right)
 			this.physical.set_velocity(this.physical.get_velocity().force_x(
@@ -86,11 +87,26 @@ public class Actor implements Cloneable {
 		
 		// Determine which side is the player looking at
 		boolean is_left = this._mouse_position.x < this.physical.get().get_position().x;
-		int gid = this.physical.get_geom_id() & 254;
-		if (is_left) gid++;
-		this.physical.set(gid);
+		int direction = is_left ? 1 : 0;
+		
+		// Determine applied animation
+		
+		if (Math.abs(this.physical.get_velocity().y) > Rebound.VERT_EPSILON) {
+			// it's jumping
+			this.physical.set(direction + GeometrySet.JUMP_RIGHT);
+			return;
+		}
+		
+		if (this._kbd_right || this._kbd_left) {
+			// Running
+			this.physical.set(direction + GeometrySet.RUN_RIGHT);
+			return;
+		}
+		
+		// It's standing
+		this.physical.set(direction + GeometrySet.IDLE_RIGHT);
 	}
-	
+
 	public Actor(int id, ActorBlueprint abp) {
 		this.id = id;
 		this.actor_blueprint = abp;
