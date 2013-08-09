@@ -5,7 +5,8 @@ public class JSONUserDTO {
 	public String username;
 	public String password;
 	
-	public String weapon_name;
+	public int hero_id;
+	public int weapon_id;
 	
 	public int team_id;
 }

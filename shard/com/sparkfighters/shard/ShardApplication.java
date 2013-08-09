@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.sparkfighters.shard.loader.JSONBattleDTO;
+import com.sparkfighters.shard.loader.WorldConstructor;
+import com.sparkfighters.shared.world.World;
 
 import com.sparkfighters.shard.network.*;
 public class ShardApplication {
@@ -35,6 +37,14 @@ public class ShardApplication {
 		}		
 		
 		thread_network.start();
+		
+		// Construct the world
+		World gameworld = null;
+		try {
+			gameworld = (new WorldConstructor(bpf.content_fs_path)).load_from_dto(bpf);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to load world");
+		}
 		
 		// hang hang hang
 		

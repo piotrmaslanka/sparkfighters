@@ -23,7 +23,7 @@ final public class MapBlueprint {
 
 	private final LargeStaticGeometry lsg;
 	private final HorizSegment[] platforms;
-	private final Rectangle world_box;
+	public final Rectangle world_box;
 	
 	private final Vector spawnpoints[] = new Vector[3];
 	
