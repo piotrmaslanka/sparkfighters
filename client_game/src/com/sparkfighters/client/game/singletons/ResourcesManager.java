@@ -14,6 +14,7 @@ import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
+import com.sparkfighters.client.game.ultis.HeroFlashJsonToOurJson;
 /**
  * Singleton to hold all data information from HDD.
  * @author Kamil Iwiñski
@@ -74,7 +75,7 @@ public enum ResourcesManager
 				
 			case 6:
 					LoadHeroes();
-					progress=50;
+					progress=40;
 					break;
 			
 			case 7:
@@ -82,7 +83,7 @@ public enum ResourcesManager
 					break;
 			case 8:
 					LoadWeapons();
-					progress=70;
+					progress=50;
 					break;
 			
 			case 9:
@@ -91,7 +92,7 @@ public enum ResourcesManager
 			
 			case 10: 
 					LoadMap();
-					progress=90;
+					progress=60;
 					break;	
 					
 			case 11:
@@ -100,10 +101,20 @@ public enum ResourcesManager
 					
 			case 12:
 					WorldManager.INSTANCE.Init();	
+					progress=90;
+					break;
+			
+			case 13:
+					progressText="Waiting for others...";
+					break;
+					
+			case 14:
+					//here waiting for others
 					progress=100;
 					progressText="";
 					step=0;
 					break;
+					
 				
 		}
 		
@@ -152,10 +163,11 @@ public enum ResourcesManager
 		
 		FileHandle[] list=HDD.getDirContent("data/heroes");
 		
+		//HeroFlashJsonToOurJson.convert("data/hero.json","data/hero.png","data/hero_new.json");
+		
 		//Directory of hero
 		for(int i=0;i<list.length;i++)
 		{
-			//HeroFlashJsonToOurJson.convert(list[i]+"/data.json","data/"+list[i].name()+"_new.json");
 			HeroDataClient HD=new HeroDataClient();
 			HD= HDD.loadClass("data/heroes/"+i+"/data.json", HeroDataClient.class);
 			HD.loadTextures(list[i]+"/body.png",list[i]+"/head.png");
@@ -166,7 +178,6 @@ public enum ResourcesManager
 
 	private void LoadWeapons()
 	{
-		progressText="Loading weapons...";
 		
 		weaponsData=new HashMap<Integer, WeaponDataClient>();
 		
@@ -189,7 +200,7 @@ public enum ResourcesManager
 		map=new MapDataClient();
 		String path="data/maps/0";
 		map=HDD.loadClass(path+"/data.json", MapDataClient.class);
-		map.loadTexture(path+"/data.png");
+		map.loadTexture(path+"/map.png", path+"/base.png");
 	}
 
 	public boolean finished()

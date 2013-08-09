@@ -112,11 +112,11 @@ public class Actor
 		
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrameBody=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrame(time, true);
+		int idFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrameIndex(time);
 		
 		//calculate head	
-		int x_head=(int) (x_body-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/6.0f);
-		int y_head=(int) (y_body+currentFrameBody.getRegionHeight()-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight()/3.0f);
-		
+		int x_head=(int)(x_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).x-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2);
+		int y_head=(int)(y_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).y-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight()/2);
 		
 		//calculate weapon
 		int h_x=0;
@@ -126,7 +126,7 @@ public class Actor
 		}
 		else
 		{
-			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2;
+			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2;	
 		}
 		int h_y=(currentFrameBody.getRegionHeight()+ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight())/2;
 		

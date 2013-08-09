@@ -66,9 +66,17 @@ public class MapFragment
 		int height=GameEngine.INSTANCE.orginal_height;
 		int height_map=(int)ResourcesManager.INSTANCE.map.mapSize.y2;
 		
-		TextureRegion tr=new TextureRegion(ResourcesManager.INSTANCE.map.texture);
+		TextureRegion tr=new TextureRegion(ResourcesManager.INSTANCE.map.mapTexture);
 		tr.setRegion((int)this.mapPosition.x, height_map-(int)this.mapPosition.y-height, width, height);
 		DrawEngine.INSTANCE.Draw(tr, 0, 0, 0);
+		
+	/*	//draw bases
+		for(int i=0;i<ResourcesManager.INSTANCE.map.spawnPoints.size();i++)
+		{
+			int x=(int) (ResourcesManager.INSTANCE.map.spawnPoints.get(i).x-this.mapPosition.x);
+			int y=(int) (ResourcesManager.INSTANCE.map.spawnPoints.get(i).y-this.mapPosition.y);
+			DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.map.base[0], x , y, 0);
+		}*/
 	}
 	/**
 	 * Function draw debug info on screen

@@ -1,6 +1,6 @@
 {
-  "id": 1,
-  "name": "friend_hero",
+  "id": 0,
+  "name": "data/hero.json",
   "Animations": [
     {
       "id": 0,
