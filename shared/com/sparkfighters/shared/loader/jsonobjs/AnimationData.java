@@ -12,4 +12,5 @@ public class AnimationData
 	public float speedOfAnimation;
 	public ArrayList<Rectangle> hitboxes=new ArrayList<Rectangle>();
 	public ArrayList<Rectangle> frames=new ArrayList<Rectangle>();
+	public ArrayList<Vector> headPositions=new ArrayList<Vector>();
 }

@@ -112,6 +112,7 @@ public class Actor
 		
 		time += Gdx.graphics.getDeltaTime(); 
 		TextureRegion currentFrameBody=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrame(time, true);
+<<<<<<< HEAD
 		
 		//calculate head	
 		int x_head=(int) (x_body-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/6.0f);
@@ -133,6 +134,31 @@ public class Actor
 		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2;
 		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
 		
+=======
+		int idFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrameIndex(time);
+		
+		//calculate head	
+		int x_head=(int)(x_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).x-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2);
+		int y_head=(int)(y_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).y-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight()/2);
+		
+		//calculate weapon
+		int h_x=0;
+		int diff=0;
+		if(currentFrameBody.getRegionWidth()>ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())
+		{
+			h_x=currentFrameBody.getRegionWidth()/2;
+		}
+		else
+		{
+			diff=(currentFrameBody.getRegionWidth()-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())/2;
+			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2;	
+		}
+		int h_y=(currentFrameBody.getRegionHeight()+ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight())/3;
+		
+		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2+diff;
+		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
+		
+>>>>>>> origin/mainexe
 		double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
 		double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));	
 		double radians=Math.tan(A/C);

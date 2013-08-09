@@ -1,6 +1,14 @@
 package com.sparkfighters.client.game.ultis;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Map.Entry;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.JsonElement;
@@ -9,6 +17,7 @@ import com.google.gson.JsonParser;
 import com.sparkfighters.client.game.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.AnimationData;
 import com.sparkfighters.shared.loader.jsonobjs.HeroData;
+import com.sparkfighters.shared.physics.objects.HorizSegment;
 import com.sparkfighters.shared.physics.objects.Rectangle;
 import com.sparkfighters.shared.physics.objects.Vector;
 /**
@@ -18,12 +27,12 @@ import com.sparkfighters.shared.physics.objects.Vector;
  */
 public class HeroFlashJsonToOurJson 
 {
-	public static void convert(String loadPath, String savePath)
+	public static void convert(String loadPathJson, String loadPathImage, String savePath)
 	{
 		HeroData HD=new HeroData();
-		HD.name=loadPath;
+		HD.name=loadPathJson;
 		
-		FileHandle fh=HDD.getFileHandle(loadPath);
+		FileHandle fh=HDD.getFileHandle(loadPathJson);
 		String json=fh.readString();
 		
 		JsonParser parser = new JsonParser(); 
@@ -75,7 +84,7 @@ public class HeroFlashJsonToOurJson
 				
 				int w=j4.get("w").getAsInt();
 				int h=j4.get("h").getAsInt();
-				Animation.hitboxes.add(new Rectangle(0,0,w,h));
+				Animation.hitboxes.add(new Rectangle(0,0,w,h+20));
 				Animation.synchroPoint=new Vector(w/2,h/2); 
 			}
 			
@@ -110,8 +119,64 @@ public class HeroFlashJsonToOurJson
 			}
 		}
 		
+		//pink dot system for head
+		for(int i=0;i<HD.Animations.size();i++)
+		{
+			for(int j=0;j<HD.Animations.get(i).frames.size();j++)
+			{
+				Vector headpoint=new Vector();
+				headpoint=findHead(HD.Animations.get(i).frames.get(j), loadPathImage);
+				HD.Animations.get(i).headPositions.add(headpoint);
+			}
+		}
+		
 		HDD.saveClass(savePath, HD);
 		
+	}
+	
+	private static Vector findHead(Rectangle r,String loadPathImage)
+	{
+		Vector headpoint=new Vector();
+		
+		ImageIcon icon = new ImageIcon(loadPathImage);
+        Image image = icon.getImage();
+        BufferedImage buffImage =
+                new BufferedImage(
+                        image.getWidth(null),
+                        image.getHeight(null),
+                        BufferedImage.TYPE_INT_ARGB);
+        Graphics g = buffImage.createGraphics();
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+              
+        for (int i =(int)r.y1; i <= (int)r.y2; i++) 
+        {
+          	
+            for (int j = (int)r.x1; j <= (int)r.x2; j++) 
+            {
+            	Color c = new Color(buffImage.getRGB(j, i));   
+            	if(c.getAlpha()!=0)
+            	{            	
+	            	//System.out.println(c.getRed()+ " "+ c.getGreen()+ " "+c.getBlue());
+	            	if(c.getRed()==255)
+	            	{
+	            		if(c.getGreen()==0)
+	            		{
+	            			if(c.getBlue()==240)
+	            			{
+	            				headpoint.x=(r.x2-r.x1)-(j-r.x1);
+	            				headpoint.y=(r.y2-r.y1)-(i-r.y1);
+	            				return headpoint;
+	            			}
+	            		}
+	            	}
+            	}
+               
+            }
+        }
+        
+		
+		return headpoint;
 	}
 	
 	private static AnimationData leftAnimation(AnimationData rightAnimation)
