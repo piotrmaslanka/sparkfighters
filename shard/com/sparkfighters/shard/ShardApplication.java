@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import com.google.gson.Gson;
+import com.sparkfighters.shard.executor.ExecutorThread;
 import com.sparkfighters.shard.loader.JSONBattleDTO;
 import com.sparkfighters.shard.loader.WorldConstructor;
 import com.sparkfighters.shared.world.World;
@@ -46,10 +47,17 @@ public class ShardApplication {
 			throw new RuntimeException("Failed to load world");
 		}
 		
+		// Init executor
+		ExecutorThread thread_executor = null;
+		thread_executor = new ExecutorThread(gameworld);
+		
+		thread_executor.start();
+		
+		
 		// hang hang hang
 		
 		thread_network.terminate().join();
-		
+		thread_executor.terminate().join();
 
 	}
 
