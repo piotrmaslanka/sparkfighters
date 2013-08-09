@@ -120,17 +120,19 @@ public class Actor
 		
 		//calculate weapon
 		int h_x=0;
+		int diff=0;
 		if(currentFrameBody.getRegionWidth()>ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())
 		{
 			h_x=currentFrameBody.getRegionWidth()/2;
 		}
 		else
 		{
+			diff=(currentFrameBody.getRegionWidth()-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())/2;
 			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2;	
 		}
 		int h_y=(currentFrameBody.getRegionHeight()+ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight())/2;
 		
-		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2;
+		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2+diff;
 		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
 		
 		double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
