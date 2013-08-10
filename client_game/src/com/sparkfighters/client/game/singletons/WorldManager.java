@@ -23,11 +23,7 @@ public enum WorldManager
 	{
 		int id=0;
 		int idHero=0;
-<<<<<<< HEAD
 		int idWeapon=4;
-=======
-		int idWeapon=0;
->>>>>>> origin/mainexe
 		
 	
 		actors.add(new com.sparkfighters.client.game.scene.Actor(id,idHero,idWeapon));
