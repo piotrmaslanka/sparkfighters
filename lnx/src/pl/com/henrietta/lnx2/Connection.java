@@ -1,5 +1,6 @@
 package pl.com.henrietta.lnx2;
 
+import java.util.Collection;
 import java.util.Vector;
 import java.util.HashMap;
 import java.lang.System;
@@ -75,6 +76,9 @@ public class Connection {
 	public Channel getChannel(int id) {
 		return this.channels.get(id);
 	}
-	
+
+	public Collection<Channel> getChannels() {
+		return this.channels.values();
+	}	
 	
 }
