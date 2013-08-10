@@ -19,6 +19,16 @@ public class Connection {
 	private long last_received;
 	
 	/**
+	 * This flag is set to true if a LNX2 channel associated with this connection,
+	 * during the course of receiving a packet, declares that it has new data
+	 * to read.
+	 * 
+	 * This flag must be manually unset by whoever takes care of this Connection
+	 * object.
+	 */
+	public boolean has_new_data = false;
+	
+	/**
 	 * Creates a LNX2 connection
 	 * @param channels sequence of channels supported by this connection
 	 * @param timeout a period of inactivity (no packets received) after 
@@ -53,7 +63,9 @@ public class Connection {
 	 */
 	public void on_received(Packet p) {
 		Channel chan = this.channels.get(new Integer(p.channel_id));
-		if (chan != null) chan.on_received(p);
+		if (chan != null) 
+			if (chan.on_received(p))
+				this.has_new_data = true;
 		this.last_received = System.currentTimeMillis();
 	}
 	

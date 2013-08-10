@@ -213,9 +213,10 @@ public class Channel {
 	/**
 	 * Signal from upper layer that a data packet was received. There may be data
 	 * available to read after calling this.
-	 * @param packet
+	 * @param packet Packet received
+	 * @return whether there is data to read from this channel now
 	 */
-	public void on_received(Packet packet) {
+	public boolean on_received(Packet packet) {
 		if (packet.is_ack) {
 			// this is an ack
 			Integer win_id = new Integer(packet.window_id); 
@@ -244,19 +245,19 @@ public class Channel {
 				// fresh data. Verify if that's the case..
 				// Both RTM_AUTO and RTM_AUTO_ORDERED care a lot about packets
 				if (held_packet.equals(packet)) this.enq_ack(packet.window_id);
-				return;
+				return false;
 			}
 			
 			switch (this.retransmission_mode) {
 			case RTM_NONE:
 				this.data_to_read.addFirst(packet.data);
-				break;
+				return true;
 			case RTM_MANUAL:
 			case RTM_AUTO:
 				this.data_to_read.addFirst(packet.data);
 				this.enq_ack(packet.window_id);
 				this.holding_buffer[packet.window_id] = packet;
-				break;
+				return true;
 			case RTM_AUTO_ORDERED:
 				this.enq_ack(packet.window_id);
 				this.reassemble_buffer[packet.window_id] = packet;
@@ -269,9 +270,11 @@ public class Channel {
 						this.data_to_read.addFirst(pfb.data);
 						this.next_expc_window_id = (this.next_expc_window_id + 1) % 64;
 					}
+					return true;
 				}
-			}
+			}			
 		}
+		return false;
 	}
 	
 }
