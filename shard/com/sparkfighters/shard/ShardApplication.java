@@ -36,7 +36,7 @@ public class ShardApplication {
 		// Init network
 		NetworkThread thread_network = null;
 		try {
-			 thread_network = new NetworkThread(new NetworkRoot(bpf.netifc, bpf.netport), br);
+			 thread_network = new NetworkThread(new NetworkRoot(bpf.netifc, bpf.netport, br, bpf), br);
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to initialize network");
 		}		
