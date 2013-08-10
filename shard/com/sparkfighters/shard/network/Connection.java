@@ -1,7 +1,10 @@
 package com.sparkfighters.shard.network;
 
+import java.net.SocketAddress;
 import java.util.Random;
 import java.util.Vector;
+
+import com.sparkfighters.shard.loader.JSONUserDTO;
 
 import pl.com.henrietta.lnx2.Channel;
 import pl.com.henrietta.lnx2.RetransmissionMode;
@@ -17,11 +20,13 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 	 * Player ID is fundamentally the same as logical actor ID in shared.
 	 * ID is assigned by login - from BPF file
 	 */
+	public SocketAddress address = null;
 	public int player_id = -1;
 	public String username = null;	// associated username
 	public boolean is_logged_in = false;	// whether login went successfully
 	
-	private byte[] challenge = new byte[20];	// challenge/response nonce
+	public byte[] challenge_nonce = new byte[20];	// challenge/response nonce
+	public JSONUserDTO associated_dto = null;
 	
 	/**
 	 * Returns a vector of channels to put into Connection constructor. Because, 
@@ -43,7 +48,7 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 		
 		// Generate nonce
 		Random rand = new Random(System.currentTimeMillis());
-		rand.nextBytes(this.challenge);
+		rand.nextBytes(this.challenge_nonce);
 		
 	}
 
