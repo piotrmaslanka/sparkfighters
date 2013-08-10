@@ -13,6 +13,7 @@ import com.sparkfighters.shard.loader.WorldConstructor;
 import com.sparkfighters.shared.world.World;
 
 import com.sparkfighters.shard.network.*;
+import com.sparkfighters.shard.network.bridge.BridgeRoot;
 public class ShardApplication {
 
 	/**
@@ -29,10 +30,13 @@ public class ShardApplication {
 			throw new RuntimeException("BPF file not found");
 		}
 		
+		// Init bridge
+		BridgeRoot br = new BridgeRoot();
+		
 		// Init network
 		NetworkThread thread_network = null;
 		try {
-			 thread_network = new NetworkThread(new NetworkRoot(bpf.netifc, bpf.netport));
+			 thread_network = new NetworkThread(new NetworkRoot(bpf.netifc, bpf.netport), br);
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to initialize network");
 		}		
@@ -49,7 +53,7 @@ public class ShardApplication {
 		
 		// Init executor
 		ExecutorThread thread_executor = null;
-		thread_executor = new ExecutorThread(gameworld);
+		thread_executor = new ExecutorThread(gameworld, br);
 		
 		thread_executor.start();
 		
