@@ -20,7 +20,7 @@ public class NetworkThread extends Thread {
 	
 	public void run() {
 		while (!this._terminating) {
-			
+			this.root.select();
 		}
 	}
 
