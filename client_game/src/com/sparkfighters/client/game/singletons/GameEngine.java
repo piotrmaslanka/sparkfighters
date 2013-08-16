@@ -1,6 +1,7 @@
 package com.sparkfighters.client.game.singletons;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.sparkfighters.client.game.enums.Debug;
 /**
  * Singleton to hold information about game.
@@ -42,7 +43,6 @@ public enum GameEngine
 		
 		WorldManager.INSTANCE.mapFragment.set(WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getY_absolute());
 		
-		
 		for(int i=0;i<WorldManager.INSTANCE.actors.size();i++)
 		{
 			int id=WorldManager.INSTANCE.actors.get(i).getId();
@@ -64,7 +64,8 @@ public enum GameEngine
 	 */
 	public void Draw()
 	{	
-		DrawEngine.INSTANCE.ClearScreen();		
+		DrawEngine.INSTANCE.ClearScreen();	
+		
 		
 		WorldManager.INSTANCE.mapFragment.Draw();
 		

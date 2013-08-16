@@ -30,8 +30,12 @@ public enum DrawEngine
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameEngine.INSTANCE.orginal_width, GameEngine.INSTANCE.orginal_height);
 		
+		//camera.zoom=5.0f;
+		//camera.update();
+		
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);	
+		
 		
 		shape=new ShapeRenderer();
 		shape.setProjectionMatrix(camera.combined);
