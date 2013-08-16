@@ -16,12 +16,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
  * @author Kamil Iwiñski
  *
  */
-public enum DrawEngine 
+public enum DrawEngineScene 
 {
 	INSTANCE;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
+	private float zoom=0.0f;
 	/**
 	 * Function to configure DrawEngine parameters
 	 */
@@ -29,16 +30,26 @@ public enum DrawEngine
 	{
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameEngine.INSTANCE.orginal_width, GameEngine.INSTANCE.orginal_height);
-		
-		//camera.zoom=5.0f;
-		//camera.update();
-		
+			
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);	
 		
 		
 		shape=new ShapeRenderer();
 		shape.setProjectionMatrix(camera.combined);
+	}
+	/**
+	 * x,y center of screen
+	 * @param x
+	 * @param y
+	 */
+	public void setPositionCamera(float x, float y)
+	{
+		camera.position.set(x, y, 0f);
+		camera.update();
+		
+		batch.setProjectionMatrix(camera.combined);	
+		shape.setProjectionMatrix(camera.combined);	
 	}
 	
 	/**
@@ -130,49 +141,5 @@ public enum DrawEngine
 		shape.line(x, y, x2, y2);
 		shape.end();
 	}
-	/**
-	 * Function draw text in position x, y
-	 * @param x
-	 * @param y
-	 * @param color
-	 * @param font
-	 * @param text
-	 */
-	public void DrawText(int x, int y, Color color,BitmapFont font, String text)
-	{
-		font.setColor(color);
-		batch.begin();
-		font.draw(batch, text, x, y);
-		batch.end();
-	}
-	
-	/**
-	 * Function draw debug info on screen from all classes
-	 */
-	public void DrawDebugInfo()
-	{	
-		//int w=GameEngine.INSTANCE.orginal_width;
-		int h=GameEngine.INSTANCE.orginal_height;
-		BitmapFont font=ResourcesManager.INSTANCE.debugFont;
-		Color color=Color.GREEN;
-		int space_h=40;
-		
-		//FPS COUNTER
-		DrawText(0,h,color,font,"FPS: "+Gdx.graphics.getFramesPerSecond());
-		h-=space_h;
-		//Input
-		Input.INSTANCE.DrawDebugInfo(0, h, font, color);
-		h-=space_h;
-		//debug about map
-		WorldManager.INSTANCE.mapFragment.DrawDebugInfo(0,h,font,color);
-		h-=space_h;
-		//debug about heroes
-		for(int i=0;i<WorldManager.INSTANCE.actors.size();i++)
-		{
-			WorldManager.INSTANCE.actors.get(i).DrawDebugInfo(0,h,font,color);
-			h-=space_h;
-		}
-			
 
-	}
 }

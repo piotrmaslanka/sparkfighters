@@ -4,7 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.sparkfighters.client.game.singletons.DrawEngine;
+import com.sparkfighters.client.game.singletons.DrawEngineGUI;
+import com.sparkfighters.client.game.singletons.DrawEngineScene;
 import com.sparkfighters.client.game.singletons.ResourcesManager;
 import com.sparkfighters.client.game.singletons.WorldManager;
 import com.sparkfighters.shared.physics.objects.Vector;
@@ -106,8 +107,8 @@ public class Actor
 	public void Draw()
 	{
 		//calculate body
-		int x_body=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
-		int y_body=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
+		int x_body=(int)(this.actorPositionAbsolute.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
+		int y_body=(int)(this.actorPositionAbsolute.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
 		int direction=idAnimation%2;
 		
 		time += Gdx.graphics.getDeltaTime(); 
@@ -149,9 +150,9 @@ public class Actor
 		}
 		
 		//draw body, head, weapon
-		DrawEngine.INSTANCE.Draw(currentFrameBody, x_body,y_body,0);
-		DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction], x_head, y_head,degrees);
-		DrawEngine.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction], x_weapon,y_weapon,degrees);
+		DrawEngineScene.INSTANCE.Draw(currentFrameBody, x_body,y_body,0);
+		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction], x_head, y_head,degrees);
+		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction], x_weapon,y_weapon,degrees);
 		
 	}
 	/**
@@ -163,8 +164,8 @@ public class Actor
 	 */
 	public void DrawDebugInfo(int x,int y, BitmapFont font, Color color)
 	{
-		int x_relative=(int)(this.actorPositionRelative.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
-		int y_relative=(int)(this.actorPositionRelative.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
+		int x_absolute=(int)(this.actorPositionAbsolute.x-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x);
+		int y_absolute=(int)(this.actorPositionAbsolute.y-ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y);
 		
 		//draw hitboxes
 		for(int i=0;i<ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.size();i++)
@@ -174,16 +175,16 @@ public class Actor
 			int y1=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.get(i).y1;
 			int y2=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).hitboxes.get(i).y2;
 			
-			DrawEngine.INSTANCE.DrawRectangle(x_relative+x1, y_relative+y1, x_relative+x2, y_relative+y2,2,Color.RED);
+			DrawEngineScene.INSTANCE.DrawRectangle(x_absolute+x1, y_absolute+y1, x_absolute+x2, y_absolute+y2,2,Color.RED);
 		}
 		
 		//draw synchro point
 		int x3=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.x;
 		int y3=(int)ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).synchroPoint.y;
-		DrawEngine.INSTANCE.DrawPoint(x_relative+x3, y_relative+y3,5, Color.YELLOW);
+		DrawEngineScene.INSTANCE.DrawPoint(x_absolute+x3, y_absolute+y3,5, Color.YELLOW);
 		
 		//draw Data about hero
-		DrawEngine.INSTANCE.DrawText(x,y,color,font,
+		DrawEngineGUI.INSTANCE.DrawText(x,y,color,font,
 				"PID="+id+
 				" HeroID="+ResourcesManager.INSTANCE.heroesData.get(idHero).id+
 				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeapon).id+

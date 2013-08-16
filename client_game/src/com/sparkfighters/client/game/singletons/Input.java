@@ -100,7 +100,7 @@ public enum Input
 	 */
 	public void DrawDebugInfo(int x, int y, BitmapFont font, Color color)
 	{
-		DrawEngine.INSTANCE.DrawText(x,y,color,font,
+		DrawEngineGUI.INSTANCE.DrawText(x,y,color,font,
 				"Mouse-relative(x,y)=("+x_relative+","+y_relative+")"+
 				" Mouse-absolute(x,y)=("+x_absolute+","+y_absolute+")"		
 				);

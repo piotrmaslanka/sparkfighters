@@ -123,9 +123,8 @@ public enum ResourcesManager
 	
 	public void DrawLoadingScreen(String text)
 	{
-		DrawEngine.INSTANCE.ClearScreen();
-		DrawEngine.INSTANCE.Draw(loadingScreen, 0, 0);
-		DrawEngine.INSTANCE.DrawText(100, 100, Color.ORANGE, loadingFont, text);
+		DrawEngineGUI.INSTANCE.Draw(loadingScreen, 0, 0);
+		DrawEngineGUI.INSTANCE.DrawText(100, 100, Color.ORANGE, loadingFont, text);
 	}
 	
 	private void LoadLoadingScreen() 
