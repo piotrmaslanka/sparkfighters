@@ -2,6 +2,8 @@ package com.sparkfighters.client.game.singletons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sparkfighters.client.game.enums.Debug;
 /**
  * Singleton to hold information about game.
@@ -29,7 +31,8 @@ public enum GameEngine
 		this.window_width=window_width;
 		this.window_height=window_height;	
 		
-		DrawEngine.INSTANCE.Init();	
+		DrawEngineScene.INSTANCE.Init();
+		DrawEngineGUI.INSTANCE.Init();
 	}
 	
 	/**
@@ -64,7 +67,7 @@ public enum GameEngine
 	 */
 	public void Draw()
 	{	
-		DrawEngine.INSTANCE.ClearScreen();	
+		DrawEngineScene.INSTANCE.ClearScreen();	
 		
 		
 		WorldManager.INSTANCE.mapFragment.Draw();
@@ -75,12 +78,42 @@ public enum GameEngine
 		}
 		
 		if(debug==Debug.ALLMETHODS || debug==Debug.ONSCREEN) 
-			DrawEngine.INSTANCE.DrawDebugInfo();
+			DrawDebugInfo();
 		
 		//run garbage collector FPS drop form 60 to 30
 		//when using on each frame framerate: 60 FPS
 		//Runtime r = Runtime.getRuntime();
 		//r.gc();
+
+	}
+	
+	/**
+	 * Function draw debug info on screen from all classes
+	 */
+	public void DrawDebugInfo()
+	{	
+		//int w=GameEngine.INSTANCE.orginal_width;
+		int h=GameEngine.INSTANCE.orginal_height;
+		BitmapFont font=ResourcesManager.INSTANCE.debugFont;
+		Color color=Color.GREEN;
+		int space_h=40;
+		
+		//FPS COUNTER
+		DrawEngineGUI.INSTANCE.DrawText(0,h,color,font,"FPS: "+Gdx.graphics.getFramesPerSecond());
+		h-=space_h;
+		//Input
+		Input.INSTANCE.DrawDebugInfo(0, h, font, color);
+		h-=space_h;
+		//debug about map
+		WorldManager.INSTANCE.mapFragment.DrawDebugInfo(0,h,font,color);
+		h-=space_h;
+		//debug about heroes
+		for(int i=0;i<WorldManager.INSTANCE.actors.size();i++)
+		{
+			WorldManager.INSTANCE.actors.get(i).DrawDebugInfo(0,h,font,color);
+			h-=space_h;
+		}
+			
 
 	}
 }
