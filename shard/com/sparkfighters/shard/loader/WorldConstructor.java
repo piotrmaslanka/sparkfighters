@@ -65,8 +65,9 @@ public class WorldConstructor {
 	
 	public MapData load_map(int map_id) throws Exception {
 		Path p = Paths.get(this.contentfs_root);
-		p = p.resolve("maps").resolve((new Integer(map_id).toString()));
-
+		p = p.resolve("maps").resolve((new Integer(map_id).toString())).resolve("data.json");
+		p = p.toAbsolutePath();
+		
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(p.toString()))));
 		return gson.fromJson(reader, MapData.class);		
@@ -74,7 +75,8 @@ public class WorldConstructor {
 
 	public HeroData load_hero(int hero_id) throws Exception {
 		Path p = Paths.get(this.contentfs_root);
-		p = p.resolve("heroes").resolve((new Integer(hero_id).toString()));
+		p = p.resolve("heroes").resolve((new Integer(hero_id).toString())).resolve("data.json");
+		p = p.toAbsolutePath();
 		
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(p.toString()))));
@@ -83,7 +85,8 @@ public class WorldConstructor {
 
 	public WeaponData load_weapon(int weapon_id) throws Exception {
 		Path p = Paths.get(this.contentfs_root);
-		p = p.resolve("weapons").resolve((new Integer(weapon_id).toString()));
+		p = p.resolve("weapons").resolve((new Integer(weapon_id).toString())).resolve("data.json");
+		p = p.toAbsolutePath();
 
 		Gson gson = new Gson();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(p.toString()))));

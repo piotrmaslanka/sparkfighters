@@ -1,0 +1,16 @@
+{
+	"map": 0,
+	"content_fs_path": "..\\client_game\\data",
+	"netifc": "0.0.0.0",
+	"netport": 4000,
+	"users": [
+		{
+			"id": 0,
+			"username": "test",
+			"password": "test",		
+			"hero_id": 0,
+			"weapon_id": 0,
+			"team_id": 1
+		}
+	]
+}

@@ -24,7 +24,7 @@ public class ShardApplication {
 		Gson gson = new Gson();
 		JSONBattleDTO bpf = null;
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(args[1]))));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(args[0]))));
 			bpf = gson.fromJson(reader, JSONBattleDTO.class);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("BPF file not found");
