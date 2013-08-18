@@ -6,6 +6,10 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Formatter;
 import java.util.HashMap;
 
 import com.sparkfighters.shard.loader.JSONBattleDTO;
@@ -40,35 +44,58 @@ public class NetworkRoot {
 		this.br = br;
 	}
 
-	public void select() {
+	/**
+	 * Runs an execution loop
+	 * @return true if loop has done something
+	 */
+	public boolean select() {
+		boolean work_was_done = false;
+		boolean any_data_received = true;
+		
 		SocketAddress sa = null;
 		try {
-			sa = this.channel.receive(this.recvbuf);
+			sa = this.channel.receive(this.recvbuf);			
 		} catch (IOException e) {
-			return;
+			any_data_received = false;
 		}
+		if (sa == null) any_data_received = false;
 		
-		// is it an existing connection?
-		Connection conn = this.connections.get(sa);
-		if (conn == null) {
-			// brand new connection!
-			this.on_connected(sa);
-			conn = this.connections.get(sa);
-		}
+		
+		if (any_data_received) {
+			work_was_done = true;
+			// strip out the readed bytes
+			int how_much_readed = this.recvbuf.position();
+			System.out.format("Packet in, received %d bytes\n", how_much_readed);
+			byte[] data_readed = new byte[how_much_readed];
+			System.arraycopy(this.recvbuf.array(), 0, data_readed, 0, how_much_readed);
+			this.recvbuf.clear();
 			
-		try {
-			conn.on_received(Packet.from_bytes(this.recvbuf.array()));
-		} catch (PacketMalformedError e) {
-			this.on_disconnected(sa);
-			return;
+			// is it an existing connection?
+			Connection conn = this.connections.get(sa);
+			if (conn == null) {
+				// brand new connection!
+				this.on_connected(sa);
+				conn = this.connections.get(sa);
+			}
+				
+			try {
+				conn.on_received(Packet.from_bytes(data_readed));
+			} catch (PacketMalformedError e) {
+				this.on_disconnected(sa);
+				return true;
+			}
+			
+			if (conn.has_new_data) {
+				conn.has_new_data = false;
+				try {
+					this.on_has_data(sa, conn);
+				} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+					throw new RuntimeException("Java plays ball");
+				}
+			}
 		}
 		
-		if (conn.has_new_data) {
-			conn.has_new_data = false;
-			this.on_has_data(sa, conn);
-		}
-		
-		// Dispatch all packets
+		// Dispatch all outbound packets
 		for (SocketAddress csa : this.connections.keySet()) {
 			try {
 				Packet p = this.connections.get(csa).on_sendable();
@@ -78,17 +105,32 @@ public class NetworkRoot {
 			} catch (IOException e) { 
 			  	throw new RuntimeException("IO error in network ops");
 			}
+			work_was_done = true;
 		}
 		
 		// Ok, roll through all connections, kill timeouters
-		for (SocketAddress csa : this.connections.keySet())
+		for (SocketAddress csa : this.connections.keySet()) {
+			Connection conn = this.connections.get(csa);
 			if (conn.has_timeouted()) {
+				System.out.println("Connection killed due to timeout");
 				this.on_disconnected(csa);
+				work_was_done = true;
 				break;
 			}
+		}
+		
+		return work_was_done;
 	}
 	
-	public void on_has_data(SocketAddress sa, Connection conn) {
+	/**
+	 * Called upon data exists on given connection
+	 * @param sa Address of sender
+	 * @param conn Connection on which data exists
+	 * @throws UnsupportedEncodingException Called upon Java sucking cock
+	 * @throws NoSuchAlgorithmException Called upon Java sucking cock
+	 */
+	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
+																      NoSuchAlgorithmException {
 		if (!conn.is_logged_in) {
 			// it's either confirmation data or login request.
 			// read it anyway
@@ -105,16 +147,15 @@ public class NetworkRoot {
 			// ok, so what is this?
 			if (conn.username == null) {
 				// This is a login packet
-				try {
-					conn.username = new String(p, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					throw new RuntimeException("Java does not support UTF-8, wtf");
-				}
+				conn.username = new String(p, "UTF-8");
 				
+				System.out.printf("Logging in: %s\n", conn.username);
+
 				// check it this does make sense, prime DTO if so
 				conn.associated_dto = this.bpf.find_by_login(conn.username);
 				if (conn.associated_dto == null) {
 					// Invalid user!
+					System.out.printf("I cannot find this user\n");
 					this.on_disconnected(sa);
 					return;
 				}
@@ -124,20 +165,26 @@ public class NetworkRoot {
 				// This is a nonce-confirmation
 				// calculate SHA replica
 				byte[] pwd;
-				try {
-					pwd = conn.associated_dto.password.getBytes("UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					throw new RuntimeException("Java does not support UTF-8, wtf");
-				}
+				pwd = conn.associated_dto.password.getBytes("UTF-8");
 
 				// Lol, why can't Java just concat two arrays?
 				byte[] response = new byte[pwd.length + conn.challenge_nonce.length];
 				System.arraycopy(pwd, 0, response, 0, pwd.length);
 				System.arraycopy(conn.challenge_nonce, 0, response, pwd.length, conn.challenge_nonce.length);
 				
+				// Compute SHA-1
+				MessageDigest md = MessageDigest.getInstance("SHA-1");
+				md.update(response);
+				
+				Formatter formatter = new Formatter();
+				for (byte b : md.digest()) formatter.format("%02x", b);
+				
+				response = formatter.toString().getBytes("UTF-8");
+				formatter.close();
+				
 				// Compare the nonce...
-				if (response.equals(p)) {	// It's All-Ok!
-					
+				if (Arrays.equals(response, p)) {	// It's All-Ok!
+					System.out.println("Response matches");
 					// If the player was logged in right now, invalidate that connection
 					Connection alrdy_logd = this.connection_by_pid.get(conn.player_id);
 					if (alrdy_logd != null) {
@@ -152,6 +199,10 @@ public class NetworkRoot {
 					
 					this.connection_by_pid.put(conn.player_id, conn);
 					this.br.send_to_executor(new PlayerConnected(conn.player_id));
+					
+					byte[] ok = {'O', 'K'};
+					conn.getChannel(0).write(ok);	// send OK
+					
 				} else {
 					// Failed nonce check.
 					this.on_disconnected(sa);

@@ -20,7 +20,10 @@ public class NetworkThread extends Thread {
 	
 	public void run() {
 		while (!this._terminating) {
-			this.root.select();
+			try {
+				if (!this.root.select()) Thread.sleep(10);
+			} catch (InterruptedException e) {				
+			}
 		}
 	}
 
