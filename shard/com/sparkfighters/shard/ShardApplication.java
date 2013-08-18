@@ -57,11 +57,12 @@ public class ShardApplication {
 		
 		thread_executor.start();
 		
+		while (true) Thread.sleep(5000);
 		
 		// hang hang hang
 		
-		thread_network.terminate().join();
-		thread_executor.terminate().join();
+		// thread_network.terminate().join();
+		// thread_executor.terminate().join();
 
 	}
 
