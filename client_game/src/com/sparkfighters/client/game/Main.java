@@ -11,6 +11,7 @@ import net.java.truevfs.access.TFile;
 import net.java.truevfs.access.TFileOutputStream;
 import net.java.truevfs.access.TFileReader;
 import net.java.truevfs.access.TFileWriter;
+import net.java.truevfs.access.TVFS;
 
 import pl.com.henrietta.lnx2.exceptions.NothingToRead;
 import pl.com.henrietta.lnx2.exceptions.NothingToSend;
@@ -55,7 +56,19 @@ public class Main {
 	public static void main(String[] args)
 	{
 		Logger.INSTANCE.write("SparkFightersGame.jar", Logger.LogType.INFO);
-		
+		/*VFS.setDetector();
+		try 
+		{
+			File entry = new TFile("archive.dat/HalloWorld.txt");
+			Writer writer = new TFileWriter(entry);
+		    writer.write("Hello world!\n");
+		    writer.close();
+		    TVFS.umount();
+		} 
+		catch (Exception e)
+		{
+		   e.printStackTrace();
+		}*/
 		Monitor m=new Monitor();
 		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
 		if(m.launch(jarName, Main.class,"Spark Fighters Game")==true)
