@@ -15,7 +15,6 @@ public class SparkFightersGame extends Game
 	/**
 	 * Function call when game is created 
 	 */
-	@Override
 	public void create() 
 	{
 		GameEngine.INSTANCE.Init(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());

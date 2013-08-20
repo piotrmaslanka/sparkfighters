@@ -15,6 +15,7 @@ import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
 import com.sparkfighters.client.game.ultis.HeroFlashJsonToOurJson;
+import com.sparkfighters.client.game.ultis.VFS;
 /**
  * Singleton to hold all data information from HDD.
  * @author Kamil Iwiñski
@@ -40,10 +41,10 @@ public enum ResourcesManager
 	private int step=0;
 	
 	public void LoadResources()
-	{	
+	{			
 		switch (step)
 		{
-			case 0: 
+			case 0: 		
 					progress=0;
 					progressText="";		
 					Texture.setEnforcePotImages(false);
@@ -58,6 +59,14 @@ public enum ResourcesManager
 			
 			case 2:
 					//here init UDP and authorize connection
+					try
+					{
+						//Network.INSTANCE.Connect();
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
 					progress=20;
 					break;
 				
