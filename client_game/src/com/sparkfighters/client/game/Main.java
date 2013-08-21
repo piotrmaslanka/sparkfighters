@@ -19,6 +19,8 @@ import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
+import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.client.game.HDD.VFS;
 import com.sparkfighters.client.game.singletons.Logger;
 import com.sparkfighters.client.game.singletons.Network;
@@ -30,50 +32,19 @@ import com.sparkfighters.client.monitor.Monitor;
  *
  */
 public class Main {
-	/**
-	 * 
-	 * @param filename path to file
-	 * @return String with context of file
-	 */
-	public static String readFile(String filename)
-	{
-	   String content = null;
-	   File file = new File(filename); 
-	   try 
-	   {
-	       FileReader reader = new FileReader(file);
-	       char[] chars = new char[(int) file.length()];
-	       reader.read(chars);
-	       content = new String(chars);
-	       reader.close();
-	   } catch (IOException e)
-	   {
-	       e.printStackTrace();
-	   }
-	   return content;
-	}
 	
 	public static void main(String[] args)
 	{
 		Logger.INSTANCE.write("SparkFightersGame.jar", Logger.LogType.INFO);
-		VFS.setDetector();
-		/*try 
-		{
-			File entry = new TFile("archive.dat/HalloWorld.txt");
-			Writer writer = new TFileWriter(entry);
-		    writer.write("Hello world!\n");
-		    writer.close();
-		    TVFS.umount();
-		} 
-		catch (Exception e)
-		{
-		   e.printStackTrace();
-		}*/
+		
 		Monitor m=new Monitor();
 		String jarName=new java.io.File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
 		if(m.launch(jarName, Main.class,"Spark Fighters Game")==true)
-		{		
-			String s=readFile("data/cfg.cfg");
+		{	
+			VFS.setDetector();
+			
+			FileHandle fh=HDD.getFileHandle("data/cfg.cfg");
+			String s=fh.readString();
 			String[] s2=s.split(" ");
 			
 			int window_width=Integer.parseInt(s2[0]);
