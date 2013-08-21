@@ -19,9 +19,9 @@ import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.sparkfighters.client.game.HDD.VFS;
 import com.sparkfighters.client.game.singletons.Logger;
 import com.sparkfighters.client.game.singletons.Network;
-import com.sparkfighters.client.game.ultis.VFS;
 import com.sparkfighters.client.monitor.Monitor;
 
 /**
@@ -56,8 +56,8 @@ public class Main {
 	public static void main(String[] args)
 	{
 		Logger.INSTANCE.write("SparkFightersGame.jar", Logger.LogType.INFO);
-		/*VFS.setDetector();
-		try 
+		VFS.setDetector();
+		/*try 
 		{
 			File entry = new TFile("archive.dat/HalloWorld.txt");
 			Writer writer = new TFileWriter(entry);
@@ -94,14 +94,9 @@ public class Main {
 			cfg.foregroundFPS=fps;
 			
 			//cfg.addIcon("logo.png", FileType.Internal);
-			try 
-			{
-				Network.INSTANCE.Init(args[0], args[1], args[2], args[3]);
-			}
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-			}
+	
+			Network.INSTANCE.Init(args[0], args[1], args[2], args[3]);
+			
 			new LwjglApplication(new SparkFightersGame(), cfg);
 		}
 		else

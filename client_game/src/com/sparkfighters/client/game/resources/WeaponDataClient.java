@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.MipMapGenerator;
+import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.WeaponData;
 /**
  * Class extend WeaponData.
@@ -22,7 +23,7 @@ public class WeaponDataClient extends WeaponData
 	 */
 	public void loadTexture(String filePath)
 	{
-		texture=new Texture(filePath);
+		texture=new Texture(HDD.getFileHandle(filePath));
 		texture.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		texture.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(texture.getTextureData().consumePixmap(), 

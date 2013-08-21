@@ -17,8 +17,7 @@
         <copy file="C:/Program Files (x86)/Java/jre7/lib/jfxrt.jar" todir="../bin/data/libraries"/>
         <copy file="../monitor/libs/tools.jar" todir="../bin/data/libraries"/>
         
-        <taskdef resource="proguard/ant/task.properties"
-         classpath="proguard/proguard.jar" />
+        <taskdef resource="proguard/ant/task.properties" classpath="proguard/proguard.jar" />
 		<proguard configuration="proguard/client_patcher.pro"/>
 		
 		<move file="../bin/Spark Fighters Patcher_proguard.jar" tofile="../bin/Spark Fighters Patcher.jar" verbose="true" overwrite="true" />

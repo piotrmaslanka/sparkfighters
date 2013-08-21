@@ -12,8 +12,7 @@
             <fileset dir="../monitor/bin"/>
         </jar>
         
-        <taskdef resource="proguard/ant/task.properties"
-         classpath="proguard/proguard.jar" />
+        <taskdef resource="proguard/ant/task.properties" classpath="proguard/proguard.jar" />
 		<proguard configuration="proguard/client_launcher.pro"/>
 		
 		<move file="../bin/data/SparkFightersLauncher_proguard.jar" tofile="../bin/data/SparkFightersLauncher.jar" verbose="true" overwrite="true" />

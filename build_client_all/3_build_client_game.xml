@@ -6,7 +6,7 @@
         <jar destfile="../bin/data/SparkFightersGame.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.sparkfighters.client.game.Main"/>
-                <attribute name="Class-Path" value=". libraries/gdx.jar libraries/bodyeditor-loader.jar libraries/tween-engine-api.jar libraries/gson-2.2.4.jar libraries/gdx-backend-lwjgl-natives.jar libraries/gdx-backend-lwjgl.jar libraries/gdx-natives.jar libraries/tools.jar"/>
+                <attribute name="Class-Path" value=". libraries/gdx.jar libraries/bodyeditor-loader.jar libraries/tween-engine-api.jar libraries/gson-2.2.4.jar libraries/gdx-backend-lwjgl-natives.jar libraries/gdx-backend-lwjgl.jar libraries/gdx-natives.jar libraries/tools.jar truevfs-profile-default-0.10.3-shaded.jar"/>
             </manifest>
             <fileset dir="../client_game/bin"/>
             <fileset dir="../shared/bin"/>
@@ -25,8 +25,7 @@
         
         <copydir src="../client_game/data" dest="../bin/data/data/"/>
         
-         <taskdef resource="proguard/ant/task.properties"
-         classpath="proguard/proguard.jar" />
+        <taskdef resource="proguard/ant/task.properties" classpath="proguard/proguard.jar" />
 		<proguard configuration="proguard/client_game.pro"/>
 		
 		<move file="../bin/data/SparkFightersGame_proguard.jar" tofile="../bin/data/SparkFightersGame.jar" verbose="true" overwrite="true" />

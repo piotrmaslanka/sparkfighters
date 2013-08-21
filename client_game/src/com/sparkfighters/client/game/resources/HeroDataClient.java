@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.MipMapGenerator;
+import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.HeroData;
 /**
  * Class extend HeroData.
@@ -25,7 +26,7 @@ public class HeroDataClient extends HeroData
 
 	public void loadTextures(String filePathBody, String filePathHead)
 	{
-		textureBody=new Texture(filePathBody);
+		textureBody=new Texture(HDD.getFileHandle(filePathBody));
 		textureBody.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		
 		textureBody.getTextureData().prepare();
@@ -62,7 +63,7 @@ public class HeroDataClient extends HeroData
 		}
 		
 		
-		textureHead=new Texture(filePathHead);
+		textureHead=new Texture(HDD.getFileHandle(filePathHead));
 		textureHead.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);	
 		textureHead.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(textureHead.getTextureData().consumePixmap(), 
