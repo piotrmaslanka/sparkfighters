@@ -48,7 +48,7 @@ public enum Network implements Runnable
 		//create real connection
 		channel = DatagramChannel.open();
 		channel.socket().bind(new InetSocketAddress(0));
-		setBlocking(true);
+		setBlocking(false);
 						
 		//setting channels
 		Vector<Channel> chanells=new Vector<Channel>();	
@@ -92,16 +92,17 @@ public enum Network implements Runnable
 	
 			if(this.connection.has_new_data==true)
 			{
+				this.connection.has_new_data=false;
 				for (Channel c : connection.getChannels()) 
 				{
-					String msg = new String(connection.getChannel(c.channel_id).read(), "UTF-8");
+					byte[] msg = connection.getChannel(c.channel_id).read();
 					DoCommand(c.channel_id, msg);
 				}
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -119,31 +120,46 @@ public enum Network implements Runnable
 	}
 	
 
-	private void DoCommand(byte channel, String msg) throws UnsupportedEncodingException, NoSuchAlgorithmException 
+	private void DoCommand(byte channel, byte[] msg) throws UnsupportedEncodingException, NoSuchAlgorithmException 
 	{
 		if(channel==0)
 		{
-			byte[] pwd;
-			pwd = this.password.getBytes("UTF-8");
-			byte[] msg2;
-			msg2=msg.getBytes("UTF-8");
-
-			// Lol, why can't Java just concat two arrays?
-			byte[] response = new byte[pwd.length + msg2.length];
-			System.arraycopy(pwd, 0, response, 0, pwd.length);
-			System.arraycopy(msg2, 0, response, pwd.length, msg2.length);
+			String msg_s=new String(msg, "UTF-8");
 			
-			// Compute SHA-1
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			md.update(response);
+			if(msg_s.equals("OK"))
+			{
+				
+			}
+			else
+			{
+				if(msg_s.equals("FAIL"))
+				{
+					System.exit(0);
+				}
+				else
+				{
+					byte[] pwd;
+					pwd = this.password.getBytes("UTF-8");
+		
+					// Lol, why can't Java just concat two arrays?
+					byte[] response = new byte[pwd.length + msg.length];
+					System.arraycopy(pwd, 0, response, 0, pwd.length);
+					System.arraycopy(msg, 0, response, pwd.length, msg.length);
+					
+					// Compute SHA-1
+					MessageDigest md = MessageDigest.getInstance("SHA-1");
+					md.update(response);
+					
+					Formatter formatter = new Formatter();
+					for (byte b : md.digest()) formatter.format("%02x", b);
+					
+					response = formatter.toString().getBytes("UTF-8");
+					formatter.close();
+					
+					Send((byte)0, new String(response, "UTF-8"));
+				}
+			}
 			
-			Formatter formatter = new Formatter();
-			for (byte b : md.digest()) formatter.format("%02x", b);
-			
-			response = formatter.toString().getBytes("UTF-8");
-			formatter.close();
-			
-			Send((byte)0, new String(response, "UTF-8"));
 		}
 	}
 	
@@ -165,7 +181,7 @@ public enum Network implements Runnable
 			}
 			catch(Exception e)
 			{
-				continue;
+				
 			}
 			
 			Recive();
