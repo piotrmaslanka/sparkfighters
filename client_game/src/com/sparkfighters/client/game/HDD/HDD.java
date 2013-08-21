@@ -28,7 +28,9 @@ public class HDD
 	{
 		if(type==0)
 		{	
-			return Gdx.files.local(path);
+			File file = new TFile(path);
+			FileHandle fh=new FileHandle(file);
+			return fh;
 		}
 		
 		if(type==1)
