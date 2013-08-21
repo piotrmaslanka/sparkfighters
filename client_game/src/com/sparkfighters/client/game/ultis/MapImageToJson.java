@@ -3,7 +3,7 @@ package com.sparkfighters.client.game.ultis;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import com.sparkfighters.client.game.HDD;
+import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.MapData;
 import com.sparkfighters.shared.physics.objects.HorizSegment;
 import com.sparkfighters.shared.physics.objects.Vector;

@@ -10,12 +10,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.MipMapGenerator;
 
-import com.sparkfighters.client.game.HDD;
+import com.sparkfighters.client.game.HDD.HDD;
+import com.sparkfighters.client.game.HDD.VFS;
+import com.sparkfighters.client.game.HDD.VFSFileHandle;
 import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
 import com.sparkfighters.client.game.ultis.HeroFlashJsonToOurJson;
-import com.sparkfighters.client.game.ultis.VFS;
 /**
  * Singleton to hold all data information from HDD.
  * @author Kamil Iwiñski
@@ -41,7 +42,7 @@ public enum ResourcesManager
 	private int step=0;
 	
 	public void LoadResources()
-	{			
+	{	
 		switch (step)
 		{
 			case 0: 		
@@ -137,8 +138,8 @@ public enum ResourcesManager
 	}
 	
 	private void LoadLoadingScreen() 
-	{		
-		loadingScreen = new Texture(HDD.getFileHandle("data/loadingScreen.png"));
+	{
+		loadingScreen = new Texture(HDD.getFileHandle("data/loadingscreen.png"));
 		loadingScreen.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		loadingScreen.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(loadingScreen.getTextureData().consumePixmap(), 
@@ -152,6 +153,7 @@ public enum ResourcesManager
 				texture.getWidth(), texture.getHeight(), true);
 		TextureRegion tr=new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
 		loadingFont = new BitmapFont(HDD.getFileHandle("data/fonts/loadingfont.fnt"), tr, false);
+	
 	}
 	
 	private void LoadFonts()
@@ -177,7 +179,7 @@ public enum ResourcesManager
 		for(int i=0;i<list.length;i++)
 		{
 			HeroDataClient HD=new HeroDataClient();
-			HD= HDD.loadClass("data/heroes/"+i+"/data.json", HeroDataClient.class);
+			HD= HDD.loadClass(list[i]+"/data.json", HeroDataClient.class);
 			HD.loadTextures(list[i]+"/body.png",list[i]+"/head.png");
 			heroesData.put(new Integer(HD.id), HD);
 		}
@@ -195,8 +197,8 @@ public enum ResourcesManager
 		for(int i=0;i<list.length;i++)
 		{
 			WeaponDataClient WD=new WeaponDataClient();
-			WD=HDD.loadClass("data/weapons/"+i+"/data.json", WeaponDataClient.class);
-			WD.loadTexture("data/weapons/"+i+"/data.png");
+			WD=HDD.loadClass(list[i]+"/data.json", WeaponDataClient.class);
+			WD.loadTexture(list[i]+"/data.png");
 			
 			weaponsData.put(new Integer(WD.id), WD);
 		}

@@ -14,7 +14,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sparkfighters.client.game.HDD;
+import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.AnimationData;
 import com.sparkfighters.shared.loader.jsonobjs.HeroData;
 import com.sparkfighters.shared.physics.objects.HorizSegment;
