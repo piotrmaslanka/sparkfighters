@@ -20,7 +20,7 @@ import pl.com.henrietta.lnx2.exceptions.NothingToRead;
 import pl.com.henrietta.lnx2.exceptions.NothingToSend;
 import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 
-public enum Network
+public enum Network implements Runnable
 {
 	INSTANCE;
 	private String login;
@@ -32,6 +32,8 @@ public enum Network
 	
 	private DatagramChannel channel;
 	private Connection connection;
+	
+	private Thread thread;
 	
 	public void Init(String login, String password, String ip, String port)
 	{
@@ -55,48 +57,69 @@ public enum Network
 						
 		connection=new Connection(chanells, 15f);
 		
-		AuthorizeConnection();
-	
-	}
-	
-	public void setBlocking(boolean blocking) throws IOException
-	{
-		this.blocking=blocking;	
-		channel.configureBlocking(this.blocking);
-	}
-	
-	
-	
-	public void Recive() throws IOException, PacketMalformedError, NothingToRead, NoSuchAlgorithmException, NothingToSend
-	{
-		ByteBuffer recvbuf = ByteBuffer.allocate(2048);
-		this.channel.receive(recvbuf);
+		thread=new Thread(Network.INSTANCE);
+		thread.start();
 		
-		this.connection.on_received(Packet.from_bytes(recvbuf.array()));
-
-		if(this.connection.has_new_data==true)
+		AuthorizeConnection();
+	}
+	
+	public void setBlocking(boolean blocking)
+	{
+		try
 		{
-			for (Channel c : connection.getChannels()) 
+			this.blocking=blocking;	
+			channel.configureBlocking(this.blocking);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void Recive()
+	{
+		try
+		{
+			ByteBuffer recvbuf = ByteBuffer.allocate(2048);
+			this.channel.receive(recvbuf);
+			
+			int how_much_readed = recvbuf.position();
+			byte[] data_readed = new byte[how_much_readed];
+			System.arraycopy(recvbuf.array(), 0, data_readed, 0, how_much_readed);
+			
+			this.connection.on_received(Packet.from_bytes(data_readed));
+	
+			if(this.connection.has_new_data==true)
 			{
-				String msg = new String(connection.getChannel(c.channel_id).read(), "UTF-8");
-				DoCommand(c.channel_id, msg);
+				for (Channel c : connection.getChannels()) 
+				{
+					String msg = new String(connection.getChannel(c.channel_id).read(), "UTF-8");
+					DoCommand(c.channel_id, msg);
+				}
 			}
 		}
-
-			
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
-	public void Send(byte channel, String text) throws NothingToSend, IOException
+	public void Send(byte channel, String text)
 	{
-		this.connection.getChannel(channel).write(text.getBytes("UTF-8"));	
-		Packet p=this.connection.on_sendable();	
-		ByteBuffer buf=ByteBuffer.wrap(p.to_bytes());	
-		
-		this.channel.send(buf, new InetSocketAddress(this.ip, this.port));
+		try
+		{
+			//prepare to send data
+			this.connection.getChannel(channel).write(text.getBytes("UTF-8"));	
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 
-	private void DoCommand(byte channel, String msg) throws NoSuchAlgorithmException, NothingToSend, IOException
+	private void DoCommand(byte channel, String msg) throws UnsupportedEncodingException, NoSuchAlgorithmException 
 	{
 		if(channel==0)
 		{
@@ -119,16 +142,34 @@ public enum Network
 			
 			response = formatter.toString().getBytes("UTF-8");
 			formatter.close();
-				
+			
 			Send((byte)0, new String(response, "UTF-8"));
 		}
 	}
 	
-	private void AuthorizeConnection() throws NothingToSend, IOException, PacketMalformedError, NothingToRead, NoSuchAlgorithmException
+	private void AuthorizeConnection()
 	{
 		Send((byte) 0, login);
-		Recive(); //for nonce
-		Recive(); //for resposne OK/failed
+	}
+
+	public void run() 
+	{
+		while(true)
+		{
+			try
+			{
+				//send data
+				Packet p=this.connection.on_sendable();	
+				ByteBuffer buf=ByteBuffer.wrap(p.to_bytes());	
+				this.channel.send(buf, new InetSocketAddress(this.ip, this.port));
+			}
+			catch(Exception e)
+			{
+				continue;
+			}
+			
+			Recive();
+		}
 	}
 	
 	

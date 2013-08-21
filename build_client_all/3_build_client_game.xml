@@ -21,8 +21,8 @@
         <copy file="../client_game/libs/gdx-backend-lwjgl-natives.jar" todir="../bin/data/libraries"/>
         <copy file="../client_game/libs/gdx-backend-lwjgl.jar" todir="../bin/data/libraries"/>
         <copy file="../client_game/libs/gdx-natives.jar" todir="../bin/data/libraries"/>
-        <copy file="../client_game/libs/truevfs-profile-default-0.10.3-shaded.jar" todir="../bin/data/libraries"/>
-        
+        <copy file="../client_game/libs/truevfs-profile-default-0.10.3-shaded.jar" todir="../bin/data/libraries"/>       
+    		    
         <copydir src="../client_game/data" dest="../bin/data/data/"/>
         
         <taskdef resource="proguard/ant/task.properties" classpath="proguard/proguard.jar" />
