@@ -62,7 +62,7 @@ public enum ResourcesManager
 					//here init UDP and authorize connection
 					try
 					{
-						//Network.INSTANCE.Connect();
+						Network.INSTANCE.Connect();
 					}
 					catch(Exception e)
 					{
