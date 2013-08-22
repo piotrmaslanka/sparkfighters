@@ -35,6 +35,11 @@ public enum Network implements Runnable
 	
 	private Thread thread;
 	
+	public boolean Authorization=false;
+	public boolean GameData=false;
+	public String GameDataMsg="";
+	public boolean StartGame=false;
+	
 	public void Init(String login, String password, String ip, String port)
 	{
 		this.ip=ip;
@@ -48,7 +53,7 @@ public enum Network implements Runnable
 		//create real connection
 		channel = DatagramChannel.open();
 		channel.socket().bind(new InetSocketAddress(0));
-		setBlocking(true);
+		setBlocking(false);
 						
 		//setting channels
 		Vector<Channel> chanells=new Vector<Channel>();	
@@ -92,16 +97,17 @@ public enum Network implements Runnable
 	
 			if(this.connection.has_new_data==true)
 			{
+				this.connection.has_new_data=false;
 				for (Channel c : connection.getChannels()) 
 				{
-					String msg = new String(connection.getChannel(c.channel_id).read(), "UTF-8");
+					byte[] msg = connection.getChannel(c.channel_id).read();
 					DoCommand(c.channel_id, msg);
 				}
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -119,34 +125,72 @@ public enum Network implements Runnable
 	}
 	
 
-	private void DoCommand(byte channel, String msg) throws UnsupportedEncodingException, NoSuchAlgorithmException 
+	private void DoCommand(byte channel, byte[] msg)
 	{
-		if(channel==0)
+		try
 		{
-			byte[] pwd;
-			pwd = this.password.getBytes("UTF-8");
-			byte[] msg2;
-			msg2=msg.getBytes("UTF-8");
-
-			// Lol, why can't Java just concat two arrays?
-			byte[] response = new byte[pwd.length + msg2.length];
-			System.arraycopy(pwd, 0, response, 0, pwd.length);
-			System.arraycopy(msg2, 0, response, pwd.length, msg2.length);
-			
-			// Compute SHA-1
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			md.update(response);
-			
-			Formatter formatter = new Formatter();
-			for (byte b : md.digest()) formatter.format("%02x", b);
-			
-			response = formatter.toString().getBytes("UTF-8");
-			formatter.close();
-			
-			Send((byte)0, new String(response, "UTF-8"));
+			if(channel==0) Channel0(msg);
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 	
+	private void Channel0(byte[] msg) throws UnsupportedEncodingException, NoSuchAlgorithmException
+	{
+		String msg_s=new String(msg, "UTF-8");
+		if(Authorization==false)
+		{
+			if(msg_s.equals("OK"))
+			{
+				this.Authorization=true;
+			}
+			else
+			{
+				if(msg_s.equals("FAIL"))
+				{
+					System.exit(0);
+				}
+				else
+				{
+					byte[] pwd;
+					pwd = this.password.getBytes("UTF-8");
+		
+					// Lol, why can't Java just concat two arrays?
+					byte[] response = new byte[pwd.length + msg.length];
+					System.arraycopy(pwd, 0, response, 0, pwd.length);
+					System.arraycopy(msg, 0, response, pwd.length, msg.length);
+					
+					// Compute SHA-1
+					MessageDigest md = MessageDigest.getInstance("SHA-1");
+					md.update(response);
+					
+					Formatter formatter = new Formatter();
+					for (byte b : md.digest()) formatter.format("%02x", b);
+					
+					response = formatter.toString().getBytes("UTF-8");
+					formatter.close();
+					
+					Send((byte)0, new String(response, "UTF-8"));
+				}
+			}
+		}
+		else
+		{
+			if(this.GameData==false)
+			{
+				this.GameDataMsg=new String(msg, "UTF-8");
+				this.GameData=true;	
+			}
+			else
+			{
+				this.StartGame=Boolean.valueOf(msg_s);
+			}
+			
+		}
+	}
 	private void AuthorizeConnection()
 	{
 		Send((byte) 0, login);
@@ -165,7 +209,7 @@ public enum Network implements Runnable
 			}
 			catch(Exception e)
 			{
-				continue;
+				
 			}
 			
 			Recive();
