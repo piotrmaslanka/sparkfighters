@@ -1,5 +1,6 @@
 package com.sparkfighters.shard.network;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -13,6 +14,7 @@ import java.util.Formatter;
 import java.util.HashMap;
 
 import com.sparkfighters.shard.loader.JSONBattleDTO;
+import com.sparkfighters.shard.loader.JSONUserDTO;
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
 import com.sparkfighters.shard.network.bridge.net.PlayerConnected;
 import com.sparkfighters.shard.network.bridge.net.PlayerDisconnected;
@@ -89,7 +91,7 @@ public class NetworkRoot {
 				conn.has_new_data = false;
 				try {
 					this.on_has_data(sa, conn);
-				} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+				} catch (NoSuchAlgorithmException | IOException e) {
 					throw new RuntimeException("Java plays ball");
 				}
 			}
@@ -130,7 +132,8 @@ public class NetworkRoot {
 	 * @throws NoSuchAlgorithmException Called upon Java sucking cock
 	 */
 	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
-																      NoSuchAlgorithmException {
+																      NoSuchAlgorithmException,
+																      IOException {
 		if (!conn.is_logged_in) {
 			// it's either confirmation data or login request.
 			// read it anyway
@@ -200,11 +203,36 @@ public class NetworkRoot {
 					this.connection_by_pid.put(conn.player_id, conn);
 					this.br.send_to_executor(new PlayerConnected(conn.player_id));
 					
-					byte[] ok = {'O', 'K'};
-					conn.getChannel(0).write(ok);	// send OK
+					byte[] ok = {'O', 'K'};			// Send OK
+					conn.getChannel(0).write(ok);
+					
+								// Send info about map and players
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					bos.write(Integer.toString(this.bpf.map).getBytes("UTF-8"));
+					
+					for (JSONUserDTO user : this.bpf.users) {
+						bos.write(0);
+						bos.write(Integer.toString(user.hero_id).getBytes("UTF-8"));
+						bos.write(0);
+						bos.write(Integer.toString(user.weapon_id).getBytes("UTF-8"));
+						bos.write(0);
+						bos.write(Integer.toString(user.id).getBytes("UTF-8"));
+						bos.write(0);
+						bos.write(Integer.toString(user.team_id).getBytes("UTF-8"));
+						bos.write(0);
+						bos.write(user.username.getBytes("UTF-8"));						
+					}
+					conn.getChannel(0).write(bos.toByteArray());
+					
+							// Send info about game status
+					byte[] nots = {'0'};
+					conn.getChannel(0).write(nots);
 					
 				} else {
-					// Failed nonce check.
+					byte[] fail = {'F', 'A', 'I', 'L'};
+					conn.getChannel(0).write(fail);	// send FAIL
+
+					
 					this.on_disconnected(sa);
 					return;
 				}
