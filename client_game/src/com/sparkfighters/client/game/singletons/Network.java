@@ -35,6 +35,11 @@ public enum Network implements Runnable
 	
 	private Thread thread;
 	
+	public boolean Authorization=false;
+	public boolean GameData=false;
+	public String GameDataMsg="";
+	public boolean StartGame=false;
+	
 	public void Init(String login, String password, String ip, String port)
 	{
 		this.ip=ip;
@@ -120,15 +125,27 @@ public enum Network implements Runnable
 	}
 	
 
-	private void DoCommand(byte channel, byte[] msg) throws UnsupportedEncodingException, NoSuchAlgorithmException 
+	private void DoCommand(byte channel, byte[] msg)
 	{
-		if(channel==0)
+		try
 		{
-			String msg_s=new String(msg, "UTF-8");
-			
+			if(channel==0) Channel0(msg);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+	
+	private void Channel0(byte[] msg) throws UnsupportedEncodingException, NoSuchAlgorithmException
+	{
+		String msg_s=new String(msg, "UTF-8");
+		if(Authorization==false)
+		{
 			if(msg_s.equals("OK"))
 			{
-				
+				this.Authorization=true;
 			}
 			else
 			{
@@ -159,10 +176,21 @@ public enum Network implements Runnable
 					Send((byte)0, new String(response, "UTF-8"));
 				}
 			}
+		}
+		else
+		{
+			if(this.GameData==false)
+			{
+				this.GameDataMsg=new String(msg, "UTF-8");
+				this.GameData=true;	
+			}
+			else
+			{
+				this.StartGame=Boolean.valueOf(msg_s);
+			}
 			
 		}
 	}
-	
 	private void AuthorizeConnection()
 	{
 		Send((byte) 0, login);

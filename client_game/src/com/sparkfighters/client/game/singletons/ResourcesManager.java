@@ -68,61 +68,78 @@ public enum ResourcesManager
 					{
 						e.printStackTrace();
 					}
-					progress=20;
+					break;
+			
+			case 3:
+					if(Network.INSTANCE.Authorization==true && Network.INSTANCE.GameData==true)
+					{
+						step--;
+					}
+					else
+					{
+						progress=20;
+					}
 					break;
 				
-			case 3:
+			case 4:
 					progressText="Loading fonts...";
 					break;
-			case 4: 
+			case 5: 
 					LoadFonts();
 					progress=30;
 					break;
 			
-			case 5:
+			case 6:
 					progressText="Loading heroes...";
 					break;
 				
-			case 6:
+			case 7:
 					LoadHeroes();
 					progress=40;
 					break;
 			
-			case 7:
+			case 8:
 					progressText="Loading weapons...";				
 					break;
-			case 8:
+			case 9:
 					LoadWeapons();
 					progress=50;
 					break;
 			
-			case 9:
+			case 10:
 					progressText="Loading map...";
 					break;
 			
-			case 10: 
+			case 11: 
 					LoadMap();
 					progress=60;
 					break;	
 					
-			case 11:
+			case 12:
 					progressText="Generating world...";
 					break;
 					
-			case 12:
+			case 13:
 					WorldManager.INSTANCE.Init();	
 					progress=90;
 					break;
 			
-			case 13:
+			case 14:
 					progressText="Waiting for others...";
 					break;
 					
-			case 14:
+			case 15:
 					//here waiting for others
-					progress=100;
-					progressText="";
-					step=0;
+					if(Network.INSTANCE.StartGame==false)
+					{
+						step--;
+					}
+					else
+					{
+						progress=100;
+						progressText="";
+						step=0;
+					}
 					break;
 					
 				
