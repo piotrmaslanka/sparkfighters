@@ -37,9 +37,16 @@ challenge = packon(0)
 
 print 'Challenge received, sending back response...'
 replica = hashlib.sha1('test'+challenge).hexdigest()
-print replica
 conn[0].write(replica)
 
 connect = packon(0)
 if connect == 'OK':
     print 'Response OK, connected!'
+
+packon(0)	# We don't care about participant info right now
+
+pa = packon(0)
+if pa == '0':
+	print 'Waiting for game start'
+	assert packon(0) == '1'
+print 'Game started'

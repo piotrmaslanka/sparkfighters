@@ -26,12 +26,14 @@ import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 
 public class NetworkRoot {
 
-	DatagramChannel channel = null;
-	HashMap<SocketAddress, Connection> connections = new HashMap<>();
-	HashMap<Integer, Connection> connection_by_pid = new HashMap<>();
-	ByteBuffer recvbuf = ByteBuffer.allocate(2048);
-	BridgeRoot br = null;
-	JSONBattleDTO bpf = null;
+	public DatagramChannel channel = null;
+	public HashMap<SocketAddress, Connection> connections = new HashMap<>();
+	public HashMap<Integer, Connection> connection_by_pid = new HashMap<>();
+	public ByteBuffer recvbuf = ByteBuffer.allocate(2048);
+	public BridgeRoot br = null;
+	public JSONBattleDTO bpf = null;
+	
+	public boolean is_game_started = false;
 	
 	/**
 	 * @param netifc Network interface name
@@ -225,13 +227,12 @@ public class NetworkRoot {
 					conn.getChannel(0).write(bos.toByteArray());
 					
 							// Send info about game status
-					byte[] nots = {'0'};
+					byte[] nots = {this.is_game_started ? (byte)'1' : (byte)'0'};
 					conn.getChannel(0).write(nots);
 					
 				} else {
 					byte[] fail = {'F', 'A', 'I', 'L'};
 					conn.getChannel(0).write(fail);	// send FAIL
-
 					
 					this.on_disconnected(sa);
 					return;
