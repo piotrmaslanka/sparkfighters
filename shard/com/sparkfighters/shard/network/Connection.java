@@ -40,9 +40,12 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 	private static Vector<Channel> _get_channels_vector() {
 		Channel chan_0 = new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED,
 				(float)10, 60);
+		Channel chan_1 = new Channel((byte)0, RetransmissionMode.RTM_MANUAL,
+				(float)5, 1);
 
 		Vector<Channel> channels = new Vector<>();
 		channels.add(chan_0);
+		channels.add(chan_1);
 		return channels;
 	}
 	
