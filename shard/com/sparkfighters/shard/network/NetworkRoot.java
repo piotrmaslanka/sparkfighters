@@ -136,6 +136,8 @@ public class NetworkRoot {
 	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
 																      NoSuchAlgorithmException,
 																      IOException {
+		try { conn.getChannel(1).read(); } catch (NothingToRead e) {}	// catch and disregard pings
+
 		if (conn.login_phase == 0) {
 			// it's either confirmation data or login request.
 			// read it anyway
