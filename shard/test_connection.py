@@ -44,9 +44,14 @@ if connect == 'OK':
     print 'Response OK, connected!'
 
 packon(0)	# We don't care about participant info right now
+conn[0].write('RDY') # we are ready
 
-pa = packon(0)
-if pa == '0':
-	print 'Waiting for game start'
-	assert packon(0) == '1'
-print 'Game started'
+while True:
+	pa = packon(0)
+	if pa == '0':
+		print 'Waiting for cinematics'
+	elif pa == '1':
+		print 'Cinematics started'
+	elif pa == '2':
+		print 'Game started'
+		break

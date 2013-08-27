@@ -23,7 +23,12 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 	public SocketAddress address = null;
 	public int player_id = -1;
 	public String username = null;	// associated username
-	public boolean is_logged_in = false;	// whether login went successfully
+	/**
+	 * 0 - not logged in
+	 * 1 - authorized, sent information about map
+	 * 2 - acknowledged readiness
+	 */
+	public int login_phase = 0;
 	
 	public byte[] challenge_nonce = new byte[20];	// challenge/response nonce
 	public JSONUserDTO associated_dto = null;

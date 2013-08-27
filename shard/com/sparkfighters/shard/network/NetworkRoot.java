@@ -136,7 +136,7 @@ public class NetworkRoot {
 	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
 																      NoSuchAlgorithmException,
 																      IOException {
-		if (!conn.is_logged_in) {
+		if (conn.login_phase == 0) {
 			// it's either confirmation data or login request.
 			// read it anyway
 			byte[] p = null;
@@ -193,14 +193,14 @@ public class NetworkRoot {
 					// If the player was logged in right now, invalidate that connection
 					Connection alrdy_logd = this.connection_by_pid.get(conn.player_id);
 					if (alrdy_logd != null) {
-						// set is_logged_in to false so that on_disconnect
+						// set login_phase to 0 so that on_disconnect
 						// doesn't annoy Executor
-						alrdy_logd.is_logged_in = false;
+						alrdy_logd.login_phase = 0;
 						this.on_disconnected(alrdy_logd.address);
 					}
 					
 					conn.player_id = conn.associated_dto.hero_id;
-					conn.is_logged_in = true;
+					conn.login_phase = 1;
 					
 					this.connection_by_pid.put(conn.player_id, conn);
 					this.br.send_to_executor(new PlayerConnected(conn.player_id));
@@ -226,10 +226,7 @@ public class NetworkRoot {
 					}
 					conn.getChannel(0).write(bos.toByteArray());
 					
-							// Send info about game status
-					byte[] nots = {this.is_game_started ? (byte)'1' : (byte)'0'};
-					conn.getChannel(0).write(nots);
-					
+					// Wait for RDY					
 				} else {
 					byte[] fail = {'F', 'A', 'I', 'L'};
 					conn.getChannel(0).write(fail);	// send FAIL
@@ -239,6 +236,28 @@ public class NetworkRoot {
 				}
 			}
 			
+		} else if (conn.login_phase == 1) {
+			// Awaiting RDY
+			byte[] dat_in;
+			try {
+				dat_in = conn.getChannel(0).read();
+			} catch (NothingToRead e) {
+				// too bad it hasn't arrived yet.
+				return;
+			}
+			
+			byte[] templ = {'R', 'D', 'Y'};	// what should arrive
+			if (Arrays.equals(dat_in, templ)) {
+				// he's ready
+				this.br.send_to_executor(new PlayerConnected(conn.player_id));
+				conn.login_phase = 2;
+				
+				// send '0' or '2' about game state
+				byte[] gstate = { this.is_game_started ? (byte)'2' : (byte)'0' };
+				conn.getChannel(0).write(gstate);
+			}			
+		} else {
+			// Connection has been established
 		}
 	}
 	
@@ -246,7 +265,7 @@ public class NetworkRoot {
 		// a new socket was disconnected
 		Connection cn = this.connections.get(sa);
 		this.connections.remove(sa);
-		if (!cn.is_logged_in) return;	// not logged in - no problem
+		if (cn.login_phase < 2) return;	// not logged in - no problem
 			
 		this.connection_by_pid.remove(cn.player_id);
 		this.br.send_to_executor(new PlayerDisconnected(cn.player_id));

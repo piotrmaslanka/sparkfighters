@@ -2,7 +2,7 @@ package com.sparkfighters.shard.network;
 
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
 import com.sparkfighters.shard.network.bridge.ExecutorToNetwork;
-import com.sparkfighters.shard.network.bridge.exec.GameStarted;
+import com.sparkfighters.shard.network.bridge.exec.*;
 
 public class NetworkThread extends Thread {
 
@@ -30,13 +30,21 @@ public class NetworkThread extends Thread {
 			ExecutorToNetwork etn = this.br.network_receive();
 			if (etn != null) {				
 				
+				if (etn instanceof CinematicStarted) {
+					// Tell waiting players that it is so
+					for (Connection c : this.root.connections.values()) {
+						byte[] rdy = {'1'};
+						c.getChannel(0).write(rdy);
+					}					
+				}
+				
 				if (etn instanceof GameStarted) {
 					// Instruct root that stuff is connected
 					this.root.is_game_started = true;
 					
 					// Tell waiting players that it is so
 					for (Connection c : this.root.connections.values()) {
-						byte[] rdy = {'1'};
+						byte[] rdy = {'2'};
 						c.getChannel(0).write(rdy);
 					}
 				}

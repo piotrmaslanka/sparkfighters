@@ -12,11 +12,16 @@ import com.sparkfighters.shared.world.World;
 
 public class ExecutorThread extends Thread {
 
+	static final long FORCED_START_ITERATION = 1200;
+	static final long CINEMATICS_DURATION = 200;
+	static final int FRAME_DURATION = 50;
+	
 	World gameworld;
 	boolean _terminating = false;
 	BridgeRoot br = null;
 	long iteration = 0;
 	boolean is_game_started = false;
+	long game_started_on = 0;
 	
 	HashMap<Integer, Boolean> is_online = new HashMap<>();
 	
@@ -47,16 +52,23 @@ public class ExecutorThread extends Thread {
 					this.is_online.put(nex.player_id, false);				
 			}		
 			
-			// Should we start the game?
-			if (!this.is_game_started) {
+			// Should we start cinematics?
+			if (this.game_started_on == 0) {
 				boolean all_connected = true;
 				for (Boolean b : this.is_online.values()) all_connected &= b;
 				
-				if ((this.iteration > 240) || all_connected) {
-					this.is_game_started = true;
-					this.br.send_to_network(new GameStarted());
-					System.out.println("Executor: starting the game");
+				if ((this.iteration >= ExecutorThread.FORCED_START_ITERATION) || all_connected) {
+					this.game_started_on = this.iteration;
+					this.br.send_to_network(new CinematicStarted());
+					System.out.println("Executor: starting cinematics");
 				}
+			}
+			
+			// Should we start the game?
+			if ((this.game_started_on != 0) && ((this.iteration - this.game_started_on) == ExecutorThread.CINEMATICS_DURATION)) {
+				this.is_game_started = true;
+				this.br.send_to_network(new GameStarted());
+				System.out.println("Executor: starting gameplay");
 			}
 			
 			// Increment exception, wait more
@@ -64,7 +76,7 @@ public class ExecutorThread extends Thread {
 				long delta = System.currentTimeMillis() - started_on;
 				if (delta < 0) throw new RuntimeException("Timer overrun");
 				iteration++;
-				Thread.sleep(250-delta);
+				Thread.sleep(ExecutorThread.FRAME_DURATION-delta);
 			} catch (InterruptedException e) {};
 		}
 		
