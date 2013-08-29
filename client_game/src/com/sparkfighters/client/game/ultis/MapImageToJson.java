@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.shared.loader.jsonobjs.MapData;
+import com.sparkfighters.shared.loader.jsonobjs.MapData.SpawnPoint;
 import com.sparkfighters.shared.physics.objects.HorizSegment;
 import com.sparkfighters.shared.physics.objects.Vector;
 
@@ -103,9 +104,21 @@ public class MapImageToJson
 		MD.id=0;
 		MD.name="first map";
 		MD.sparkStart=new Vector(400,400);
-		MD.spawnPoints.add(new Vector(600,600));
-		MD.spawnPoints.add(new Vector(800,800));
-		MD.spawnPoints.add(new Vector(1000,1000));
+		
+		MapData.SpawnPoint sp=MD.new SpawnPoint();
+		sp.team_id=0;
+		sp.position=new Vector(600,600);
+		MD.spawnPoints.add(sp);
+		
+		sp=MD.new SpawnPoint();
+		sp.team_id=1;
+		sp.position=new Vector(800,800);
+		MD.spawnPoints.add(sp);
+		
+		sp=MD.new SpawnPoint();
+		sp.team_id=2;
+		sp.position=new Vector(1000,1000);
+		MD.spawnPoints.add(sp);
 		
 		
 		platformsToJson(platformImagePath);

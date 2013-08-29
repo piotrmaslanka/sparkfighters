@@ -73,7 +73,15 @@ public enum WorldManager
 				//create logic actors
 				actorsLogic[j]=new com.sparkfighters.shared.world.Actor(idActor, actorsBlueprint);
 				actorsLogic[j].physical=actorsLogic[0].actor_blueprint.create_physicactor(idActor);
-				actorsLogic[j].physical.set_position(ResourcesManager.INSTANCE.map.spawnPoints.get(i)); //!!!!!
+				for(int k=0;k<ResourcesManager.INSTANCE.map.spawnPoints.size();k++)
+				{
+					if(ResourcesManager.INSTANCE.map.spawnPoints.get(k).team_id==idTeam)
+					{
+						actorsLogic[j].physical.set_position(ResourcesManager.INSTANCE.map.spawnPoints.get(k).position);
+						break;
+					}
+				}
+				
 				worldPhysics.add_actor(actorsLogic[j].physical);
 			}
 			
