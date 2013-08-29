@@ -18,6 +18,7 @@ import com.sparkfighters.client.game.resources.HeroDataClient;
 import com.sparkfighters.client.game.resources.MapDataClient;
 import com.sparkfighters.client.game.resources.WeaponDataClient;
 import com.sparkfighters.client.game.ultis.HeroFlashJsonToOurJson;
+import com.sparkfighters.client.game.ultis.MapImageToJson;
 /**
  * Singleton to hold all data information from HDD.
  * @author Kamil Iwiñski
@@ -227,7 +228,9 @@ public enum ResourcesManager
 	}
 
 	private void LoadMap()
-	{		
+	{			
+		//MapImageToJson c=new MapImageToJson();
+		//c.convert("p.png", "out.json");
 		map=new MapDataClient();
 		String path="data/maps/"+Network.INSTANCE.GameDataMsg.getIdMap();
 		map=HDD.loadClass(path+"/data.json", MapDataClient.class);
