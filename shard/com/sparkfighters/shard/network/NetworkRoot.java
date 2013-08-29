@@ -136,7 +136,7 @@ public class NetworkRoot {
 																      NoSuchAlgorithmException,
 																      IOException {
 		// handle ping
-		try { conn.getChannel(1).read(); } catch (NothingToRead e) {}
+		try { conn.getChannel(1).write(conn.getChannel(1).read()); } catch (NothingToRead e) {}
 		
 		if (conn.login_phase == 0) {
 			// it's either confirmation data or login request.
