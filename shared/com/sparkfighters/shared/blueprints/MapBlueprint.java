@@ -26,6 +26,7 @@ final public class MapBlueprint {
 	public final Rectangle world_box;
 	
 	private final Vector spawnpoints[] = new Vector[3];
+	private final int spawnpoints_team[] = new int[3];
 	
 	@SuppressWarnings("unused")
 	private final Vector spark_start;
@@ -35,10 +36,12 @@ final public class MapBlueprint {
 		
 		this.platforms = md.platforms.toArray(new HorizSegment[0]);
 		
-		this.spawnpoints[0] = md.spawnPoints.get(0);
-		this.spawnpoints[1] = md.spawnPoints.get(1);
-		this.spawnpoints[2] = md.spawnPoints.get(2);
-		
+		int i=0;
+		for (MapData.SpawnPoint sp : md.spawnPoints) {
+			this.spawnpoints[i] = sp.position;
+			this.spawnpoints_team[i] = sp.team_id;
+			i++;
+		}
 		this.spark_start = md.sparkStart;
 		
 		this.world_box = md.mapSize;
