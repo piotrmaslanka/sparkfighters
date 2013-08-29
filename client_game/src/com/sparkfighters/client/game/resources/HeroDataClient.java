@@ -17,48 +17,37 @@ import com.sparkfighters.shared.loader.jsonobjs.HeroData;
 public class HeroDataClient extends HeroData
 {
 
-	public Texture textureMyHeroBody;
-	public Texture textureMyHeroHead;	
-	public ArrayList<Animation> animationsDrawableMyHeroBody;
-	public TextureRegion[] animationsDrawableMyHeroHead;
+	/**
+	 * 0-my_hero
+	 * 1-friend_hero
+	 * 2-enemy hero
+	 */
+	public ArrayList<Texture> textureBody=new ArrayList<Texture>();
+	public ArrayList<Texture> textureHead=new ArrayList<Texture>();	
 	
-	public Texture textureFriendHeroBody;
-	public Texture textureFriendHeroHead;	
-	public ArrayList<Animation> animationsDrawableFriendHeroBody;
-	public TextureRegion[] animationsDrawableFriendHeroHead;
+	public ArrayList<ArrayList<Animation>> animationsDrawableBody=new ArrayList<ArrayList<Animation>>();
+	public ArrayList<TextureRegion[]> animationsDrawableHead=new ArrayList<TextureRegion[]>();
 	
-	public Texture textureEnemyHeroBody;
-	public Texture textureEnemyHeroHead;	
-	public ArrayList<Animation> animationsDrawableEnemyHeroBody;
-	public TextureRegion[] animationsDrawableEnemyHeroHead;
 	
 	public void loadTextures(String Path)
 	{
-		 CreateAnimations(Path+"/my_hero_body.png", Path+"/my_hero_head.png",
-				 textureMyHeroBody, textureMyHeroHead, 
-				 animationsDrawableMyHeroBody, animationsDrawableMyHeroHead);
-		 
-		 CreateAnimations(Path+"/friend_hero_body.png", Path+"/friend_hero_head.png",
-				 textureFriendHeroBody, textureFriendHeroHead, 
-				 animationsDrawableFriendHeroBody, animationsDrawableFriendHeroHead);
-		 
-		 CreateAnimations(Path+"/enemy_hero_body.png", Path+"/enemy_hero_head.png",
-				 textureEnemyHeroBody, textureEnemyHeroHead, 
-				 animationsDrawableEnemyHeroBody, animationsDrawableEnemyHeroHead);
+		 CreateAnimations(Path+"/my_hero_body.png", Path+"/my_hero_head.png");		 
+		 CreateAnimations(Path+"/friend_hero_body.png", Path+"/friend_hero_head.png");	 
+		 CreateAnimations(Path+"/enemy_hero_body.png", Path+"/enemy_hero_head.png");
 	}
 	
-	private void CreateAnimations(String filePathBody, String filePathHead,
-			Texture textureBody, Texture textureHead, 
-			ArrayList<Animation> animationsDrawableBody,TextureRegion[] animationsDrawableHead)
+	private void CreateAnimations(String filePathBody, String filePathHead)
 	{
-		textureBody=new Texture(HDD.getFileHandle(filePathBody));
+		Texture textureBody=new Texture(HDD.getFileHandle(filePathBody));
 		textureBody.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
 		
 		textureBody.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(textureBody.getTextureData().consumePixmap(), 
 				textureBody.getWidth(), textureBody.getHeight(), true);
 		
-		animationsDrawableBody=new ArrayList<Animation>();
+		this.textureBody.add(textureBody);
+		
+		ArrayList<Animation> animationsDrawableBody=new ArrayList<Animation>();
 		
 		for(int i=0;i<Animations.size();i++)
 		{
@@ -87,17 +76,22 @@ public class HeroDataClient extends HeroData
 			animationsDrawableBody.add(a);
 		}
 		
+		this.animationsDrawableBody.add(animationsDrawableBody);
 		
-		textureHead=new Texture(HDD.getFileHandle(filePathHead));
+		Texture textureHead=new Texture(HDD.getFileHandle(filePathHead));
 		textureHead.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);	
 		textureHead.getTextureData().prepare();
 		MipMapGenerator.generateMipMap(textureHead.getTextureData().consumePixmap(), 
 				textureHead.getWidth(), textureHead.getHeight(), true);
 		
-		animationsDrawableHead=new TextureRegion[2];
+		this.textureHead.add(textureHead);
+		
+		TextureRegion[] animationsDrawableHead=new TextureRegion[2];
 		animationsDrawableHead[0]=new TextureRegion(textureHead);
 		animationsDrawableHead[1]=new TextureRegion(textureHead);
 		animationsDrawableHead[1].flip(true, false);
+		
+		this.animationsDrawableHead.add(animationsDrawableHead);
 	}
 	
 }

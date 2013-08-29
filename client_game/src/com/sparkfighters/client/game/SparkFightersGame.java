@@ -28,7 +28,7 @@ public class SparkFightersGame extends Game
 			ResourcesManager.INSTANCE.LoadResources();		
 			
 			ResourcesManager.INSTANCE.DrawLoadingScreen(
-				Integer.toString(ResourcesManager.INSTANCE.getProgress())+" "+
+				Integer.toString(ResourcesManager.INSTANCE.getProgress())+"% "+
 				ResourcesManager.INSTANCE.getProgressText());
 		}
 		else
