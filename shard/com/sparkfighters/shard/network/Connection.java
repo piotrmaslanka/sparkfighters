@@ -50,6 +50,9 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 		channels.add(new Channel((byte)2, RetransmissionMode.RTM_MANUAL, (float)5, 1));
 		// Core game events stream channel
 		channels.add(new Channel((byte)3, RetransmissionMode.RTM_AUTO, (float)10, 60));
+		// LSD sync channels
+		channels.add(new Channel((byte)4, RetransmissionMode.RTM_NONE, (float)0, 0));
+		channels.add(new Channel((byte)5, RetransmissionMode.RTM_AUTO, (float)5, 60));
 		return channels;
 	}
 	
