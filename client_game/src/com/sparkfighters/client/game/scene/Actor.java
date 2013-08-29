@@ -21,7 +21,7 @@ public class Actor
 	private Vector mousePositionAbsolute=new Vector();
 	private Vector mousePositionRelative=new Vector();
 	
-	private int idHero,idWeapon, id;
+	private int idHero,idWeapon, id, idHeroType;
 	private int idAnimation;
 	private float time;
 	
@@ -68,10 +68,11 @@ public class Actor
 	 * @param idHero Actor need body to exist
 	 * @param idWeapon Actor need a weapon to exist
 	 */
-	public Actor(int id, int idHero, int idWeapon)
+	public Actor(int id, int idHero,int idHeroType, int idWeapon)
 	{
 		this.id=id;
 		this.idHero=idHero;
+		this.idHeroType=idHeroType;
 		this.idWeapon=idWeapon;
 			
 		setAnimation(0);
@@ -112,26 +113,26 @@ public class Actor
 		int direction=idAnimation%2;
 		
 		time += Gdx.graphics.getDeltaTime(); 
-		TextureRegion currentFrameBody=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrame(time, true);
-		int idFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idAnimation).getKeyFrameIndex(time);
+		TextureRegion currentFrameBody=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idHeroType).get(idAnimation).getKeyFrame(time, true);
+		int idFrame=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableBody.get(idHeroType).get(idAnimation).getKeyFrameIndex(time);
 
 		//calculate head
-		int x_head=(int)(x_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).x-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2);
-		int y_head=(int)(y_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).y-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight()/2);
+		int x_head=(int)(x_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).x-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction].getRegionWidth()/2);
+		int y_head=(int)(y_body+ResourcesManager.INSTANCE.heroesData.get(idHero).Animations.get(idAnimation).headPositions.get(idFrame).y-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction].getRegionHeight()/2);
 
 		//calculate weapon
 		int h_x=0;
 		int diff=0;
-		if(currentFrameBody.getRegionWidth()>ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())
+		if(currentFrameBody.getRegionWidth()>ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction].getRegionWidth())
 		{
 			h_x=currentFrameBody.getRegionWidth()/2;
 		}
 		else
 		{
-			diff=(currentFrameBody.getRegionWidth()-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth())/2;
-			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionWidth()/2;	
+			diff=(currentFrameBody.getRegionWidth()-ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction].getRegionWidth())/2;
+			h_x=ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction].getRegionWidth()/2;	
 		}
-		int h_y=(currentFrameBody.getRegionHeight()+ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction].getRegionHeight())/3;
+		int h_y=(currentFrameBody.getRegionHeight()+ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction].getRegionHeight())/3;
 
 		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2+diff;
 		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
@@ -151,7 +152,7 @@ public class Actor
 		
 		//draw body, head, weapon
 		DrawEngineScene.INSTANCE.Draw(currentFrameBody, x_body,y_body,0);
-		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead[direction], x_head, y_head,degrees);
+		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction], x_head, y_head,degrees);
 		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction], x_weapon,y_weapon,degrees);
 		
 	}

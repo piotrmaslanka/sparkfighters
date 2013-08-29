@@ -50,11 +50,22 @@ public enum WorldManager
 				int idTeam=actor_n.get(j).IdTeam;
 				String login=actor_n.get(j).login;
 				
-				actors.add(new com.sparkfighters.client.game.scene.Actor(idActor,idHero,idWeapon));
-				if(login.equals(Network.INSTANCE.login)) 
+				if(Network.INSTANCE.GameDataMsg.getMyTeam()==idTeam)
 				{
-					myHeroArrayActors=actors.size()-1;
+					if(login.equals(Network.INSTANCE.login)) 
+					{
+						actors.add(new com.sparkfighters.client.game.scene.Actor(idActor,idHero,0,idWeapon));
+						myHeroArrayActors=actors.size()-1;
+					}
+					else
+					{
+						actors.add(new com.sparkfighters.client.game.scene.Actor(idActor,idHero,1,idWeapon));
+					}
 				}
+				else
+				{
+					actors.add(new com.sparkfighters.client.game.scene.Actor(idActor,idHero,2,idWeapon));
+				}			
 				
 				//Create Blueprint Actor
 				ActorBlueprint actorsBlueprint=new ActorBlueprint(ResourcesManager.INSTANCE.weaponsData.get(idWeapon), ResourcesManager.INSTANCE.heroesData.get(idHero));
