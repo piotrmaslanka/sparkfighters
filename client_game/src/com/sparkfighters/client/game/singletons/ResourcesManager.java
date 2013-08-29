@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.MipMapGenerator;
+import com.badlogic.gdx.utils.Array;
 
 import com.sparkfighters.client.game.HDD.HDD;
 import com.sparkfighters.client.game.HDD.VFS;
@@ -71,7 +72,7 @@ public enum ResourcesManager
 					break;
 			
 			case 3:
-					if(Network.INSTANCE.Authorization==true && Network.INSTANCE.GameData==true)
+					if(Network.INSTANCE.Authorization==false && Network.INSTANCE.GameData==false)
 					{
 						step--;
 					}
@@ -120,7 +121,8 @@ public enum ResourcesManager
 					break;
 					
 			case 13:
-					WorldManager.INSTANCE.Init();	
+					WorldManager.INSTANCE.Init();
+					Network.INSTANCE.Send((byte)0, "RDY");
 					progress=90;
 					break;
 			
@@ -188,34 +190,36 @@ public enum ResourcesManager
 	{		
 		heroesData=new HashMap<Integer, HeroDataClient>();
 		
-		FileHandle[] list=HDD.getDirContent("data/heroes");
+		String path="data/heroes/";
+		Array<Integer> ids=Network.INSTANCE.GameDataMsg.getIdHeroesToLoad();
 		
 		//HeroFlashJsonToOurJson.convert("data/hero.json","data/hero.png","data/hero_new.json");
 		
 		//Directory of hero
-		for(int i=0;i<list.length;i++)
+		for(int i=0;i<ids.size;i++)
 		{
 			HeroDataClient HD=new HeroDataClient();
-			HD= HDD.loadClass(list[i]+"/data.json", HeroDataClient.class);
-			HD.loadTextures(list[i]+"/body.png",list[i]+"/head.png");
+			HD= HDD.loadClass(path+ids.get(i)+"/data.json", HeroDataClient.class);
+			HD.loadTextures(path+ids.get(i)+"/body.png",path+ids.get(i)+"/head.png");
 			heroesData.put(new Integer(HD.id), HD);
 		}
 		
 	}
 
 	private void LoadWeapons()
-	{
-		
+	{		
 		weaponsData=new HashMap<Integer, WeaponDataClient>();
 		
-		FileHandle[] list=HDD.getDirContent("data/weapons");
+		String path="data/weapons/";
+		Array<Integer> ids=Network.INSTANCE.GameDataMsg.getIdWeaponsToLoad();
+		
 		
 		//Directory of weapon
-		for(int i=0;i<list.length;i++)
+		for(int i=0;i<ids.size;i++)
 		{
 			WeaponDataClient WD=new WeaponDataClient();
-			WD=HDD.loadClass(list[i]+"/data.json", WeaponDataClient.class);
-			WD.loadTexture(list[i]+"/data.png");
+			WD=HDD.loadClass(path+ids.get(i)+"/data.json", WeaponDataClient.class);
+			WD.loadTexture(path+ids.get(i)+"/data.png");
 			
 			weaponsData.put(new Integer(WD.id), WD);
 		}
@@ -225,7 +229,7 @@ public enum ResourcesManager
 	private void LoadMap()
 	{		
 		map=new MapDataClient();
-		String path="data/maps/0";
+		String path="data/maps/"+Network.INSTANCE.GameDataMsg.getIdMap();
 		map=HDD.loadClass(path+"/data.json", MapDataClient.class);
 		map.loadTexture(path+"/map.png", path+"/base.png");
 	}

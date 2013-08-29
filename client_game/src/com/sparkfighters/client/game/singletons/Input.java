@@ -87,7 +87,7 @@ public enum Input
 	       
 		}
 			
-		 int id= WorldManager.INSTANCE.actors.get( WorldManager.INSTANCE.myHeroArrayActors).getId();
+		 int id= WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getId();
 		 WorldManager.INSTANCE.worldLogic.actor_by_id.get(id).controller().set_mouse_position(new Vector(x_absolute,y_absolute));
 		
 	}

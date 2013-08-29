@@ -23,7 +23,7 @@ import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 public enum Network implements Runnable
 {
 	INSTANCE;
-	private String login;
+	public String login;
 	private String password;
 	
 	private String ip;
@@ -37,8 +37,9 @@ public enum Network implements Runnable
 	
 	public boolean Authorization=false;
 	public boolean GameData=false;
-	public String GameDataMsg="";
+	public com.sparkfighters.client.game.network.GameData GameDataMsg;
 	public boolean StartGame=false;
+	private long start_time=System.currentTimeMillis();
 	
 	public void Init(String login, String password, String ip, String port)
 	{
@@ -57,9 +58,16 @@ public enum Network implements Runnable
 						
 		//setting channels
 		Vector<Channel> chanells=new Vector<Channel>();	
+		
 		Channel c0=new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED, 10, 60);
 		chanells.add(c0);
-						
+		
+		Channel c1=new Channel((byte)1, RetransmissionMode.RTM_MANUAL, 5, 1);
+		chanells.add(c1);
+		
+		Channel c2=new Channel((byte)2, RetransmissionMode.RTM_MANUAL, 5, 1);
+		chanells.add(c2);
+		
 		connection=new Connection(chanells, 15f);
 		
 		thread=new Thread(Network.INSTANCE);
@@ -130,6 +138,8 @@ public enum Network implements Runnable
 		try
 		{
 			if(channel==0) Channel0(msg);
+			if(channel==1) Channel1(msg);
+			if(channel==2) Channel2(msg);
 		}
 		catch(Exception e)
 		{
@@ -138,6 +148,17 @@ public enum Network implements Runnable
 
 	}
 	
+	private void Channel2(byte[] msg) 
+	{
+		
+		
+	}
+
+	private void Channel1(byte[] msg) 
+	{
+		//for ping
+	}
+
 	private void Channel0(byte[] msg) throws UnsupportedEncodingException, NoSuchAlgorithmException
 	{
 		String msg_s=new String(msg, "UTF-8");
@@ -181,12 +202,27 @@ public enum Network implements Runnable
 		{
 			if(this.GameData==false)
 			{
-				this.GameDataMsg=new String(msg, "UTF-8");
+				this.GameDataMsg=new com.sparkfighters.client.game.network.GameData(new String(msg, "UTF-8"));
 				this.GameData=true;	
 			}
 			else
 			{
-				this.StartGame=Boolean.valueOf(msg_s);
+				if(msg_s.equals("0"))
+				{
+					//game not start yet
+				}
+				
+				if(msg_s.equals("1"))
+				{
+					//play the cinematic sequence
+				}
+				
+				if(msg_s.equals("2"))
+				{
+					//play the game
+					this.StartGame=true;
+				}
+				
 			}
 			
 		}
@@ -200,6 +236,16 @@ public enum Network implements Runnable
 	{
 		while(true)
 		{
+			long now_time=System.currentTimeMillis();		
+			long time=now_time-start_time;
+			
+			if(time>=3000)
+			{
+				//send ping
+				start_time=System.currentTimeMillis();
+				Send((byte)1,"P");		
+			}
+
 			try
 			{
 				//send data
