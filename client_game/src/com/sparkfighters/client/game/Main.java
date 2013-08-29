@@ -35,6 +35,21 @@ public class Main {
 	
 	public static void main(String[] args)
 	{
+		/* 
+		 * WORKING:
+		 * args[0] -login
+		 * args[1] -password
+		 * args[2] -IP
+		 * args[3] -port UDP
+		 * 
+		 * args[4] -width of window
+		 * args[5] -height of window
+		 * args[6] -fullscreen
+		 * 
+		 * NOT WORKING NOW:
+		 * args[7] -debug type
+		 * args[8] -normal catalog(0), archive zip catalog(1)
+		 */
 		Logger.INSTANCE.write("SparkFightersGame.jar", Logger.LogType.INFO);
 		
 		Monitor m=new Monitor();
@@ -42,14 +57,10 @@ public class Main {
 		if(m.launch(jarName, Main.class,"Spark Fighters Game")==true)
 		{	
 			VFS.setDetector();
-			
-			FileHandle fh=HDD.getFileHandle("data/cfg.cfg");
-			String s=fh.readString();
-			String[] s2=s.split(" ");
-			
-			int window_width=Integer.parseInt(s2[0]);
-			int window_height=Integer.parseInt(s2[1]);
-			Boolean fullscreen= Boolean.valueOf(s2[2]);
+					
+			int window_width=Integer.parseInt(args[4]);
+			int window_height=Integer.parseInt(args[5]);
+			Boolean fullscreen= Boolean.valueOf(args[6]);
 			int fps=60;
 			
 			LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
