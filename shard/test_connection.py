@@ -1,10 +1,20 @@
-from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, ClientSocket, NothingToRead
-import sys, select, socket, hashlib
+from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, ClientSocket, NothingToRead, RTM_MANUAL
+import sys, select, socket, hashlib, time
 
 # Prepare channel and connection
 c_0 = Channel(0, RTM_AUTO_ORDERED, 10, 60)
+c_2 = Channel(2, RTM_MANUAL, 5, 1) 
 
-conn = Connection([c_0], 15)
+conn = Connection([c_0, c_2], 15)
+
+def wait_until_clear(chanid):
+    """Waits until there is no tx activity on channel chanid"""
+    while conn[chanid].is_tx_in_progress():
+        rs, ws, xs = select.select([sock.socket], [sock.socket], [], 5)
+        if len(ws) == 1:
+            sock.on_sendable()
+        if len(rs) == 1:
+            sock.on_readable()
 
 def packon(chanid):
     """Waits until a packet is received on channel chanid. Returns it"""
@@ -22,7 +32,6 @@ def packon(chanid):
                 pass
             else:
                 return p
-
 
 # Get connection data and set up socket
 remote_address = sys.argv[1], int(sys.argv[2])
@@ -55,3 +64,9 @@ while True:
 	elif pa == '2':
 		print 'Game started'
 		break
+		
+# Send input periodically
+while True:
+	conn[2].write('\x00\x10\x00\x08\x01\x0A')
+	wait_until_clear(2)
+	time.sleep(4)

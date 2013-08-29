@@ -48,6 +48,13 @@ public class Controller {
 		return this;
 	}
 
-	
+	/**
+	 * Updates mouse status
+	 * @param lmb: Left Mouse Button status
+	 * @param rmb: Right Mouse Button status
+	 */
+	public Controller set_mouse_status(boolean lmb, boolean rmb) {
+		return this;
+	}
 	
 }
