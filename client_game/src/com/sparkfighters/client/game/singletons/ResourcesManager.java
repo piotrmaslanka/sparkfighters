@@ -200,7 +200,7 @@ public enum ResourcesManager
 		{
 			HeroDataClient HD=new HeroDataClient();
 			HD= HDD.loadClass(path+ids.get(i)+"/data.json", HeroDataClient.class);
-			HD.loadTextures(path+ids.get(i)+"/body.png",path+ids.get(i)+"/head.png");
+			HD.loadTextures(path+ids.get(i));
 			heroesData.put(new Integer(HD.id), HD);
 		}
 		

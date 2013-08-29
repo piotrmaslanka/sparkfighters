@@ -17,14 +17,39 @@ import com.sparkfighters.shared.loader.jsonobjs.HeroData;
 public class HeroDataClient extends HeroData
 {
 
-	public Texture textureBody;
-	public Texture textureHead;
+	public Texture textureMyHeroBody;
+	public Texture textureMyHeroHead;	
+	public ArrayList<Animation> animationsDrawableMyHeroBody;
+	public TextureRegion[] animationsDrawableMyHeroHead;
 	
-	public ArrayList<Animation> animationsDrawableBody;
-	public TextureRegion[] animationsDrawableHead;
+	public Texture textureFriendHeroBody;
+	public Texture textureFriendHeroHead;	
+	public ArrayList<Animation> animationsDrawableFriendHeroBody;
+	public TextureRegion[] animationsDrawableFriendHeroHead;
 	
-
-	public void loadTextures(String filePathBody, String filePathHead)
+	public Texture textureEnemyHeroBody;
+	public Texture textureEnemyHeroHead;	
+	public ArrayList<Animation> animationsDrawableEnemyHeroBody;
+	public TextureRegion[] animationsDrawableEnemyHeroHead;
+	
+	public void loadTextures(String Path)
+	{
+		 CreateAnimations(Path+"/my_hero_body.png", Path+"/my_hero_head.png",
+				 textureMyHeroBody, textureMyHeroHead, 
+				 animationsDrawableMyHeroBody, animationsDrawableMyHeroHead);
+		 
+		 CreateAnimations(Path+"/friend_hero_body.png", Path+"/friend_hero_head.png",
+				 textureFriendHeroBody, textureFriendHeroHead, 
+				 animationsDrawableFriendHeroBody, animationsDrawableFriendHeroHead);
+		 
+		 CreateAnimations(Path+"/enemy_hero_body.png", Path+"/enemy_hero_head.png",
+				 textureEnemyHeroBody, textureEnemyHeroHead, 
+				 animationsDrawableEnemyHeroBody, animationsDrawableEnemyHeroHead);
+	}
+	
+	private void CreateAnimations(String filePathBody, String filePathHead,
+			Texture textureBody, Texture textureHead, 
+			ArrayList<Animation> animationsDrawableBody,TextureRegion[] animationsDrawableHead)
 	{
 		textureBody=new Texture(HDD.getFileHandle(filePathBody));
 		textureBody.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
@@ -73,7 +98,6 @@ public class HeroDataClient extends HeroData
 		animationsDrawableHead[0]=new TextureRegion(textureHead);
 		animationsDrawableHead[1]=new TextureRegion(textureHead);
 		animationsDrawableHead[1].flip(true, false);
-		
 	}
 	
 }
