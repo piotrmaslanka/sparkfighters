@@ -215,6 +215,9 @@ public class NetworkRoot {
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
 					bos.write(Integer.toString(this.bpf.map).getBytes("UTF-8"));
 					
+					bos.write(0);
+					bos.write(Integer.toString(conn.player_id).getBytes("UTF-8"));
+					
 					for (JSONUserDTO user : this.bpf.users) {
 						bos.write(0);
 						bos.write(Integer.toString(user.hero_id).getBytes("UTF-8"));

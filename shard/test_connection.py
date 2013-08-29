@@ -1,10 +1,10 @@
-from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, ClientSocket, NothingToRead, RTM_MANUAL
+from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, ClientSocket, NothingToRead, RTM_MANUAL, RTM_AUTO
 import sys, select, socket, hashlib, time
 
 # Prepare channel and connection
 c_0 = Channel(0, RTM_AUTO_ORDERED, 10, 60)
 c_2 = Channel(2, RTM_MANUAL, 5, 1) 
-c_3 = Channel(3, RTM_AUTO_ORDERED, 10, 60)
+c_3 = Channel(3, RTM_AUTO, 10, 60)
 
 conn = Connection([c_0, c_2, c_3], 15)
 

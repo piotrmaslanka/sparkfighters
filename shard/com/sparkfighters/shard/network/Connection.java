@@ -42,10 +42,14 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 	 */
 	private static Vector<Channel> _get_channels_vector() {
 		Vector<Channel> channels = new Vector<>();
+		// Authentication channel
 		channels.add(new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED, (float)10, 60));
+		// Ping channel
 		channels.add(new Channel((byte)1, RetransmissionMode.RTM_MANUAL, (float)5, 1));
+		// Input controller channel
 		channels.add(new Channel((byte)2, RetransmissionMode.RTM_MANUAL, (float)5, 1));
-		channels.add(new Channel((byte)3, RetransmissionMode.RTM_AUTO_ORDERED, (float)10, 60));
+		// Core game events stream channel
+		channels.add(new Channel((byte)3, RetransmissionMode.RTM_AUTO, (float)10, 60));
 		return channels;
 	}
 	

@@ -58,6 +58,16 @@ public class NetworkThread extends Thread {
 							c.getChannel(3).write(txe);
 				}
 
+				if (etn instanceof TeamSlain) {
+					TeamSlain f = (TeamSlain)etn;
+					byte[] txe = {2, (byte)(f.team_id)};
+					
+					for (Connection c : this.root.connections.values())
+						if (c.login_phase == 2)
+							c.getChannel(3).write(txe);
+				}
+				
+				
 				if (etn instanceof FBPlayerDisconnected) {
 					FBPlayerDisconnected f = (FBPlayerDisconnected)etn;
 					byte[] txe = {1, (byte)(f.player_id >> 8), (byte)(f.player_id & 255)};
