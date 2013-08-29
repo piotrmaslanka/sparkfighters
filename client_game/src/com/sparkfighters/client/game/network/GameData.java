@@ -9,6 +9,7 @@ import com.sparkfighters.client.game.singletons.Network;
 public class GameData 
 {
 	private int IdMap=-1;
+	private int IdPlayer=-1;
 	private HashMap<Integer, Actor> actors=new HashMap<Integer, Actor>();
 	
 	public class Actor
@@ -36,11 +37,23 @@ public class GameData
 		
 		this.IdMap=Integer.valueOf(s[0]);
 		
-		for(int i=0;i<(s.length-1)/5;i++)
+		this.IdPlayer=Integer.valueOf(s[1]);
+				
+		for(int i=1;i<1+(s.length-2)/5;i++)
 		{
 			Actor a=new Actor(Integer.valueOf(s[i+1]),Integer.valueOf(s[i+2]),Integer.valueOf(s[i+3]),Integer.valueOf(s[i+4]),s[i+5]);
 			actors.put(new Integer(a.IdActor), a);
 		}
+	}
+	
+	public int getMyTeam()
+	{
+		for(int i=0;i<actors.size();i++)
+		{
+			if(actors.get(i).IdActor==IdPlayer) return actors.get(i).IdTeam;
+		}
+		
+		return -1;
 	}
 	
 	public int getIdMap()
