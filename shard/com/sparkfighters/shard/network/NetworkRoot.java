@@ -16,6 +16,7 @@ import java.util.HashMap;
 import com.sparkfighters.shard.loader.JSONBattleDTO;
 import com.sparkfighters.shard.loader.JSONUserDTO;
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
+import com.sparkfighters.shard.network.bridge.net.InputStatusChanged;
 import com.sparkfighters.shard.network.bridge.net.PlayerConnected;
 import com.sparkfighters.shard.network.bridge.net.PlayerDisconnected;
 
@@ -136,6 +137,9 @@ public class NetworkRoot {
 	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
 																      NoSuchAlgorithmException,
 																      IOException {
+		// handle ping
+		try { conn.getChannel(1).read(); } catch (NothingToRead e) {}
+		
 		if (conn.login_phase == 0) {
 			// it's either confirmation data or login request.
 			// read it anyway
@@ -249,8 +253,8 @@ public class NetworkRoot {
 			byte[] templ = {'R', 'D', 'Y'};	// what should arrive
 			if (Arrays.equals(dat_in, templ)) {
 				// he's ready
-				this.br.send_to_executor(new PlayerConnected(conn.player_id));
 				conn.login_phase = 2;
+				this.br.send_to_executor(new PlayerConnected(conn.player_id));
 				
 				// send '0' or '2' about game state
 				byte[] gstate = { this.is_game_started ? (byte)'2' : (byte)'0' };
@@ -258,6 +262,33 @@ public class NetworkRoot {
 			}			
 		} else {
 			// Connection has been established
+			
+			// Handle controller update input
+			try {
+				System.out.println("Controller input update");
+				byte[] data = conn.getChannel(2).read();
+				if (data.length != 6) {
+					System.out.println("NET: Protocol violation at channel 2");
+					this.on_disconnected(sa);
+					return;
+				}
+				
+				long mousex = data[0]*256 + data[1];
+				long mousey = data[2]*256 + data[3];
+				
+				boolean lmb = (data[4] & 16) > 0;
+				boolean rmb = (data[4] & 32) > 0;
+				
+				boolean up = (data[4] & 1) > 0;
+				boolean right = (data[4] & 2) > 0;
+				boolean down = (data[4] & 4) > 0;
+				boolean left = (data[4] & 8) > 0;
+				
+				conn.lag_state = (data[5] & 0xFF) * 4;
+				
+				this.br.send_to_executor(new InputStatusChanged(conn.player_id, mousex, mousey, 
+																up, right, down, left, lmb, rmb));				
+			} catch (NothingToRead e) {}
 		}
 	}
 	

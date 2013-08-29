@@ -8,6 +8,8 @@ import com.sparkfighters.shard.network.bridge.BridgeRoot;
 import com.sparkfighters.shard.network.bridge.NetworkToExecutor;
 import com.sparkfighters.shard.network.bridge.exec.*;
 import com.sparkfighters.shard.network.bridge.net.*;
+import com.sparkfighters.shared.physics.objects.Vector;
+import com.sparkfighters.shared.world.Controller;
 import com.sparkfighters.shared.world.World;
 
 public class ExecutorThread extends Thread {
@@ -49,7 +51,14 @@ public class ExecutorThread extends Thread {
 				if (nex instanceof PlayerConnected)
 					this.is_online.put(nex.player_id, true);
 				if (nex instanceof PlayerDisconnected)
-					this.is_online.put(nex.player_id, false);				
+					this.is_online.put(nex.player_id, false);	
+				if (nex instanceof InputStatusChanged) {
+					InputStatusChanged isc = (InputStatusChanged)nex;
+					gameworld.actor_by_id.get(isc.player_id).controller()
+						.set_mouse_position(new Vector(isc.mouse_x, isc.mouse_y))
+						.set_keyboard_status(isc.kbd_up, isc.kbd_right, isc.kbd_down, isc.kbd_left)
+						.set_mouse_status(isc.mouse_lmb, isc.mouse_rmb);						
+				}
 			}		
 			
 			// Should we start cinematics?
