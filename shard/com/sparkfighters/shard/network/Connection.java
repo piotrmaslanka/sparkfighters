@@ -10,7 +10,8 @@ import pl.com.henrietta.lnx2.Channel;
 import pl.com.henrietta.lnx2.RetransmissionMode;
 
 /**
- * Connection with it's own metadata
+ * Connection with it's own metadata. This is what Network layer
+ * knows about a connected user.
  * @author Henrietta
  *
  */
@@ -23,21 +24,32 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 	public SocketAddress address = null;
 	public int player_id = -1;
 	public String username = null;	// associated username
-	public boolean is_logged_in = false;	// whether login went successfully
+	/**
+	 * 0 - not logged in
+	 * 1 - authorized, sent information about map
+	 * 2 - acknowledged readiness
+	 */
+	public int login_phase = 0;
 	
 	public byte[] challenge_nonce = new byte[20];	// challenge/response nonce
 	public JSONUserDTO associated_dto = null;
+	
+	public int lag_state;	// current ping in miliseconds
 	
 	/**
 	 * Returns a vector of channels to put into Connection constructor. Because, 
 	 * well, stupid Java and 'parent constructor as first statement'.
 	 */
 	private static Vector<Channel> _get_channels_vector() {
-		Channel chan_0 = new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED,
-				(float)10, 60);
-
 		Vector<Channel> channels = new Vector<>();
-		channels.add(chan_0);
+		// Authentication channel
+		channels.add(new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED, (float)10, 60));
+		// Ping channel
+		channels.add(new Channel((byte)1, RetransmissionMode.RTM_MANUAL, (float)5, 1));
+		// Input controller channel
+		channels.add(new Channel((byte)2, RetransmissionMode.RTM_MANUAL, (float)5, 1));
+		// Core game events stream channel
+		channels.add(new Channel((byte)3, RetransmissionMode.RTM_AUTO, (float)10, 60));
 		return channels;
 	}
 	

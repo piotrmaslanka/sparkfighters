@@ -16,8 +16,8 @@ import java.util.HashMap;
 import com.sparkfighters.shard.loader.JSONBattleDTO;
 import com.sparkfighters.shard.loader.JSONUserDTO;
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
-import com.sparkfighters.shard.network.bridge.net.PlayerConnected;
-import com.sparkfighters.shard.network.bridge.net.PlayerDisconnected;
+import com.sparkfighters.shard.network.bridge.exec.*;
+import com.sparkfighters.shard.network.bridge.net.*;
 
 import pl.com.henrietta.lnx2.Packet;
 import pl.com.henrietta.lnx2.exceptions.NothingToRead;
@@ -26,12 +26,14 @@ import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 
 public class NetworkRoot {
 
-	DatagramChannel channel = null;
-	HashMap<SocketAddress, Connection> connections = new HashMap<>();
-	HashMap<Integer, Connection> connection_by_pid = new HashMap<>();
-	ByteBuffer recvbuf = ByteBuffer.allocate(2048);
-	BridgeRoot br = null;
-	JSONBattleDTO bpf = null;
+	public DatagramChannel channel = null;
+	public HashMap<SocketAddress, Connection> connections = new HashMap<>();
+	public HashMap<Integer, Connection> connection_by_pid = new HashMap<>();
+	public ByteBuffer recvbuf = ByteBuffer.allocate(2048);
+	public BridgeRoot br = null;
+	public JSONBattleDTO bpf = null;
+	
+	public boolean is_game_started = false;
 	
 	/**
 	 * @param netifc Network interface name
@@ -134,7 +136,10 @@ public class NetworkRoot {
 	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
 																      NoSuchAlgorithmException,
 																      IOException {
-		if (!conn.is_logged_in) {
+		// handle ping
+		try { conn.getChannel(1).write(conn.getChannel(1).read()); } catch (NothingToRead e) {}
+		
+		if (conn.login_phase == 0) {
 			// it's either confirmation data or login request.
 			// read it anyway
 			byte[] p = null;
@@ -191,14 +196,14 @@ public class NetworkRoot {
 					// If the player was logged in right now, invalidate that connection
 					Connection alrdy_logd = this.connection_by_pid.get(conn.player_id);
 					if (alrdy_logd != null) {
-						// set is_logged_in to false so that on_disconnect
+						// set login_phase to 0 so that on_disconnect
 						// doesn't annoy Executor
-						alrdy_logd.is_logged_in = false;
+						alrdy_logd.login_phase = 0;
 						this.on_disconnected(alrdy_logd.address);
 					}
 					
 					conn.player_id = conn.associated_dto.hero_id;
-					conn.is_logged_in = true;
+					conn.login_phase = 1;
 					
 					this.connection_by_pid.put(conn.player_id, conn);
 					this.br.send_to_executor(new PlayerConnected(conn.player_id));
@@ -209,6 +214,9 @@ public class NetworkRoot {
 								// Send info about map and players
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
 					bos.write(Integer.toString(this.bpf.map).getBytes("UTF-8"));
+					
+					bos.write(0);
+					bos.write(Integer.toString(conn.player_id).getBytes("UTF-8"));
 					
 					for (JSONUserDTO user : this.bpf.users) {
 						bos.write(0);
@@ -224,20 +232,66 @@ public class NetworkRoot {
 					}
 					conn.getChannel(0).write(bos.toByteArray());
 					
-							// Send info about game status
-					byte[] nots = {'0'};
-					conn.getChannel(0).write(nots);
-					
+					// Wait for RDY					
 				} else {
 					byte[] fail = {'F', 'A', 'I', 'L'};
 					conn.getChannel(0).write(fail);	// send FAIL
-
 					
 					this.on_disconnected(sa);
 					return;
 				}
 			}
 			
+		} else if (conn.login_phase == 1) {
+			// Awaiting RDY
+			byte[] dat_in;
+			try {
+				dat_in = conn.getChannel(0).read();
+			} catch (NothingToRead e) {
+				// too bad it hasn't arrived yet.
+				return;
+			}
+			
+			byte[] templ = {'R', 'D', 'Y'};	// what should arrive
+			if (Arrays.equals(dat_in, templ)) {
+				// he's ready
+				conn.login_phase = 2;
+				this.br.send_to_executor(new PlayerConnected(conn.player_id));
+				this.br.feedback_network(new FBPlayerConnected(conn.player_id));
+				
+				// send '0' or '2' about game state
+				byte[] gstate = { this.is_game_started ? (byte)'2' : (byte)'0' };
+				conn.getChannel(0).write(gstate);
+			}			
+		} else {
+			// Connection has been established
+			
+			// Handle controller update input
+			try {
+				System.out.println("Controller input update");
+				byte[] data = conn.getChannel(2).read();
+				if (data.length != 6) {
+					System.out.println("NET: Protocol violation at channel 2");
+					this.on_disconnected(sa);
+					return;
+				}
+				
+				long mousex = data[0]*256 + data[1];
+				long mousey = data[2]*256 + data[3];
+				
+				boolean lmb = (data[4] & 16) > 0;
+				boolean rmb = (data[4] & 32) > 0;
+				
+				boolean up = (data[4] & 1) > 0;
+				boolean right = (data[4] & 2) > 0;
+				boolean down = (data[4] & 4) > 0;
+				boolean left = (data[4] & 8) > 0;
+				
+				conn.lag_state = (data[5] & 0xFF) * 4;
+				
+				this.br.send_to_executor(new InputStatusChanged(conn.player_id, mousex, mousey, 
+																up, right, down, left, lmb, rmb));				
+			} catch (NothingToRead e) {}
 		}
 	}
 	
@@ -245,9 +299,10 @@ public class NetworkRoot {
 		// a new socket was disconnected
 		Connection cn = this.connections.get(sa);
 		this.connections.remove(sa);
-		if (!cn.is_logged_in) return;	// not logged in - no problem
+		if (cn.login_phase < 2) return;	// not logged in - no problem
 			
 		this.connection_by_pid.remove(cn.player_id);
+		this.br.feedback_network(new FBPlayerDisconnected(cn.player_id));
 		this.br.send_to_executor(new PlayerDisconnected(cn.player_id));
 	}
 	

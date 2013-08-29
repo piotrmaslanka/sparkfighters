@@ -25,4 +25,29 @@ public class BridgeRoot {
 	public void send_to_executor(NetworkToExecutor msg) {
 		this.network_to_executor.add(msg);
 	}
+	
+	public void feedback_network(FBNetworkToNetwork msg) {
+		this.executor_to_network.add(msg);
+	}
+
+	public void feedback_executor(FBExecutorToExecutor msg) {
+		this.network_to_executor.add(msg);
+	}
+	
+	
+	/**
+	 * Non-blocking
+	 * @return null if no message available
+	 */
+	public ExecutorToNetwork network_receive() {
+		return this.executor_to_network.poll();
+	}
+	
+	/**
+	 * Non-blocking
+	 * @return null if no message available
+	 */
+	public NetworkToExecutor executor_receive() {
+		return this.network_to_executor.poll();
+	}	
 }

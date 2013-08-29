@@ -53,7 +53,7 @@ public class ShardApplication {
 		
 		// Init executor
 		ExecutorThread thread_executor = null;
-		thread_executor = new ExecutorThread(gameworld, br);
+		thread_executor = new ExecutorThread(gameworld, br, bpf);
 		
 		thread_executor.start();
 		
