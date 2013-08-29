@@ -45,6 +45,7 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 		channels.add(new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED, (float)10, 60));
 		channels.add(new Channel((byte)1, RetransmissionMode.RTM_MANUAL, (float)5, 1));
 		channels.add(new Channel((byte)2, RetransmissionMode.RTM_MANUAL, (float)5, 1));
+		channels.add(new Channel((byte)3, RetransmissionMode.RTM_AUTO_ORDERED, (float)10, 60));
 		return channels;
 	}
 	

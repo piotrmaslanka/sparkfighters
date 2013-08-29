@@ -16,6 +16,7 @@ import java.util.HashMap;
 import com.sparkfighters.shard.loader.JSONBattleDTO;
 import com.sparkfighters.shard.loader.JSONUserDTO;
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
+import com.sparkfighters.shard.network.bridge.exec.*;
 import com.sparkfighters.shard.network.bridge.net.*;
 
 import pl.com.henrietta.lnx2.Packet;
@@ -253,6 +254,7 @@ public class NetworkRoot {
 				// he's ready
 				conn.login_phase = 2;
 				this.br.send_to_executor(new PlayerConnected(conn.player_id));
+				this.br.feedback_network(new FBPlayerConnected(conn.player_id));
 				
 				// send '0' or '2' about game state
 				byte[] gstate = { this.is_game_started ? (byte)'2' : (byte)'0' };
@@ -297,6 +299,7 @@ public class NetworkRoot {
 		if (cn.login_phase < 2) return;	// not logged in - no problem
 			
 		this.connection_by_pid.remove(cn.player_id);
+		this.br.feedback_network(new FBPlayerDisconnected(cn.player_id));
 		this.br.send_to_executor(new PlayerDisconnected(cn.player_id));
 	}
 	

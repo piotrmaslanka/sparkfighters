@@ -26,6 +26,15 @@ public class BridgeRoot {
 		this.network_to_executor.add(msg);
 	}
 	
+	public void feedback_network(FBNetworkToNetwork msg) {
+		this.executor_to_network.add(msg);
+	}
+
+	public void feedback_executor(FBExecutorToExecutor msg) {
+		this.network_to_executor.add(msg);
+	}
+	
+	
 	/**
 	 * Non-blocking
 	 * @return null if no message available

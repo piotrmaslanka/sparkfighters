@@ -9,7 +9,6 @@ import com.sparkfighters.shard.network.bridge.NetworkToExecutor;
 import com.sparkfighters.shard.network.bridge.exec.*;
 import com.sparkfighters.shard.network.bridge.net.*;
 import com.sparkfighters.shared.physics.objects.Vector;
-import com.sparkfighters.shared.world.Controller;
 import com.sparkfighters.shared.world.World;
 
 public class ExecutorThread extends Thread {

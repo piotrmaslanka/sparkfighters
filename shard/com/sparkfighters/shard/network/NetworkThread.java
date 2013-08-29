@@ -49,6 +49,25 @@ public class NetworkThread extends Thread {
 					}
 				}
 				
+				if (etn instanceof FBPlayerConnected) {
+					FBPlayerConnected f = (FBPlayerConnected)etn;
+					byte[] txe = {0, (byte)(f.player_id >> 8), (byte)(f.player_id & 255)};
+					
+					for (Connection c : this.root.connections.values())
+						if (c.login_phase == 2)
+							c.getChannel(3).write(txe);
+				}
+
+				if (etn instanceof FBPlayerDisconnected) {
+					FBPlayerDisconnected f = (FBPlayerDisconnected)etn;
+					byte[] txe = {1, (byte)(f.player_id >> 8), (byte)(f.player_id & 255)};
+					
+					for (Connection c : this.root.connections.values())
+						if (c.login_phase == 2)
+							c.getChannel(3).write(txe);
+				}
+				
+				
 			}
 				
 				

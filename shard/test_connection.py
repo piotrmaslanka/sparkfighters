@@ -4,8 +4,9 @@ import sys, select, socket, hashlib, time
 # Prepare channel and connection
 c_0 = Channel(0, RTM_AUTO_ORDERED, 10, 60)
 c_2 = Channel(2, RTM_MANUAL, 5, 1) 
+c_3 = Channel(3, RTM_AUTO_ORDERED, 10, 60)
 
-conn = Connection([c_0, c_2], 15)
+conn = Connection([c_0, c_2, c_3], 15)
 
 def wait_until_clear(chanid):
     """Waits until there is no tx activity on channel chanid"""
@@ -38,7 +39,6 @@ remote_address = sys.argv[1], int(sys.argv[2])
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock = ClientSocket(sock, remote_address, conn)
 
-
 # let's try logging in
 conn[0].write('test')
 print 'Sent login, awaiting challenge...'
@@ -67,6 +67,20 @@ while True:
 		
 # Send input periodically
 while True:
+	try:
+		msg = conn[3].read()
+	except NothingToRead:
+		pass
+	else:
+		k = 'Channel 3 message: '
+		if msg[0] == 0:
+			k += 'player %s connected' % ((msg[1] << 8) + msg[2], )
+		elif msg[0] == 1:
+			k += 'player %s disconnected' % ((msg[1] << 8) + msg[2], )
+		else:
+			k += 'and for now something completely different!'
+		print k
+
 	conn[2].write('\x00\x10\x00\x08\x01\x0A')
 	wait_until_clear(2)
 	time.sleep(4)
