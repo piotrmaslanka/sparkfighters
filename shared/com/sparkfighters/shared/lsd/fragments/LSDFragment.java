@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public interface LSDFragment {
-	void toStream(ByteArrayOutputStream bs) throws IOException;
-	void fromStream(ByteArrayInputStream bs) throws IOException;
+	public void toStream(ByteArrayOutputStream bs) throws IOException;
+	public void fromStream(ByteArrayInputStream bs) throws IOException;
+	public int getId();
 }
