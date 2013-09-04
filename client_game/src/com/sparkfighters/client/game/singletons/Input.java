@@ -17,6 +17,9 @@ public enum Input
 	
 	private int x_relative,y_relative;
 	private int x_absolute,y_absolute;
+	private boolean up,down,right,left;
+	private boolean lmb=false,rmb=false;
+	
 	/**
 	 * 
 	 * @return x_absolute
@@ -34,14 +37,43 @@ public enum Input
 	{
 		processMouse();
 		processKeyboard();
+		SendInputStatus();
 	}
+	
+	private void SendInputStatus()
+	{
+		char[] mouse_x=new char[2];
+		mouse_x[0]=(char) (x_absolute<<8);
+		mouse_x[1]=(char) (x_absolute);
+
+		char[] mouse_y=new char[2];
+		mouse_y[0]=(char) (y_absolute<<8);
+		mouse_y[1]=(char) (y_absolute);
+		
+		char KBDStatus=(char) ((up ? 1 : 0) + (right ? 2 : 0) + (down ? 4 : 0)+(left ? 8 : 0)
+								+(lmb ? 16 : 0) + (rmb ? 32 : 0));
+		
+		char lag=0;
+		if(Network.INSTANCE.ping>=1020)
+		{
+			lag=255;
+		}
+		else
+		{
+			lag=(char) (Network.INSTANCE.ping/4);
+		}
+		
+		String result=String.valueOf(mouse_x[0]+mouse_x[1]+mouse_y[0]+mouse_y[1]+KBDStatus+lag);
+		
+		Network.INSTANCE.Send((byte)2, result);
+	}
+	
 	/**
 	 * Function to process keyboard
-	 */
+	 */	
 	private void processKeyboard() 
-	{
-		
-		 boolean up=false,down=false,right=false,left=false;
+	{	
+		 up=false;down=false;right=false;left=false;
 		 if(Gdx.input.isKeyPressed(Keys.W))
 		 {
 			up=true;
@@ -77,18 +109,20 @@ public enum Input
 		x_absolute=x_relative+WorldManager.INSTANCE.mapFragment.getX();
 		y_absolute=y_relative+WorldManager.INSTANCE.mapFragment.getY();
 		
+		lmb=false;rmb=false;
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) 
 		{
-	       
+	       lmb=true;
 		}
 		
 		if (Gdx.input.isButtonPressed(Buttons.RIGHT)) 
 		{
-	       
+			rmb=true;
 		}
 			
 		 int id= WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getId();
 		 WorldManager.INSTANCE.worldLogic.actor_by_id.get(id).controller().set_mouse_position(new Vector(x_absolute,y_absolute));
+		 WorldManager.INSTANCE.worldLogic.actor_by_id.get(id).controller().set_mouse_status(lmb, rmb);
 		
 	}
 	/**
