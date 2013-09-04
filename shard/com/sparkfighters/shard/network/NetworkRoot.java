@@ -63,13 +63,11 @@ public class NetworkRoot {
 			any_data_received = false;
 		}
 		if (sa == null) any_data_received = false;
-		
-		
+				
 		if (any_data_received) {
 			work_was_done = true;
 			// strip out the readed bytes
 			int how_much_readed = this.recvbuf.position();
-			System.out.format("Packet in, received %d bytes\n", how_much_readed);
 			byte[] data_readed = new byte[how_much_readed];
 			System.arraycopy(this.recvbuf.array(), 0, data_readed, 0, how_much_readed);
 			this.recvbuf.clear();
@@ -102,14 +100,16 @@ public class NetworkRoot {
 		// Dispatch all outbound packets
 		for (SocketAddress csa : this.connections.keySet()) {
 			try {
-				Packet p = this.connections.get(csa).on_sendable();
-				this.channel.send(ByteBuffer.wrap(p.to_bytes()), csa);
+				while (true) {
+					Packet p = this.connections.get(csa).on_sendable();
+					this.channel.send(ByteBuffer.wrap(p.to_bytes()), csa);
+					work_was_done = true;
+				}
 			} catch (NothingToSend e) {
 				continue;
 			} catch (IOException e) { 
 			  	throw new RuntimeException("IO error in network ops");
 			}
-			work_was_done = true;
 		}
 		
 		// Ok, roll through all connections, kill timeouters
@@ -137,7 +137,9 @@ public class NetworkRoot {
 																      NoSuchAlgorithmException,
 																      IOException {
 		// handle ping
-		try { conn.getChannel(1).write(conn.getChannel(1).read()); } catch (NothingToRead e) {}
+		try { 
+			conn.getChannel(1).write(conn.getChannel(1).read());
+		} catch (NothingToRead e) {}
 		
 		if (conn.login_phase == 0) {
 			// it's either confirmation data or login request.
