@@ -6,12 +6,14 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.sparkfighters.shared.world.*;
 import com.sparkfighters.shared.blueprints.*;
 
 import com.sparkfighters.shared.loader.jsonobjs.*;
+import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
  * This class's job is to load a World from DTO objects
@@ -48,8 +50,13 @@ public class WorldConstructor {
 			teams[user.team_id].actors = target_actors;
 		}
 		
+		// load spawn points
+		HashMap<Integer, Vector> spawnpoints = new HashMap<>();
+		for (int i=0; i<map_bp.spawnpoints.length; i++)
+			spawnpoints.put(map_bp.spawnpoints_team[i], map_bp.spawnpoints[i]);
+		
 		// create world
-		return new World(pworld, teams);
+		return new World(pworld, spawnpoints, teams);
 	}
 
 	

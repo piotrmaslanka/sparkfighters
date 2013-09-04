@@ -2,6 +2,7 @@ package com.sparkfighters.shared.world;
 
 import java.util.HashMap;
 import com.sparkfighters.shared.physics.gwobjects.PhysicActor;
+import com.sparkfighters.shared.physics.objects.Vector;
 
 /**
  * A god-class that represents the game world.
@@ -11,6 +12,7 @@ public class World implements Cloneable {
 
 	public com.sparkfighters.shared.physics.world.World physics_world = null;
 	public HashMap<Integer, Actor> actor_by_id = null; // by Actor ID
+	public HashMap<Integer, Vector> spawnpoints_by_team = null; // immutable!
 	public Team[] teams = null; // by Team ID
 	
 	/**
@@ -21,11 +23,15 @@ public class World implements Cloneable {
 	/**
 	 * Initializes the world
 	 * @param physics_world A blueprint-loaded physics world
+	 * @param spawn_points Where players spawn (team => position)
 	 * @param teams Array of teams. Borrows reference.
 	 */
 	public World(com.sparkfighters.shared.physics.world.World physics_world,
+				 HashMap<Integer, Vector> spawn_points,
 				 Team[] teams) {
 		this.physics_world = physics_world;
+		
+		this.spawnpoints_by_team = spawn_points;
 		
 		PhysicsWorldBridge bridge = new PhysicsWorldBridge(this);
 		this.physics_world.set_processor(bridge);
@@ -89,7 +95,7 @@ public class World implements Cloneable {
 		}
 
 		//prepare logic world
-		World nworld = new World(physworld, new_teams);
+		World nworld = new World(physworld, this.spawnpoints_by_team, new_teams);
 
 		return nworld;
 	}

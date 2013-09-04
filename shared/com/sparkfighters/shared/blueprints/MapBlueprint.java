@@ -25,8 +25,8 @@ final public class MapBlueprint {
 	private final HorizSegment[] platforms;
 	public final Rectangle world_box;
 	
-	private final Vector spawnpoints[];
-	private final int spawnpoints_team[];
+	public final Vector spawnpoints[];
+	public final int spawnpoints_team[];
 	
 	@SuppressWarnings("unused")
 	private final Vector spark_start;

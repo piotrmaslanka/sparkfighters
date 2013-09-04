@@ -1,5 +1,7 @@
 package com.sparkfighters.shard.network;
 
+import java.io.ByteArrayOutputStream;
+
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
 import com.sparkfighters.shard.network.bridge.ExecutorToNetwork;
 import com.sparkfighters.shard.network.bridge.exec.*;
@@ -77,6 +79,27 @@ public class NetworkThread extends Thread {
 							c.getChannel(3).write(txe);
 				}
 				
+				if (etn instanceof DispatchLSD4) {
+					DispatchLSD4 lsd = (DispatchLSD4)etn;
+					
+					Connection c = this.root.connections.get(lsd.actor_id);
+					if (c != null) {
+						ByteArrayOutputStream bs = new ByteArrayOutputStream();
+						lsd.frag.toStream(bs);
+						c.getChannel(4).write(bs.toByteArray());
+					}
+				}
+				
+				if (etn instanceof DispatchLSD5) {
+					DispatchLSD5 lsd = (DispatchLSD5)etn;
+					
+					Connection c = this.root.connections.get(lsd.actor_id);
+					if (c != null) {
+						ByteArrayOutputStream bs = new ByteArrayOutputStream();
+						lsd.frag.toStream(bs);
+						c.getChannel(5).write(bs.toByteArray());
+					}
+				}
 				
 			}
 				
