@@ -39,7 +39,8 @@ public enum Network implements Runnable
 	public boolean GameData=false;
 	public com.sparkfighters.client.game.network.GameData GameDataMsg;
 	public boolean StartGame=false;
-	private long start_time=System.currentTimeMillis();
+	private long sendPing=System.currentTimeMillis();
+	public long ping;
 	
 	public void Init(String login, String password, String ip, String port)
 	{
@@ -67,6 +68,15 @@ public enum Network implements Runnable
 		
 		Channel c2=new Channel((byte)2, RetransmissionMode.RTM_MANUAL, 5, 1);
 		chanells.add(c2);
+		
+		Channel c3=new Channel((byte)3, RetransmissionMode.RTM_AUTO, 10, 60);
+		chanells.add(c3);
+		
+		Channel c4=new Channel((byte)4, RetransmissionMode.RTM_NONE, 0, 0); 
+		chanells.add(c4);
+		
+		Channel c5=new Channel((byte)5, RetransmissionMode.RTM_AUTO, 5, 60); 
+		chanells.add(c5);
 		
 		connection=new Connection(chanells, 15f);
 		
@@ -104,25 +114,34 @@ public enum Network implements Runnable
 			this.connection.on_received(Packet.from_bytes(data_readed));
 	
 			if(this.connection.has_new_data==true)
-			{
-				this.connection.has_new_data=false;
+			{			
 				for (Channel c : connection.getChannels()) 
 				{
-					byte[] msg = connection.getChannel(c.channel_id).read();
-					DoCommand(c.channel_id, msg);
-				}
+					try
+					{
+						byte[] msg = connection.getChannel(c.channel_id).read();
+						DoCommand(c.channel_id, msg);
+					}
+					catch(NothingToRead e)
+					{
+						continue;
+					}
+				}	
+				this.connection.has_new_data=false;
 			}
 		}
 		catch(Exception e)
 		{
 			
 		}
+	
 	}
 	
 	public void Send(byte channel, String text)
 	{
 		try
 		{
+			//Logger.INSTANCE.write("Send:"+text, Logger.LogType.INFO);
 			//prepare to send data
 			this.connection.getChannel(channel).write(text.getBytes("UTF-8"));	
 		}
@@ -137,9 +156,13 @@ public enum Network implements Runnable
 	{
 		try
 		{
+			//Logger.INSTANCE.write("Recive:"+new String(msg), Logger.LogType.INFO);
 			if(channel==0) Channel0(msg);
 			if(channel==1) Channel1(msg);
 			if(channel==2) Channel2(msg);
+			if(channel==3) Channel3(msg);
+			if(channel==4) Channel4(msg);
+			if(channel==5) Channel5(msg);
 		}
 		catch(Exception e)
 		{
@@ -148,6 +171,21 @@ public enum Network implements Runnable
 
 	}
 	
+	private void Channel5(byte[] msg) 
+	{
+		
+	}
+
+	private void Channel4(byte[] msg) 
+	{
+		
+	}
+
+	private void Channel3(byte[] msg)
+	{
+		
+	}
+
 	private void Channel2(byte[] msg) 
 	{
 		
@@ -157,6 +195,8 @@ public enum Network implements Runnable
 	private void Channel1(byte[] msg) 
 	{
 		//for ping
+		long now_time=System.currentTimeMillis();		
+		this.ping=now_time-sendPing;
 	}
 
 	private void Channel0(byte[] msg) throws UnsupportedEncodingException, NoSuchAlgorithmException
@@ -237,12 +277,12 @@ public enum Network implements Runnable
 		while(true)
 		{
 			long now_time=System.currentTimeMillis();		
-			long time=now_time-start_time;
+			long time=now_time-sendPing;
 			
-			if(time>=3000)
+			if(time>=1000)
 			{
 				//send ping
-				start_time=System.currentTimeMillis();
+				sendPing=System.currentTimeMillis();
 				Send((byte)1,"P");		
 			}
 

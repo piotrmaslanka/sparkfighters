@@ -42,7 +42,7 @@ public enum GameEngine
 	{				
 		Input.INSTANCE.processInput();
 		
-		WorldManager.INSTANCE.worldLogic.advance(10.0*Gdx.graphics.getDeltaTime());
+		WorldManager.INSTANCE.worldLogic.advance(Gdx.graphics.getDeltaTime());
 		
 		WorldManager.INSTANCE.mapFragment.set(WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getX_absolute(), WorldManager.INSTANCE.actors.get(WorldManager.INSTANCE.myHeroArrayActors).getY_absolute());
 		
@@ -101,6 +101,8 @@ public enum GameEngine
 		//FPS COUNTER
 		DrawEngineGUI.INSTANCE.DrawText(0,h,color,font,"FPS: "+Gdx.graphics.getFramesPerSecond());
 		h-=space_h;
+		DrawEngineGUI.INSTANCE.DrawText(0,h,color,font,"PING: "+Network.INSTANCE.ping);
+		h-=space_h;
 		//Input
 		Input.INSTANCE.DrawDebugInfo(0, h, font, color);
 		h-=space_h;
@@ -113,7 +115,8 @@ public enum GameEngine
 			WorldManager.INSTANCE.actors.get(i).DrawDebugInfo(0,h,font,color);
 			h-=space_h;
 		}
-			
+
+		
 
 	}
 }
