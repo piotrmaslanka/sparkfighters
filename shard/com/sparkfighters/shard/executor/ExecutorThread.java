@@ -17,20 +17,25 @@ import com.sparkfighters.shared.world.World;
 
 public class ExecutorThread extends Thread {
 
-	static final long FORCED_START_ITERATION = 1200;
-	static final long CINEMATICS_DURATION = 200;
+	static final int FORCED_START_ITERATION = 1200;
+	static final int CINEMATICS_DURATION = 200;
 	static final int FRAME_DURATION = 50;
 	
 	World gameworld;
 	boolean _terminating = false;
 	BridgeRoot br = null;
-	long iteration = 0;
+	int iteration = 0;
 	boolean is_game_started = false;
-	long game_started_on = 0;
+	int cine_started_on = 0;
 	
 	public Synchronizer sync;
 	
-	HashMap<Integer, Boolean> is_online = new HashMap<>();
+	HashMap<Integer, Boolean> is_online = new HashMap<>();	// by Actor ID
+	/**
+	 * Indexed by Team ID
+	 * If given part is zero, team should be spawned
+	 */
+	HashMap<Integer, Integer> team_death_counter = new HashMap<>();
 	
 	public ExecutorThread(World gameworld, BridgeRoot br, JSONBattleDTO bpf) {
 		this.gameworld = gameworld;
@@ -51,17 +56,17 @@ public class ExecutorThread extends Thread {
 	 * Spawns a team. Relays messages to backend.
 	 * @param team_id ID of team to spawn
 	 */
-	private void spawn_team(int team_id) {
-		Vector position = this.gameworld.spawnpoints_by_team.get(team_id);
-		Team team = this.gameworld.teams[team_id];
-
-		for (Actor actor : team.actors) {
-			actor.physical = actor.actor_blueprint.create_physicactor(actor.id);
-			this.gameworld.physics_world.add_actor(actor.physical);
-			actor.physical.set_position(position);
-		}
+	private void spawn_character(int actor_id) {
+		Actor actor = this.gameworld.actor_by_id.get(actor_id);
+		assert actor != null;
 		
-		this.send_to_network(new TeamSpawned(this.iteration, team_id, position));		
+		Vector position = this.gameworld.spawnpoints_by_team.get(actor.team_id);
+
+		actor.physical = actor.actor_blueprint.create_physicactor(actor.id);
+		this.gameworld.physics_world.add_actor(actor.physical);
+		actor.physical.set_position(position);
+
+		this.sync.on_actor_spawned(actor_id, actor.team_id, position);
 	}
 	
 	
@@ -71,20 +76,27 @@ public class ExecutorThread extends Thread {
 	}
 	
 	public void run() {
-		
+
 		while (!this._terminating) {
 			long started_on = System.currentTimeMillis();
-			
+
 			// Receive messages
 			NetworkToExecutor nex;
 			while ((nex = this.br.executor_receive()) != null) {
 				
 				this.sync.relay(nex);
 				
-				if (nex instanceof PlayerConnected)
+				if (nex instanceof PlayerConnected) {
 					this.is_online.put(nex.player_id, true);
-				if (nex instanceof PlayerDisconnected)
-					this.is_online.put(nex.player_id, false);	
+					if (this.is_game_started)
+						this.spawn_character(nex.player_id);
+				}
+				if (nex instanceof PlayerDisconnected) {
+					this.is_online.put(nex.player_id, false);
+					if (this.gameworld.actor_by_id.get(nex.player_id).alive) {
+						// TODO: DISCONNECT the player
+					}
+				}
 				if (nex instanceof InputStatusChanged) {
 					InputStatusChanged isc = (InputStatusChanged)nex;
 					gameworld.actor_by_id.get(isc.player_id).controller()
@@ -93,30 +105,49 @@ public class ExecutorThread extends Thread {
 						.set_mouse_status(isc.mouse_lmb, isc.mouse_rmb);						
 				}
 			}		
-			
+
 			// Should we start cinematics?
-			if (this.game_started_on == 0) {
+			if (this.cine_started_on == 0) {
 				boolean all_connected = true;
 				for (Boolean b : this.is_online.values()) all_connected &= b;
 				
 				if ((this.iteration >= ExecutorThread.FORCED_START_ITERATION) || all_connected) {
-					this.game_started_on = this.iteration;
+					this.cine_started_on = this.iteration;
 					this.send_to_network(new CinematicStarted());
 					System.out.println("Executor: starting cinematics");
 				}
 			}
-			
+
 			// Should we start the game?
-			if ((this.game_started_on != 0) && ((this.iteration - this.game_started_on) == ExecutorThread.CINEMATICS_DURATION)) {
+			if ((this.cine_started_on != 0) && ((this.iteration - this.cine_started_on) == ExecutorThread.CINEMATICS_DURATION)) {
 				this.is_game_started = true;
 				this.send_to_network(new GameStarted());
 				System.out.println("Executor: starting gameplay");
 				
 				// Teams need to be spawned
-				for (int key : this.gameworld.spawnpoints_by_team.keySet())
-					this.spawn_team(key);
+				for (int actor_id : this.gameworld.actor_by_id.keySet())
+					this.spawn_character(actor_id);
 			}
-			
+
+			// Time spawn counters
+			if ((iteration % 20) == 0) {
+				for (int team_id : this.team_death_counter.keySet()) {
+					int tp = this.team_death_counter.get(team_id);
+					if (tp == 0) continue;
+					if ((--tp) == 0) {
+						Team team = this.gameworld.teams[team_id];
+						for (Actor a : team.actors)
+							if (this.is_online.get(a.id))
+								this.spawn_character(a.id);
+					}
+					this.team_death_counter.put(team_id, tp);
+				}
+			}
+
+			// Send forth LSD
+			ExecutorToNetwork etn;
+			while ((etn = this.sync.generate_dispatch()) != null) this.br.send_to_network(etn);
+					
 			// Increment exception, wait more
 			try {
 				long delta = System.currentTimeMillis() - started_on;

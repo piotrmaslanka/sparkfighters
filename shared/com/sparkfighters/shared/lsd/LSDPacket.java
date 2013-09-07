@@ -34,7 +34,7 @@ public class LSDPacket {
 	 * @param bs Buffer to output to
 	 * @throws IOException
 	 */
-	void toStream(ByteArrayOutputStream bs) throws IOException {
+	public void toStream(ByteArrayOutputStream bs) throws IOException {
 		DataOutputStream ds = new DataOutputStream(bs);
 		ds.writeInt(this.iteration);
 		for (LSDFragment frag : this.fragments) {
@@ -43,7 +43,7 @@ public class LSDPacket {
 		}		
 	}
 	
-	void fromStream(ByteArrayInputStream bs) throws IOException {
+	public void fromStream(ByteArrayInputStream bs) throws IOException {
 		DataInputStream ds = new DataInputStream(bs);
 		this.iteration = ds.readInt();
 		
@@ -52,8 +52,7 @@ public class LSDPacket {
 				
 			switch (ds.readByte()) {		// procure proper datatype
 				case 0:
-					frag = new CharacterZeroFragment();
-					break;
+					frag = new CharacterDisconnected();
 				case 1:
 					frag = new CharacterSpawned();
 				default:

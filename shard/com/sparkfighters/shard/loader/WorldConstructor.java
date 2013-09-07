@@ -43,7 +43,7 @@ public class WorldConstructor {
 		// go thru actors. Create them and append
 		for (JSONUserDTO user : dto.users) {
 			ActorBlueprint abp = this.load_actor_bp(user.weapon_id, user.hero_id);
-			Actor actor = new Actor(user.id, abp);
+			Actor actor = new Actor(user.id, user.team_id, abp);
 			
 			Actor[] target_actors = new Actor[teams[user.team_id].actors.length+1];
 			target_actors[teams[user.team_id].actors.length] = actor;

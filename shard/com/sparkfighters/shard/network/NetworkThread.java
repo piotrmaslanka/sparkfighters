@@ -1,6 +1,7 @@
 package com.sparkfighters.shard.network;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import com.sparkfighters.shard.network.bridge.BridgeRoot;
 import com.sparkfighters.shard.network.bridge.ExecutorToNetwork;
@@ -59,17 +60,7 @@ public class NetworkThread extends Thread {
 						if (c.login_phase == 2)
 							c.getChannel(3).write(txe);
 				}
-
-				if (etn instanceof TeamSlain) {
-					TeamSlain f = (TeamSlain)etn;
-					byte[] txe = {2, (byte)(f.team_id)};
-					
-					for (Connection c : this.root.connections.values())
-						if (c.login_phase == 2)
-							c.getChannel(3).write(txe);
-				}
-				
-				
+			
 				if (etn instanceof FBPlayerDisconnected) {
 					FBPlayerDisconnected f = (FBPlayerDisconnected)etn;
 					byte[] txe = {1, (byte)(f.player_id >> 8), (byte)(f.player_id & 255)};
@@ -85,25 +76,33 @@ public class NetworkThread extends Thread {
 					Connection c = this.root.connections.get(lsd.actor_id);
 					if (c != null) {
 						ByteArrayOutputStream bs = new ByteArrayOutputStream();
-						lsd.frag.toStream(bs);
+						try {
+							lsd.frag.toStream(bs);
+						} catch (IOException e) {
+							throw new RuntimeException("Java plays ball");
+						}
 						c.getChannel(4).write(bs.toByteArray());
 					}
 				}
 				
 				if (etn instanceof DispatchLSD5) {
 					DispatchLSD5 lsd = (DispatchLSD5)etn;
-					
-					Connection c = this.root.connections.get(lsd.actor_id);
+					System.out.format("Network: LSD5 for %d\n", lsd.actor_id);
+					Connection c = this.root.connection_by_pid.get(lsd.actor_id);
 					if (c != null) {
+						System.out.println("Network: Sending LSD5");
 						ByteArrayOutputStream bs = new ByteArrayOutputStream();
-						lsd.frag.toStream(bs);
+						try {
+							lsd.frag.toStream(bs);
+						} catch (IOException e) {
+							throw new RuntimeException("Java plays ball");
+						}
 						c.getChannel(5).write(bs.toByteArray());
 					}
 				}
 				
 			}
-				
-				
+								
 			// Sleep if nothing to do 
 			try {
 				if (!done_anything) Thread.sleep(10);
