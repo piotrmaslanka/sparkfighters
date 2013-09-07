@@ -30,12 +30,19 @@ public class Synchronizer {
 	
 	/**
 	 * Information that actor has been spawned
-	 * @return 
 	 */
 	public void on_actor_spawned(int actor_id, int team_id, com.sparkfighters.shared.physics.objects.Vector position) {
 		CharacterSpawned cs = new CharacterSpawned(actor_id, this.thrd.iteration, position);
 		for (Vector<SyncUnit> q: this.syncqueue.values()) q.add(cs);
 	}
+	
+	/**
+	 * Information that actor has been unspawned
+	 */
+	public void on_actor_unspawned(int actor_id) {
+		CharacterUnspawned cs = new CharacterUnspawned(actor_id, this.thrd.iteration);
+		for (Vector<SyncUnit> q: this.syncqueue.values()) q.add(cs);
+	}	
 	
 	
 	/**
@@ -78,6 +85,10 @@ public class Synchronizer {
 			if (u instanceof com.sparkfighters.shard.executor.synchronizer.CharacterSpawned) {
 				com.sparkfighters.shard.executor.synchronizer.CharacterSpawned ts =	(com.sparkfighters.shard.executor.synchronizer.CharacterSpawned)u;
 				frag.fragments.add(new com.sparkfighters.shared.lsd.fragments.CharacterSpawned(ts.actor_id, ts.position));
+			}				
+			else if (u instanceof com.sparkfighters.shard.executor.synchronizer.CharacterUnspawned) {
+				com.sparkfighters.shard.executor.synchronizer.CharacterUnspawned ts = (com.sparkfighters.shard.executor.synchronizer.CharacterUnspawned)u;
+				frag.fragments.add(new com.sparkfighters.shared.lsd.fragments.CharacterUnspawned(ts.actor_id));
 			}				
 		}		
 		

@@ -87,10 +87,9 @@ public class NetworkThread extends Thread {
 				
 				if (etn instanceof DispatchLSD5) {
 					DispatchLSD5 lsd = (DispatchLSD5)etn;
-					System.out.format("Network: LSD5 for %d\n", lsd.actor_id);
+
 					Connection c = this.root.connection_by_pid.get(lsd.actor_id);
 					if (c != null) {
-						System.out.println("Network: Sending LSD5");
 						ByteArrayOutputStream bs = new ByteArrayOutputStream();
 						try {
 							lsd.frag.toStream(bs);

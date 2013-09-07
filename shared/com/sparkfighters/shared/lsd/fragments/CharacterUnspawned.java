@@ -13,13 +13,13 @@ import com.sparkfighters.shared.physics.objects.Vector;
  * disconnected
  * @author Henrietta
  */
-public class CharacterDisconnected implements LSDFragment {
+public class CharacterUnspawned implements LSDFragment {
 
 	int actor_id;
 	
-	public CharacterDisconnected() {}
+	public CharacterUnspawned() {}
 
-	public CharacterDisconnected(int actor_id, Vector position) {
+	public CharacterUnspawned(int actor_id) {
 		this.actor_id = actor_id;
 	}	
 	

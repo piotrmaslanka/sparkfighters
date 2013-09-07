@@ -12,6 +12,7 @@ import com.sparkfighters.shard.network.bridge.exec.*;
 import com.sparkfighters.shard.network.bridge.net.*;
 import com.sparkfighters.shared.physics.objects.Vector;
 import com.sparkfighters.shared.world.Actor;
+import com.sparkfighters.shared.world.Manipulator;
 import com.sparkfighters.shared.world.Team;
 import com.sparkfighters.shared.world.World;
 
@@ -21,21 +22,21 @@ public class ExecutorThread extends Thread {
 	static final int CINEMATICS_DURATION = 200;
 	static final int FRAME_DURATION = 50;
 	
-	World gameworld;
+	public World gameworld;
 	boolean _terminating = false;
-	BridgeRoot br = null;
-	int iteration = 0;
-	boolean is_game_started = false;
-	int cine_started_on = 0;
+	public BridgeRoot br = null;
+	public int iteration = 0;
+	public boolean is_game_started = false;
+	public int cine_started_on = 0;
 	
 	public Synchronizer sync;
 	
-	HashMap<Integer, Boolean> is_online = new HashMap<>();	// by Actor ID
+	public HashMap<Integer, Boolean> is_online = new HashMap<>();	// by Actor ID
 	/**
 	 * Indexed by Team ID
 	 * If given part is zero, team should be spawned
 	 */
-	HashMap<Integer, Integer> team_death_counter = new HashMap<>();
+	public HashMap<Integer, Integer> team_death_counter = new HashMap<>();
 	
 	public ExecutorThread(World gameworld, BridgeRoot br, JSONBattleDTO bpf) {
 		this.gameworld = gameworld;
@@ -45,6 +46,9 @@ public class ExecutorThread extends Thread {
 		for (JSONUserDTO user : bpf.users)
 			this.is_online.put(user.hero_id, false);
 		
+		// Set up all teams
+		for (Team team : this.gameworld.teams) this.team_death_counter.put(team.id, 0);
+		
 		this.sync = new Synchronizer(this);
 		
 	}
@@ -53,22 +57,27 @@ public class ExecutorThread extends Thread {
 
 	
 	/**
-	 * Spawns a team. Relays messages to backend.
-	 * @param team_id ID of team to spawn
+	 * Spawns a character. Relays messages to backend.
+	 * @param actor_id ID of actor to spawn
 	 */
 	private void spawn_character(int actor_id) {
 		Actor actor = this.gameworld.actor_by_id.get(actor_id);
 		assert actor != null;
-		
-		Vector position = this.gameworld.spawnpoints_by_team.get(actor.team_id);
-
-		actor.physical = actor.actor_blueprint.create_physicactor(actor.id);
-		this.gameworld.physics_world.add_actor(actor.physical);
-		actor.physical.set_position(position);
-
-		this.sync.on_actor_spawned(actor_id, actor.team_id, position);
+		new Manipulator(this.gameworld).spawn_character(actor_id);
+		this.sync.on_actor_spawned(actor_id, actor.team_id, this.gameworld.spawnpoints_by_team.get(actor.team_id));
 	}
 	
+	/**
+	 * UnSpawns a character. Relays messages to backend.
+	 * @param actor_id ID of actor to spawn
+	 */
+	private void unspawn_character(int actor_id) {
+		Actor actor = this.gameworld.actor_by_id.get(actor_id);
+		assert actor != null;
+		new Manipulator(this.gameworld).unspawn_character(actor_id);
+		this.sync.on_actor_unspawned(actor_id);
+	}
+		
 	
 	public void send_to_network(ExecutorToNetwork etn) {
 		this.sync.relay(etn);
@@ -93,9 +102,8 @@ public class ExecutorThread extends Thread {
 				}
 				if (nex instanceof PlayerDisconnected) {
 					this.is_online.put(nex.player_id, false);
-					if (this.gameworld.actor_by_id.get(nex.player_id).alive) {
-						// TODO: DISCONNECT the player
-					}
+					if (this.gameworld.actor_by_id.get(nex.player_id).alive)
+						this.unspawn_character(nex.player_id);
 				}
 				if (nex instanceof InputStatusChanged) {
 					InputStatusChanged isc = (InputStatusChanged)nex;
