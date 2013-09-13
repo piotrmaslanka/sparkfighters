@@ -42,7 +42,7 @@ public class Synchronizer {
 										com.sparkfighters.shared.physics.objects.Vector character_location) {
 		
 		// f_angle will be in range [pi; -pi] radians
-		double f_angle = Math.atan2(character_location.x - base.mouse_x, character_location.y - base.mouse_y);
+		double f_angle = Math.atan2(character_location.y - base.mouse_y, character_location.x - base.mouse_x);
 		
 		// f_angle will be in range [2pi; 0] radians
 		if (f_angle < 0) f_angle += 2*Math.PI;
