@@ -71,13 +71,10 @@ public class Synchronizer {
 
 		// Is different?
 		if (!is_different)
-			if (!isc.controlEquals(prev)) {
-				System.out.printf("NOT EQUAL a=%d\n", isc.angle);
+			if (!isc.controlEquals(prev))
 				is_different = true;
-			}
 		
 		if (is_different) {
-			System.out.println("INPUT CHANGED");
 			// Go ahead, notify everyone. That'll work.
 			this.broadcast(isc);
 			// Save this value to cache
