@@ -278,8 +278,8 @@ public class NetworkRoot {
 					return;
 				}
 				
-				long mousex = data[0]*256 + data[1];
-				long mousey = data[2]*256 + data[3];
+				int mousex = data[0]*256 + data[1];
+				int mousey = data[2]*256 + data[3];
 				
 				boolean lmb = (data[4] & 16) > 0;
 				boolean rmb = (data[4] & 32) > 0;

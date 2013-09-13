@@ -1,6 +1,8 @@
 package com.sparkfighters.shard.executor;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import com.sparkfighters.shard.executor.synchronizer.*;
@@ -18,31 +20,92 @@ import com.sparkfighters.shared.lsd.LSDPacket;
 public class Synchronizer {
 
 	HashMap<Integer, Vector<SyncUnit>> syncqueue = new HashMap<>();
+	/**
+	 * Current cache of input statuses. Used to detect whether 
+	 * updates signalled to synchronizer should be put away to 
+	 * LSD layer for update
+	 */
+	HashMap<Integer, InputStatusChanged> inputcache = new HashMap<>();
 	ExecutorThread thrd;
 	
 	public Synchronizer(ExecutorThread thrd) {
 		this.thrd = thrd;
-		for (int actor_id : thrd.gameworld.actor_by_id.keySet()) {
+		for (int actor_id : thrd.gameworld.actor_by_id.keySet())
 			this.syncqueue.put(actor_id, new Vector<SyncUnit>());
-		}
-	}
+	}	
 	
+	/**
+	 * Information that input status has been changed for 
+	 * particular player
+	 */
+	public void on_input_status_changed(com.sparkfighters.shard.network.bridge.net.InputStatusChanged base,
+										com.sparkfighters.shared.physics.objects.Vector character_location) {
+		
+		// f_angle will be in range [pi; -pi] radians
+		double f_angle = Math.atan2(character_location.x - base.mouse_x, character_location.y - base.mouse_y);
+		
+		// f_angle will be in range [2pi; 0] radians
+		if (f_angle < 0) f_angle += 2*Math.PI;
+		
+		// now f_angle will be in range [360; 0] degrees
+		f_angle = f_angle * 180 / Math.PI;
+		
+		// secure negatives
+		int angle = ((int)f_angle < 0) ? 0 : (int)f_angle;
+
+		InputStatusChanged isc = new InputStatusChanged(
+									  base.player_id,
+									  this.thrd.iteration,
+									  base.kbd_up, base.kbd_left, base.kbd_down, base.kbd_right,
+									  (short)angle
+								);
+
+		InputStatusChanged prev = this.inputcache.get(base.player_id);
+			
+		// Check if updated input is markedly different from that which was
+		
+		boolean is_different = false;
+		
+		// Does exist?
+		if (prev == null) is_different = true;
+
+		// Is different?
+		if (!is_different)
+			if (!isc.controlEquals(prev)) {
+				System.out.printf("NOT EQUAL a=%d\n", isc.angle);
+				is_different = true;
+			}
+		
+		if (is_different) {
+			System.out.println("INPUT CHANGED");
+			// Go ahead, notify everyone. That'll work.
+			this.broadcast(isc);
+			// Save this value to cache
+			this.inputcache.put(base.player_id, isc);
+		}
+										
+	}
 	
 	/**
 	 * Information that actor has been spawned
 	 */
 	public void on_actor_spawned(int actor_id, int team_id, com.sparkfighters.shared.physics.objects.Vector position) {
-		CharacterSpawned cs = new CharacterSpawned(actor_id, this.thrd.iteration, position);
-		for (Vector<SyncUnit> q: this.syncqueue.values()) q.add(cs);
+		this.broadcast(new CharacterSpawned(actor_id, this.thrd.iteration, position));
 	}
 	
 	/**
 	 * Information that actor has been unspawned
 	 */
 	public void on_actor_unspawned(int actor_id) {
-		CharacterUnspawned cs = new CharacterUnspawned(actor_id, this.thrd.iteration);
-		for (Vector<SyncUnit> q: this.syncqueue.values()) q.add(cs);
+		this.broadcast(new CharacterUnspawned(actor_id, this.thrd.iteration));
 	}	
+	
+	/**
+	 * Information about input status of given actor changing
+	 */
+	public void on_input_changed(int player_id, boolean kbd_up, boolean kbd_left, boolean kbd_down, boolean kbd_right, int angle) {
+		
+	}
 	
 	
 	/**
@@ -102,6 +165,13 @@ public class Synchronizer {
 		return lsdp;
 	}
 	
+	/**
+	 * Send this syncunit to everyone
+	 * @param u SyncUnit to broadcast
+	 */
+	private void broadcast(SyncUnit u) {
+		for (Vector<SyncUnit> q : this.syncqueue.values()) q.add(u);
+	}
 	
 	public void relay(ExecutorToNetwork etn) {
 		

@@ -107,10 +107,16 @@ public class ExecutorThread extends Thread {
 				}
 				if (nex instanceof InputStatusChanged) {
 					InputStatusChanged isc = (InputStatusChanged)nex;
-					gameworld.actor_by_id.get(isc.player_id).controller()
-						.set_mouse_position(new Vector(isc.mouse_x, isc.mouse_y))
-						.set_keyboard_status(isc.kbd_up, isc.kbd_right, isc.kbd_down, isc.kbd_left)
-						.set_mouse_status(isc.mouse_lmb, isc.mouse_rmb);						
+					Actor a = this.gameworld.actor_by_id.get(isc.player_id); 
+					// Does it make any sense to relay that to Synchronizer? We can do that only if
+					// character is alive
+					if (a.alive) {
+						this.sync.on_input_status_changed(isc, a.physical.get_position());
+						a.controller()
+						    .set_mouse_position(new Vector(isc.mouse_x, isc.mouse_y))
+						    .set_keyboard_status(isc.kbd_up, isc.kbd_right, isc.kbd_down, isc.kbd_left)
+						    .set_mouse_status(isc.mouse_lmb, isc.mouse_rmb);	
+					}
 				}
 			}		
 
@@ -138,7 +144,7 @@ public class ExecutorThread extends Thread {
 			}
 
 			// Time spawn counters
-			if ((iteration % 20) == 0) {
+			if ((this.iteration % 20) == 0) {
 				for (int team_id : this.team_death_counter.keySet()) {
 					int tp = this.team_death_counter.get(team_id);
 					if (tp == 0) continue;
@@ -160,7 +166,7 @@ public class ExecutorThread extends Thread {
 			try {
 				long delta = System.currentTimeMillis() - started_on;
 				if (delta < 0) throw new RuntimeException("Timer overrun");
-				iteration++;
+				this.iteration++;
 				Thread.sleep(ExecutorThread.FRAME_DURATION-delta);
 			} catch (InterruptedException e) {};
 		}

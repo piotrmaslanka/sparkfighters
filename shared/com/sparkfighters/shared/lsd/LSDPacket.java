@@ -53,8 +53,13 @@ public class LSDPacket {
 			switch (ds.readByte()) {		// procure proper datatype
 				case 0:
 					frag = new CharacterUnspawned();
+					break;
 				case 1:
 					frag = new CharacterSpawned();
+					break;
+				case 2:
+					frag = new CharacterInputUpdate();
+					break;
 				default:
 					break;
 			}
