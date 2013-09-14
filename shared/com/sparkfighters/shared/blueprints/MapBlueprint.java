@@ -25,8 +25,8 @@ final public class MapBlueprint {
 	private final HorizSegment[] platforms;
 	public final Rectangle world_box;
 	
-	private final Vector spawnpoints[] = new Vector[3];
-	private final int spawnpoints_team[] = new int[3];
+	public final Vector spawnpoints[];
+	public final int spawnpoints_team[];
 	
 	@SuppressWarnings("unused")
 	private final Vector spark_start;
@@ -35,6 +35,9 @@ final public class MapBlueprint {
 		this.lsg = new LargeStaticGeometry(md.obstacles.toArray(new Rectangle[0]));
 		
 		this.platforms = md.platforms.toArray(new HorizSegment[0]);
+		
+		this.spawnpoints = new Vector[md.spawnPoints.size()];
+		this.spawnpoints_team = new int[md.spawnPoints.size()];
 		
 		int i=0;
 		for (MapData.SpawnPoint sp : md.spawnPoints) {

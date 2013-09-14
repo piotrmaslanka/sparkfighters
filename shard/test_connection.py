@@ -1,12 +1,15 @@
-from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, ClientSocket, NothingToRead, RTM_MANUAL, RTM_AUTO
+from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, RTM_NONE, ClientSocket, NothingToRead, RTM_MANUAL, RTM_AUTO
 import sys, select, socket, hashlib, time
 
 # Prepare channel and connection
 c_0 = Channel(0, RTM_AUTO_ORDERED, 10, 60)
 c_2 = Channel(2, RTM_MANUAL, 5, 1) 
 c_3 = Channel(3, RTM_AUTO, 10, 60)
+c_4 = Channel(4, RTM_NONE, 5, 1) 
+c_5 = Channel(5, RTM_AUTO, 5, 60)
 
-conn = Connection([c_0, c_2, c_3], 15)
+
+conn = Connection([c_0, c_2, c_3, c_4, c_5], 15)
 
 def wait_until_clear(chanid):
     """Waits until there is no tx activity on channel chanid"""
@@ -80,6 +83,14 @@ while True:
 		else:
 			k += 'and for now something completely different!'
 		print k
+
+	try:
+		msg = conn[5].read()
+	except NothingToRead:
+		pass
+	else:
+		k = 'LSD/Auto message: '
+		print k + repr(msg)
 
 	conn[2].write('\x00\x10\x00\x08\x01\x0A')
 	wait_until_clear(2)

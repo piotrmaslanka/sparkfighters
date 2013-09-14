@@ -16,7 +16,7 @@ public class Team implements Cloneable {
 	 */
 	public int id;
 	public Actor[] actors;
-	
+
 	/**
 	 * @param id Team ID [TID]
 	 * @param actors Actors in this team. Borrows reference.
@@ -25,10 +25,8 @@ public class Team implements Cloneable {
 		this.id = id;
 		this.actors = actors;
 	}
-	
-	
+
 	public Team clone() {
 		return new Team(this.id, new Actor[this.actors.length]);
 	}
-
 }

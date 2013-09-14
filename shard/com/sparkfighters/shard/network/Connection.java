@@ -59,7 +59,7 @@ public class Connection extends pl.com.henrietta.lnx2.Connection {
 	
 	public Connection() {
 		// Init parent		
-		super(Connection._get_channels_vector(), (float)15);
+		super(Connection._get_channels_vector(), (float)20);
 		
 		// Generate nonce
 		Random rand = new Random(System.currentTimeMillis());

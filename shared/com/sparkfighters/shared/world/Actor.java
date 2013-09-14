@@ -29,7 +29,18 @@ public class Actor implements Cloneable {
 	 * Actor ID [AID]
 	 */
 	public int id;
+	/**
+	 * Team ID
+	 */
+	public int team_id;
 	
+	
+	/**
+	 * Whether the actor is considered to be DEAD - due to being offline or
+	 * taking enough damage and not respawning yet
+	 */
+	public boolean alive;
+
 	/**
 	 * Return current physic actor representing this character.
 	 * 
@@ -110,16 +121,19 @@ public class Actor implements Cloneable {
 		this.physical.set(direction + GeometrySet.IDLE_RIGHT);
 	}
 
-	public Actor(int id, ActorBlueprint abp) {
+	public Actor(int id, int team_id, ActorBlueprint abp) {
 		this.id = id;
+		this.team_id = team_id;
 		this.actor_blueprint = abp;
+		this.alive = true;
 	}
 
 	/**
 	 * This will not clone .physical
 	 */
 	public Actor clone() {
-		Actor nac = new Actor(this.id, this.actor_blueprint.clone());
+		Actor nac = new Actor(this.id, this.team_id, this.actor_blueprint.clone());
+		nac.alive = this.alive;
 		nac._cached_controller = null;
 		return nac;
 	}
