@@ -15,7 +15,7 @@ import com.sparkfighters.shared.physics.objects.Vector;
  */
 public class CharacterUnspawned implements LSDFragment {
 
-	int actor_id;
+	public int actor_id;
 	
 	public CharacterUnspawned() {}
 
