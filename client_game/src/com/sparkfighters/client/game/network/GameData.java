@@ -38,11 +38,13 @@ public class GameData
 		this.IdMap=Integer.valueOf(s[0]);
 		
 		this.IdPlayer=Integer.valueOf(s[1]);
-				
-		for(int i=1;i<1+(s.length-2)/5;i++)
-		{
-			Actor a=new Actor(Integer.valueOf(s[i+1]),Integer.valueOf(s[i+2]),Integer.valueOf(s[i+3]),Integer.valueOf(s[i+4]),s[i+5]);
+		
+		int j=2;
+		for(int i=0;i<(s.length-2)/5;i++)
+		{		
+			Actor a=new Actor(Integer.valueOf(s[j]),Integer.valueOf(s[j+1]),Integer.valueOf(s[j+2]),Integer.valueOf(s[j+3]),s[j+4]);
 			actors.put(new Integer(a.IdActor), a);
+			j+=5;
 		}
 	}
 	
