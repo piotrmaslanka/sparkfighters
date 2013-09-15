@@ -11,6 +11,14 @@
 			"hero_id": 0,
 			"weapon_id": 0,
 			"team_id": 1
+		},
+		{
+			"id": 1,
+			"username": "tset",
+			"password": "tset",
+			"hero_id": 0,
+			"weapon_id": 0,
+			"team_id": 2
 		}
 	]
 }

@@ -158,6 +158,9 @@ public class ExecutorThread extends Thread {
 				}
 			}
 
+			// Push the world an iteration further
+			this.gameworld.advance((double)ExecutorThread.FRAME_DURATION / 1000.0);
+			
 			// Send forth LSD
 			ExecutorToNetwork etn;
 			while ((etn = this.sync.generate_dispatch()) != null) this.br.send_to_network(etn);
