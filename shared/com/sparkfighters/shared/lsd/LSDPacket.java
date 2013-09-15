@@ -49,8 +49,15 @@ public class LSDPacket {
 		
 		while (true) {
 			LSDFragment frag = null;
-				
-			switch (ds.readByte()) {		// procure proper datatype
+			
+			int x;
+			try {
+				x = ds.readByte();
+			} catch (EOFException e) {
+				break;
+			}
+			
+			switch (x) {		// procure proper datatype
 				case 0:
 					frag = new CharacterUnspawned();
 					break;
