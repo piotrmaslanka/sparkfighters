@@ -18,6 +18,9 @@ public class CharacterInputUpdate implements LSDFragment {
 	public boolean kbd_left;
 	public boolean kbd_down;
 	public boolean kbd_right;
+	/**
+	 * Angle is counted counterclockwise in degrees. X axis points to zero degrees.
+	 */
 	public int angle;	// 0 to 360	
 	
 	public CharacterInputUpdate(int player_id, 
