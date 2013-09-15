@@ -212,7 +212,7 @@ public enum Network implements Runnable
 			{
 				CharacterSpawned cs=(CharacterSpawned) lp.fragments.get(i);
 				
-				new Manipulator(WorldManager.INSTANCE.worldLogic).sp
+				new Manipulator(WorldManager.INSTANCE.worldLogic).spawn_character(cs.actor_id);
 				
 			}
 			
