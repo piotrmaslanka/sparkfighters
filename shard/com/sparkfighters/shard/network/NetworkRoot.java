@@ -204,7 +204,7 @@ public class NetworkRoot {
 						this.on_disconnected(alrdy_logd.address);
 					}
 					
-					conn.player_id = conn.associated_dto.hero_id;
+					conn.player_id = conn.associated_dto.id;
 					conn.login_phase = 1;
 					
 					this.connection_by_pid.put(conn.player_id, conn);
