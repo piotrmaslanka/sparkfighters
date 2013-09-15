@@ -126,14 +126,15 @@ public class GameData
 		return ids;
 	}
 	
-	public HashMap<Integer, Actor> getActorsByTeamId(int idTeam)
+	public Array<Actor> getActorsByTeamId(int idTeam)
 	{
-		HashMap<Integer, Actor> a=new HashMap<Integer, Actor>();
+		Array<Actor> a=new Array<Actor>();
 		for(int i=0;i<actors.size();i++)
 		{
 			if(actors.get(i).IdTeam==idTeam)
 			{
-				a.put(new Integer(actors.get(i).IdActor), actors.get(i));
+				a.add(actors.get(i));
+				
 			}
 		}
 		

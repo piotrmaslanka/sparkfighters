@@ -37,12 +37,12 @@ public enum WorldManager
 		
 		for(int i=0;i<ids_teams.size;i++)
 		{
-			HashMap<Integer, Actor> actor_n=Network.INSTANCE.GameDataMsg.getActorsByTeamId(ids_teams.get(i));
+			Array <Actor> actor_n=Network.INSTANCE.GameDataMsg.getActorsByTeamId(ids_teams.get(i));
 			
 			//create logic actors
-			com.sparkfighters.shared.world.Actor actorsLogic[]=new com.sparkfighters.shared.world.Actor[actor_n.size()];
+			com.sparkfighters.shared.world.Actor actorsLogic[]=new com.sparkfighters.shared.world.Actor[actor_n.size];
 			
-			for(int j=0;j<actor_n.size();j++)
+			for(int j=0;j<actor_n.size;j++)
 			{
 				int idActor=actor_n.get(j).IdActor;
 				int idHero=actor_n.get(j).IdHero;
