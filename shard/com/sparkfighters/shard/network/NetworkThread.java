@@ -74,7 +74,7 @@ public class NetworkThread extends Thread {
 					DispatchLSD4 lsd = (DispatchLSD4)etn;
 					
 					Connection c = this.root.connections.get(lsd.actor_id);
-					if (c != null) {
+					if (c != null) if (c.login_phase == 2) {
 						ByteArrayOutputStream bs = new ByteArrayOutputStream();
 						try {
 							lsd.frag.toStream(bs);
@@ -89,7 +89,7 @@ public class NetworkThread extends Thread {
 					DispatchLSD5 lsd = (DispatchLSD5)etn;
 
 					Connection c = this.root.connection_by_pid.get(lsd.actor_id);
-					if (c != null) {
+					if (c != null) if (c.login_phase == 2) {
 						ByteArrayOutputStream bs = new ByteArrayOutputStream();
 						try {
 							lsd.frag.toStream(bs);
