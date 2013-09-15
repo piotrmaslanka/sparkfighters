@@ -65,7 +65,7 @@ public class World implements Cloneable {
 		
 		for (Actor a : this.actor_by_id.values()) a.process_controller_input();
 	}
-	
+
 	
 	public World clone() {
 		// prepare physic world
