@@ -1,5 +1,6 @@
 package com.sparkfighters.client.game.singletons;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -11,6 +12,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Vector;
+
+import com.sparkfighters.shared.lsd.LSDPacket;
+import com.sparkfighters.shared.lsd.fragments.CharacterInputUpdate;
+import com.sparkfighters.shared.lsd.fragments.CharacterSpawned;
+import com.sparkfighters.shared.lsd.fragments.CharacterUnspawned;
+import com.sparkfighters.shared.world.Manipulator;
 
 import pl.com.henrietta.lnx2.Channel;
 import pl.com.henrietta.lnx2.Connection;
@@ -151,7 +158,6 @@ public enum Network implements Runnable
 		}
 	}
 	
-
 	private void DoCommand(byte channel, byte[] msg)
 	{
 		try
@@ -173,23 +179,61 @@ public enum Network implements Runnable
 	
 	private void Channel5(byte[] msg) 
 	{
-		
+		//channel 5 and 4 are very smillar so invoke channel4 function
+		Channel4(msg);
 	}
 
 	private void Channel4(byte[] msg) 
 	{
+		ByteArrayInputStream bs = new ByteArrayInputStream(msg);
+		LSDPacket lp = new LSDPacket(0);
+		try 
+		{
+			lp.fromStream(bs);
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}		
 		
+		for(int i=0;i<lp.fragments.size();i++)
+		{
+			if(lp.fragments.get(i) instanceof CharacterInputUpdate)
+			{
+				CharacterInputUpdate ciu=(CharacterInputUpdate) lp.fragments.get(i);
+				WorldManager.INSTANCE.worldLogic.actor_by_id.get(ciu.player_id).controller().set_keyboard_status(ciu.kbd_up, ciu.kbd_right, ciu.kbd_down, ciu.kbd_left);
+				
+				//WorldManager.INSTANCE.worldLogic.actor_by_id.get(ciu.player_id).controller().set_mouse_position(new Vector(ciu.,y_absolute));
+				
+				//WorldManager.INSTANCE.worldLogic.actor_by_id.get(ciu.player_id).controller().set_mouse_status(lmb, rmb);
+			}
+			
+			if(lp.fragments.get(i) instanceof CharacterSpawned)
+			{
+				CharacterSpawned cs=(CharacterSpawned) lp.fragments.get(i);
+				
+				new Manipulator(WorldManager.INSTANCE.worldLogic).sp
+				
+			}
+			
+			if(lp.fragments.get(i) instanceof CharacterUnspawned)
+			{			
+				CharacterUnspawned cu=(CharacterUnspawned) lp.fragments.get(i);
+				
+				new Manipulator(WorldManager.INSTANCE.worldLogic).unspawn_character(cu.actor_id);
+			}
+		}
 	}
 
 	private void Channel3(byte[] msg)
 	{
+		//player connected, disconnected on this channel
 		
 	}
 
 	private void Channel2(byte[] msg) 
 	{
-		
-		
+		//Write only no read 		
 	}
 
 	private void Channel1(byte[] msg) 

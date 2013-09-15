@@ -71,7 +71,7 @@ public enum WorldManager
 				ActorBlueprint actorsBlueprint=new ActorBlueprint(ResourcesManager.INSTANCE.weaponsData.get(idWeapon), ResourcesManager.INSTANCE.heroesData.get(idHero));
 				
 				//create logic actors
-				actorsLogic[j]=new com.sparkfighters.shared.world.Actor(idActor, actorsBlueprint);
+				actorsLogic[j]=new com.sparkfighters.shared.world.Actor(idActor,ids_teams.get(i),actorsBlueprint);
 				actorsLogic[j].physical=actorsLogic[0].actor_blueprint.create_physicactor(idActor);
 				for(int k=0;k<ResourcesManager.INSTANCE.map.spawnPoints.size();k++)
 				{
@@ -94,7 +94,12 @@ public enum WorldManager
 		mapBlueprint.feed_to_physics_world(worldPhysics);
 		
 		//Create logic world
-		worldLogic=new com.sparkfighters.shared.world.World(worldPhysics,teams);
+		HashMap<Integer, Vector> spawnpoints2 = new HashMap<Integer, Vector>();
+		for (int i=0; i<ResourcesManager.INSTANCE.map.spawnPoints.size(); i++)
+		{
+			spawnpoints2.put(ResourcesManager.INSTANCE.map.spawnPoints.get(i).team_id, ResourcesManager.INSTANCE.map.spawnPoints.get(i).position);
+		}
+		worldLogic=new com.sparkfighters.shared.world.World(worldPhysics,spawnpoints2,teams);
 	}
 	
 }
