@@ -55,7 +55,7 @@ public class Actor implements Cloneable {
 	// ----------------------------      controller options
 	// Everything here is PRIVATE. Use Controller if you wish to read this data
 	private Controller _cached_controller;
-	public Vector _mouse_position;
+	public Vector _mouse_position = new Vector(0, 0);
 	public boolean _kbd_up = false;
 	public boolean _kbd_left = false;
 	public boolean _kbd_right = false;
