@@ -170,7 +170,8 @@ public class ExecutorThread extends Thread {
 				long delta = System.currentTimeMillis() - started_on;
 				if (delta < 0) throw new RuntimeException("Timer overrun");
 				this.iteration++;
-				Thread.sleep(ExecutorThread.FRAME_DURATION-delta);
+				if ((ExecutorThread.FRAME_DURATION-delta) > 0)
+					Thread.sleep(ExecutorThread.FRAME_DURATION-delta);
 			} catch (InterruptedException e) {};
 		}
 		

@@ -272,7 +272,7 @@ public class NetworkRoot {
 				System.out.println("Controller input update");
 				byte[] data = conn.getChannel(2).read();
 				if (data.length != 6) {
-					System.out.println("NET: Protocol violation at channel 2");
+					System.out.format("NET: Protocol violation at channel 2. Seen %d bytes\n", data.length);
 					this.on_disconnected(sa);
 					return;
 				}
