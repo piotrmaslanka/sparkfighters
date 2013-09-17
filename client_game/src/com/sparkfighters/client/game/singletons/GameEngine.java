@@ -50,16 +50,19 @@ public enum GameEngine
 		{
 			int id=WorldManager.INSTANCE.actors.get(i).getId();
 			
-			int x=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_position().x;
-			int y=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_position().y;
-			WorldManager.INSTANCE.actors.get(i).setX_absolute(x);
-			WorldManager.INSTANCE.actors.get(i).setY_absolute(y);
-			
-			int x2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().x;
-			int y2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().y;
-			WorldManager.INSTANCE.actors.get(i).setMouseTarget(x2, y2);
-			
-			WorldManager.INSTANCE.actors.get(i).setAnimation(WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_geom_id());		
+			if(WorldManager.INSTANCE.worldLogic.get_actor(id).physical!=null)
+			{
+				int x=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_position().x;
+				int y=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_position().y;
+				WorldManager.INSTANCE.actors.get(i).setX_absolute(x);
+				WorldManager.INSTANCE.actors.get(i).setY_absolute(y);
+				
+				int x2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().x;
+				int y2=(int)WorldManager.INSTANCE.worldLogic.get_actor(id).controller().get_mouse_position().y;
+				WorldManager.INSTANCE.actors.get(i).setMouseTarget(x2, y2);
+				
+				WorldManager.INSTANCE.actors.get(i).setAnimation(WorldManager.INSTANCE.worldLogic.get_actor(id).physical.get_geom_id());	
+			}
 		}
 	}
 	/**
