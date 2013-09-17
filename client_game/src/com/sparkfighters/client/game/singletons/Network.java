@@ -158,6 +158,20 @@ public enum Network implements Runnable
 		}
 	}
 	
+	public void Send(byte channel, byte[] bytes)
+	{
+		try
+		{
+			//Logger.INSTANCE.write("Send:"+text, Logger.LogType.INFO);
+			//prepare to send data
+			this.connection.getChannel(channel).write(bytes);	
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	private void DoCommand(byte channel, byte[] msg)
 	{
 		try
