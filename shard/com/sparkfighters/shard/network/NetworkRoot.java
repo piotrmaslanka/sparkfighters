@@ -204,7 +204,7 @@ public class NetworkRoot {
 						this.on_disconnected(alrdy_logd.address);
 					}
 					
-					conn.player_id = conn.associated_dto.hero_id;
+					conn.player_id = conn.associated_dto.id;
 					conn.login_phase = 1;
 					
 					this.connection_by_pid.put(conn.player_id, conn);
@@ -272,7 +272,7 @@ public class NetworkRoot {
 				System.out.println("Controller input update");
 				byte[] data = conn.getChannel(2).read();
 				if (data.length != 6) {
-					System.out.println("NET: Protocol violation at channel 2");
+					System.out.format("NET: Protocol violation at channel 2. Seen %d bytes\n", data.length);
 					this.on_disconnected(sa);
 					return;
 				}
