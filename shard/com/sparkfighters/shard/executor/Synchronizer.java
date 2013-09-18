@@ -150,6 +150,10 @@ public class Synchronizer {
 				com.sparkfighters.shard.executor.synchronizer.CharacterUnspawned ts = (com.sparkfighters.shard.executor.synchronizer.CharacterUnspawned)u;
 				frag.fragments.add(new com.sparkfighters.shared.lsd.fragments.CharacterUnspawned(ts.actor_id));
 			}				
+			else if (u instanceof com.sparkfighters.shard.executor.synchronizer.InputStatusChanged) {
+				com.sparkfighters.shard.executor.synchronizer.InputStatusChanged is = (com.sparkfighters.shard.executor.synchronizer.InputStatusChanged)u;
+				frag.fragments.add(new com.sparkfighters.shared.lsd.fragments.CharacterInputUpdate(is.player_id, is.kbd_up, is.kbd_left, is.kbd_down, is.kbd_right, is.angle));				
+			}
 		}		
 		
 		ExecutorToNetwork lsdp = null;
