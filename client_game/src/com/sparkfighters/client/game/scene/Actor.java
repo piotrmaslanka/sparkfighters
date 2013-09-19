@@ -24,6 +24,12 @@ public class Actor
 	private int idHero,idWeapon, id, idHeroType;
 	private int idAnimation;
 	private float time;
+	private float degree=-1111111;
+	
+	public void setDegree(float d)
+	{
+		degree=d;
+	}
 	
 	public int getId(){return id;}
 	/**
@@ -137,10 +143,19 @@ public class Actor
 		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2+diff;
 		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
 
-		double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
-		double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));	
-		double radians=Math.tan(A/C);
-		float degrees=(float)(radians*180/Math.PI);
+		float degrees=0;
+		if(this.degree==-1111111)
+		{
+			double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
+			double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));	
+			double radians=Math.tan(A/C);
+			degrees=(float)(radians*180/Math.PI);
+		}
+		else
+		{
+			degrees=this.degree;
+		}
+		
 		if(direction==0)
 		{
 			if(actorPositionAbsolute.y-mousePositionAbsolute.y>0) degrees=-degrees;
@@ -191,7 +206,8 @@ public class Actor
 				" WeaponID="+ResourcesManager.INSTANCE.weaponsData.get(idWeapon).id+
 				" AnimationID="+idAnimation+
 				" Relative(x,y)=("+this.actorPositionRelative.x+","+this.actorPositionRelative.y+")"+
-				" Absolute(x,y)=("+this.actorPositionAbsolute.x+","+this.actorPositionAbsolute.y+")"
+				" Absolute(x,y)=("+this.actorPositionAbsolute.x+","+this.actorPositionAbsolute.y+")"+
+				" Angle="+this.degree
 				);
 	}
 	

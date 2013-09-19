@@ -67,13 +67,13 @@ public enum Network implements Runnable
 		//setting channels
 		Vector<Channel> chanells=new Vector<Channel>();	
 		
-		Channel c0=new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED, 10, 60);
+		Channel c0=new Channel((byte)0, RetransmissionMode.RTM_AUTO_ORDERED, 5, 60);
 		chanells.add(c0);
 		
 		Channel c1=new Channel((byte)1, RetransmissionMode.RTM_MANUAL, 5, 1);
 		chanells.add(c1);
 		
-		Channel c2=new Channel((byte)2, RetransmissionMode.RTM_MANUAL, 5, 1);
+		Channel c2=new Channel((byte)2, RetransmissionMode.RTM_MANUAL, 1, 1);
 		chanells.add(c2);
 		
 		Channel c3=new Channel((byte)3, RetransmissionMode.RTM_AUTO, 10, 60);
@@ -217,6 +217,14 @@ public enum Network implements Runnable
 				CharacterInputUpdate ciu=(CharacterInputUpdate) lp.fragments.get(i);
 				WorldManager.INSTANCE.worldLogic.actor_by_id.get(ciu.player_id).controller().set_keyboard_status(ciu.kbd_up, ciu.kbd_right, ciu.kbd_down, ciu.kbd_left);
 				
+				for(int j=0;j<WorldManager.INSTANCE.actors.size();j++)
+				{
+					if(WorldManager.INSTANCE.actors.get(j).getId()==ciu.player_id)
+					{
+						WorldManager.INSTANCE.actors.get(j).setDegree(ciu.angle);
+					}
+				}
+				
 				//WorldManager.INSTANCE.worldLogic.actor_by_id.get(ciu.player_id).controller().set_mouse_position(new Vector(ciu.,y_absolute));
 				
 				//WorldManager.INSTANCE.worldLogic.actor_by_id.get(ciu.player_id).controller().set_mouse_status(lmb, rmb);
@@ -344,17 +352,25 @@ public enum Network implements Runnable
 				Send((byte)1,"P");		
 			}
 
-			try
+
+			//send data
+			Packet p;
+			try 
 			{
-				//send data
-				Packet p=this.connection.on_sendable();	
+				p = this.connection.on_sendable();
 				ByteBuffer buf=ByteBuffer.wrap(p.to_bytes());	
 				this.channel.send(buf, new InetSocketAddress(this.ip, this.port));
-			}
-			catch(Exception e)
+			} 
+			catch (NothingToSend e) 
 			{
-				
-			}
+
+			} 
+			catch (IOException e) 
+			{
+
+				e.printStackTrace();
+			}	
+
 			
 			Recive();
 		}
