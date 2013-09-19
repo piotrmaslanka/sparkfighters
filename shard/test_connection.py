@@ -55,43 +55,46 @@ connect = packon(0)
 if connect == 'OK':
     print 'Response OK, connected!'
 
-packon(0)	# We don't care about participant info right now
+packon(0)    # We don't care about participant info right now
 conn[0].write('RDY') # we are ready
 
 while True:
-	pa = packon(0)
-	if pa == '0':
-		print 'Waiting for cinematics'
-	elif pa == '1':
-		print 'Cinematics started'
-	elif pa == '2':
-		print 'Game started'
-		break
-		
+    pa = packon(0)
+    if pa == '0':
+        print 'Waiting for cinematics'
+    elif pa == '1':
+        print 'Cinematics started'
+    elif pa == '2':
+        print 'Game started'
+        break
+        
 # Send input periodically
 while True:
-	try:
-		msg = conn[3].read()
-	except NothingToRead:
-		pass
-	else:
-		k = 'Channel 3 message: '
-		if msg[0] == 0:
-			k += 'player %s connected' % ((msg[1] << 8) + msg[2], )
-		elif msg[0] == 1:
-			k += 'player %s disconnected' % ((msg[1] << 8) + msg[2], )
-		else:
-			k += 'and for now something completely different!'
-		print k
+    try:
+        msg = conn[3].read()
+    except NothingToRead:
+        pass
+    else:
+        k = 'Channel 3 message: '
+        if msg[0] == 0:
+            k += 'player %s connected' % ((msg[1] << 8) + msg[2], )
+        elif msg[0] == 1:
+            k += 'player %s disconnected' % ((msg[1] << 8) + msg[2], )
+        else:
+            k += 'and for now something completely different!'
+        print k
 
-	try:
-		msg = conn[5].read()
-	except NothingToRead:
-		pass
-	else:
-		k = 'LSD/Auto message: '
-		print k + repr(msg)
+    try:
+        msg = conn[5].read()
+    except NothingToRead:
+        pass
+    else:
+        k = 'LSD/Auto message: '
+        print k + repr(msg)
 
-	conn[2].write('\x00\x10\x00\x08\x01\x0A')
-	wait_until_clear(2)
-	time.sleep(4)
+    if (time.time() % 10) < 5:
+        conn[2].write('\x00\x00\x00\x00\x02\x0A')
+    else:
+        conn[2].write('\x00\x00\x00\x00\x08\x0A')
+    wait_until_clear(2)
+    time.sleep(4)
