@@ -112,7 +112,7 @@ public class Synchronizer {
 	public ExecutorToNetwork generate_dispatch() {
 		for (int actor_id : this.syncqueue.keySet()) {
 			if (this.syncqueue.get(actor_id).size() > 0) {
-				SyncUnit u = this.syncqueue.get(actor_id).iterator().next();
+				SyncUnit u = this.syncqueue.get(actor_id).firstElement();
 				return this.create_dispatch(actor_id, u.getChannelAffiliation(), u.getIteration());
 			}
 		}
