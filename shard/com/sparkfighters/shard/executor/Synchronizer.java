@@ -75,6 +75,7 @@ public class Synchronizer {
 				is_different = true;
 		
 		if (is_different) {
+			System.out.format("Input has changed for %d\n", base.player_id);
 			// Go ahead, notify everyone. That'll work.
 			this.broadcast(isc);
 			// Save this value to cache
@@ -162,7 +163,6 @@ public class Synchronizer {
 		if (dispatch == 5)
 			lsdp = (ExecutorToNetwork)new DispatchLSD5(actor_id, frag);
 		
-		System.out.println("Synchronizer: dispatch performed");
 		return lsdp;
 	}
 	

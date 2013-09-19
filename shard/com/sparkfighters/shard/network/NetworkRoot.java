@@ -159,13 +159,10 @@ public class NetworkRoot {
 				// This is a login packet
 				conn.username = new String(p, "UTF-8");
 				
-				System.out.printf("Logging in: %s\n", conn.username);
-
 				// check it this does make sense, prime DTO if so
 				conn.associated_dto = this.bpf.find_by_login(conn.username);
 				if (conn.associated_dto == null) {
 					// Invalid user!
-					System.out.printf("I cannot find this user\n");
 					this.on_disconnected(sa);
 					return;
 				}
@@ -194,7 +191,6 @@ public class NetworkRoot {
 				
 				// Compare the nonce...
 				if (Arrays.equals(response, p)) {	// It's All-Ok!
-					System.out.println("Response matches");
 					// If the player was logged in right now, invalidate that connection
 					Connection alrdy_logd = this.connection_by_pid.get(conn.player_id);
 					if (alrdy_logd != null) {
@@ -202,7 +198,9 @@ public class NetworkRoot {
 						// doesn't annoy Executor
 						alrdy_logd.login_phase = 0;
 						this.on_disconnected(alrdy_logd.address);
-					}
+						System.out.printf("CONN: Replacing %s\n", conn.username);
+					} else
+						System.out.printf("CONN: Connecting %s\n", conn.username);						
 					
 					conn.player_id = conn.associated_dto.id;
 					conn.login_phase = 1;
@@ -269,10 +267,9 @@ public class NetworkRoot {
 			
 			// Handle controller update input
 			try {
-				System.out.println("Controller input update");
 				byte[] data = conn.getChannel(2).read();
 				if (data.length != 6) {
-					System.out.format("NET: Protocol violation at channel 2. Seen %d bytes\n", data.length);
+					System.out.format("NET: Protocol violation at ch2 by %d. Seen %d bytes.\n", conn.player_id, data.length);
 					this.on_disconnected(sa);
 					return;
 				}
@@ -300,6 +297,12 @@ public class NetworkRoot {
 		// a new socket was disconnected
 		Connection cn = this.connections.get(sa);
 		this.connections.remove(sa);
+
+		if (cn.username == null)
+			System.out.printf("CONN: Disconnecting <UNKNOWN>\n");
+		else
+			System.out.printf("CONN: Disconnecting %s\n", cn.username);
+		
 		if (cn.login_phase < 2) return;	// not logged in - no problem
 			
 		this.connection_by_pid.remove(cn.player_id);

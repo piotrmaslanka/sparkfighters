@@ -128,7 +128,6 @@ public class ExecutorThread extends Thread {
 				if ((this.iteration >= ExecutorThread.FORCED_START_ITERATION) || all_connected) {
 					this.cine_started_on = this.iteration;
 					this.send_to_network(new CinematicStarted());
-					System.out.println("Executor: starting cinematics");
 				}
 			}
 
@@ -136,7 +135,6 @@ public class ExecutorThread extends Thread {
 			if ((this.cine_started_on != 0) && ((this.iteration - this.cine_started_on) == ExecutorThread.CINEMATICS_DURATION)) {
 				this.is_game_started = true;
 				this.send_to_network(new GameStarted());
-				System.out.println("Executor: starting gameplay");
 				
 				// Teams need to be spawned
 				for (int actor_id : this.gameworld.actor_by_id.keySet())

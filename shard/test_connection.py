@@ -1,5 +1,5 @@
 from lnx2 import Packet, Connection, Channel, RTM_AUTO_ORDERED, RTM_NONE, ClientSocket, NothingToRead, RTM_MANUAL, RTM_AUTO
-import sys, select, socket, hashlib, time
+import sys, select, socket, hashlib, time, struct
 
 # Prepare channel and connection
 c_0 = Channel(0, RTM_AUTO_ORDERED, 10, 60)
@@ -37,18 +37,40 @@ def packon(chanid):
             else:
                 return p
 
+
+def parse_lsd(pk):
+    """Parses a LSD packet and displays it's content"""
+    pk = str(pk)
+    print 'LSD packet, iteration %s' % struct.unpack('>i', pk[:4])
+    pk = pk[4:]
+    while len(pk) > 0:
+        if pk[0] == '\x00':
+            print '    Character %s unspawned' % struct.unpack('>h', pk[1:3])
+            pk = pk[3:]
+        elif pk[0] == '\x01':
+            _, id, x, y = struct.unpack('>bhii', pk[:11])
+            pk = pk[11:]
+            print '    Character %s spawned at %s:%s' % (id, x, y)
+        elif pk[0] == '\x02':
+            _, id, kbd, angle = struct.unpack('>bhBh', pk[:6])
+            pk = pk[6:]
+            is_up, is_left, is_down, is_right = int(kbd & 1 > 0), int(kbd & 2 > 0), int(kbd & 4 > 0), int(kbd & 8 > 0)
+            print '    Controller update for %s (WSAD=%s%s%s%s, angle=%s)' % (id, is_up, is_left, is_down, is_right, angle)
+        else:
+            print '!!!! Malformed or unrecognized LSD'
+            return
 # Get connection data and set up socket
 remote_address = sys.argv[1], int(sys.argv[2])
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock = ClientSocket(sock, remote_address, conn)
 
 # let's try logging in
-conn[0].write('test')
+conn[0].write(sys.argv[3])
 print 'Sent login, awaiting challenge...'
 challenge = packon(0)
 
 print 'Challenge received, sending back response...'
-replica = hashlib.sha1('test'+challenge).hexdigest()
+replica = hashlib.sha1(sys.argv[3]+challenge).hexdigest()
 conn[0].write(replica)
 
 connect = packon(0)
@@ -89,12 +111,11 @@ while True:
     except NothingToRead:
         pass
     else:
-        k = 'LSD/Auto message: '
-        print k + repr(msg)
+        parse_lsd(msg)
 
-    if (time.time() % 10) < 5:
-        conn[2].write('\x00\x00\x00\x00\x02\x0A')
-    else:
-        conn[2].write('\x00\x00\x00\x00\x08\x0A')
+#    if (time.time() % 10) < 5:
+#        conn[2].write('\x00\x00\x00\x00\x02\x0A')
+#    else:
+    conn[2].write('\x00\x00\x00\x00\x00\x0A')
     wait_until_clear(2)
     time.sleep(4)
