@@ -38,7 +38,7 @@ public class CharacterInputUpdate implements LSDFragment {
 	public void toStream(ByteArrayOutputStream bs) throws IOException {
 		LSDSerializer ls = new LSDSerializer(bs);
 		
-		int kbd = (kbd_up ? 1 : 0) + (kbd_left ? 2 : 0) + (kbd_down ? 4 : 0) + (kbd_right ? 8 : 0);
+		int kbd = (this.kbd_up ? 1 : 0) | (this.kbd_left ? 2 : 0) | (this.kbd_down ? 4 : 0) | (this.kbd_right ? 8 : 0);
 		ls.writeShort(this.player_id);
 		ls.writeByte(kbd);		
 		ls.writeShort(this.angle);
