@@ -92,6 +92,7 @@ while True:
         break
         
 # Send input periodically
+direction = True
 while True:
     try:
         msg = conn[3].read()
@@ -114,9 +115,11 @@ while True:
     else:
         parse_lsd(msg)
 
-#    if (time.time() % 10) < 5:
-#        conn[2].write('\x00\x00\x00\x00\x02\x0A')
-#    else:
-    conn[2].write('\x00\x00\x00\x00\x00\x0A')
+    if direction:
+        conn[2].write('\x00\x00\x00\x00\x02\x0A')
+    else:
+        conn[2].write('\x00\x00\x00\x00\x08\x0A')
+    direction = not direction
+
     wait_until_clear(2)
-    time.sleep(4)
+    time.sleep(2)

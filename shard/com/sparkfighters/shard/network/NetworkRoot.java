@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.Vector;
 
 import com.sparkfighters.shard.loader.JSONBattleDTO;
 import com.sparkfighters.shard.loader.JSONUserDTO;
@@ -32,6 +33,8 @@ public class NetworkRoot {
 	public ByteBuffer recvbuf = ByteBuffer.allocate(2048);
 	public BridgeRoot br = null;
 	public JSONBattleDTO bpf = null;
+	
+	public Vector<Long> milis = new Vector<>(); 
 	
 	public boolean is_game_started = false;
 	
@@ -60,7 +63,7 @@ public class NetworkRoot {
 		try {
 			sa = this.channel.receive(this.recvbuf);			
 		} catch (IOException e) {
-			any_data_received = false;
+			throw new RuntimeException("I/O error on socket read");
 		}
 		if (sa == null) any_data_received = false;
 				
@@ -98,13 +101,11 @@ public class NetworkRoot {
 		}
 		
 		// Dispatch all outbound packets
-		for (SocketAddress csa : this.connections.keySet()) {
+		for (Connection c : this.connections.values()) {
 			try {
-				while (true) {
-					Packet p = this.connections.get(csa).on_sendable();
-					this.channel.send(ByteBuffer.wrap(p.to_bytes()), csa);
-					work_was_done = true;
-				}
+				Packet p = c.on_sendable();
+				this.channel.send(ByteBuffer.wrap(p.to_bytes()), c.address);
+				work_was_done = true;
 			} catch (NothingToSend e) {
 				continue;
 			} catch (IOException e) { 
@@ -273,6 +274,8 @@ public class NetworkRoot {
 					this.on_disconnected(sa);
 					return;
 				}
+				
+				this.milis.add(System.currentTimeMillis());
 				
 				int mousex = data[0]*256 + data[1];
 				int mousey = data[2]*256 + data[3];
