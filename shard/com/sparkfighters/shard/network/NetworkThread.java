@@ -36,6 +36,7 @@ public class NetworkThread extends Thread {
 				if (etn instanceof CinematicStarted) {
 					// Tell waiting players that it is so
 					for (Connection c : this.root.connections.values()) {
+						System.out.printf("EXEC: Cinematics started\n");
 						byte[] rdy = {'1'};
 						c.getChannel(0).write(rdy);
 					}					
@@ -44,7 +45,7 @@ public class NetworkThread extends Thread {
 				if (etn instanceof GameStarted) {
 					// Instruct root that stuff is connected
 					this.root.is_game_started = true;
-					
+					System.out.printf("EXEC: Game started\n");
 					// Tell waiting players that it is so
 					for (Connection c : this.root.connections.values()) {
 						byte[] rdy = {'2'};

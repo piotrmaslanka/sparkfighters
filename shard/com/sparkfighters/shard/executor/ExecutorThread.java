@@ -157,11 +157,16 @@ public class ExecutorThread extends Thread {
 			}
 
 			// Push the world an iteration further
-			this.gameworld.advance((double)ExecutorThread.FRAME_DURATION / 1000.0);
+			this.gameworld.advance(1);
 			
 			// Send forth LSD
 			ExecutorToNetwork etn;
-			while ((etn = this.sync.generate_dispatch()) != null) this.br.send_to_network(etn);
+			boolean was_dispatched = false;
+			while ((etn = this.sync.generate_dispatch()) != null) {
+				this.br.send_to_network(etn);
+				was_dispatched = true;
+			}
+			if (was_dispatched) System.out.println("Performed dispatch");
 					
 			// Increment exception, wait more
 			try {
