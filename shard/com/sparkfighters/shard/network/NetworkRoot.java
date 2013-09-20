@@ -152,10 +152,6 @@ public class NetworkRoot {
 			try {
 				p = conn.getChannel(0).read();
 			} catch (NothingToRead e) {
-				// If we were at login, data was received, and 0 is not readable, then this
-				// is a clear violation of the protocol.
-				System.out.printf("DC: Protocol violation by %s:%d\n", conn.address.getHostString(), conn.address.getPort());
-				this.on_disconnected(sa);
 				return;
 			}
 
