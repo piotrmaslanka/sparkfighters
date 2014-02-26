@@ -37,7 +37,7 @@ public class NetworkRoot {
 	public Vector<Long> milis = new Vector<>(); 
 	
 	public boolean is_game_started = false;
-	
+
 	/**
 	 * @param netifc Network interface name
 	 * @param port Port number
@@ -268,7 +268,7 @@ public class NetworkRoot {
 			// Connection has been established
 			
 			// Handle controller update input
-			try {
+			try {				
 				byte[] data = conn.getChannel(2).read();
 				if (data.length != 6) {
 					System.out.format("NET: Protocol violation at ch2 by %d. Seen %d bytes.\n", conn.player_id, data.length);
