@@ -28,7 +28,7 @@ import pl.com.henrietta.lnx2.exceptions.PacketMalformedError;
 public class NetworkRoot {
 
 	public DatagramChannel channel = null;
-	public HashMap<SocketAddress, Connection> connections = new HashMap<>();
+	public HashMap<InetSocketAddress, Connection> connections = new HashMap<>();
 	public HashMap<Integer, Connection> connection_by_pid = new HashMap<>();
 	public ByteBuffer recvbuf = ByteBuffer.allocate(2048);
 	public BridgeRoot br = null;
@@ -37,7 +37,7 @@ public class NetworkRoot {
 	public Vector<Long> milis = new Vector<>(); 
 	
 	public boolean is_game_started = false;
-	
+
 	/**
 	 * @param netifc Network interface name
 	 * @param port Port number
@@ -59,12 +59,15 @@ public class NetworkRoot {
 		boolean work_was_done = false;
 		boolean any_data_received = true;
 		
-		SocketAddress sa = null;
+		InetSocketAddress sa = null;
 		try {
-			sa = this.channel.receive(this.recvbuf);			
+			sa = (InetSocketAddress) this.channel.receive(this.recvbuf);			
 		} catch (IOException e) {
 			throw new RuntimeException("I/O error on socket read");
+		} catch (ClassCastException e) {
+			throw new RuntimeException("Invalid code");
 		}
+		
 		if (sa == null) any_data_received = false;
 				
 		if (any_data_received) {
@@ -114,7 +117,7 @@ public class NetworkRoot {
 		}
 		
 		// Ok, roll through all connections, kill timeouters
-		for (SocketAddress csa : this.connections.keySet()) {
+		for (InetSocketAddress csa : this.connections.keySet()) {
 			Connection conn = this.connections.get(csa);
 			if (conn.has_timeouted()) {
 				System.out.println("Connection killed due to timeout");
@@ -134,7 +137,7 @@ public class NetworkRoot {
 	 * @throws UnsupportedEncodingException Called upon Java sucking cock
 	 * @throws NoSuchAlgorithmException Called upon Java sucking cock
 	 */
-	public void on_has_data(SocketAddress sa, Connection conn) throws UnsupportedEncodingException,
+	public void on_has_data(InetSocketAddress sa, Connection conn) throws UnsupportedEncodingException,
 																      NoSuchAlgorithmException,
 																      IOException {
 		// handle ping
@@ -149,9 +152,6 @@ public class NetworkRoot {
 			try {
 				p = conn.getChannel(0).read();
 			} catch (NothingToRead e) {
-				// If we were at login, data was received, and 0 is not readable, then this
-				// is a clear violation of the protocol.
-				this.on_disconnected(sa);
 				return;
 			}
 
@@ -164,6 +164,7 @@ public class NetworkRoot {
 				conn.associated_dto = this.bpf.find_by_login(conn.username);
 				if (conn.associated_dto == null) {
 					// Invalid user!
+					System.out.printf("DC: Invalid user %s at %s:%d\n", conn.username, conn.address.getHostString(), conn.address.getPort());
 					this.on_disconnected(sa);
 					return;
 				}
@@ -199,9 +200,9 @@ public class NetworkRoot {
 						// doesn't annoy Executor
 						alrdy_logd.login_phase = 0;
 						this.on_disconnected(alrdy_logd.address);
-						System.out.printf("CONN: Replacing %s\n", conn.username);
+						System.out.printf("CONN: Replacing %s at %s:%d\n", conn.username, conn.address.getHostString(), conn.address.getPort());
 					} else
-						System.out.printf("CONN: Connecting %s\n", conn.username);						
+						System.out.printf("CONN: Connecting %s at %s:%d\n", conn.username, conn.address.getHostString(), conn.address.getPort());						
 					
 					conn.player_id = conn.associated_dto.id;
 					conn.login_phase = 1;
@@ -267,7 +268,7 @@ public class NetworkRoot {
 			// Connection has been established
 			
 			// Handle controller update input
-			try {
+			try {				
 				byte[] data = conn.getChannel(2).read();
 				if (data.length != 6) {
 					System.out.format("NET: Protocol violation at ch2 by %d. Seen %d bytes.\n", conn.player_id, data.length);
@@ -296,15 +297,15 @@ public class NetworkRoot {
 		}
 	}
 	
-	public void on_disconnected(SocketAddress sa) {
+	public void on_disconnected(InetSocketAddress sa) {
 		// a new socket was disconnected
 		Connection cn = this.connections.get(sa);
 		this.connections.remove(sa);
 
 		if (cn.username == null)
-			System.out.printf("CONN: Disconnecting <UNKNOWN>\n");
+			System.out.format("DC: <UNKNOWN> at %s:%d\n", sa.getHostString(), sa.getPort());
 		else
-			System.out.printf("CONN: Disconnecting %s\n", cn.username);
+			System.out.printf("DC: %s at %s:%d\n", cn.username, sa.getHostString(), sa.getPort());
 		
 		if (cn.login_phase < 2) return;	// not logged in - no problem
 			
@@ -313,7 +314,7 @@ public class NetworkRoot {
 		this.br.send_to_executor(new PlayerDisconnected(cn.player_id));
 	}
 	
-	public void on_connected(SocketAddress sa) {
+	public void on_connected(InetSocketAddress sa) {
 		// new user connected
 		Connection nc = new Connection();
 		nc.address = sa;

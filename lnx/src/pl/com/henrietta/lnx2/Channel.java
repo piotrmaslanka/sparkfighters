@@ -244,8 +244,9 @@ public class Channel {
 				// All retransmissions in RTM_MANUAL are important, as they may contain
 				// fresh data. Verify if that's the case..
 				// Both RTM_AUTO and RTM_AUTO_ORDERED care a lot about packets
-				if (held_packet.equals(packet)) this.enq_ack(packet.window_id);
-				return false;
+				
+				this.enq_ack(packet.window_id);
+				if (packet.equals(held_packet))	return false;
 			}
 			
 			switch (this.retransmission_mode) {
@@ -257,6 +258,11 @@ public class Channel {
 				this.data_to_read.addFirst(packet.data);
 				this.enq_ack(packet.window_id);
 				this.holding_buffer[packet.window_id] = packet;
+				
+				int i = packet.window_id - this.max_bundle_size;
+				if (i < 0) i += 64;
+				this.holding_buffer[i] = null;
+				
 				return true;
 			case RTM_AUTO_ORDERED:
 				this.enq_ack(packet.window_id);
