@@ -24,11 +24,11 @@ public class Actor
 	private int idHero,idWeapon, id, idHeroType;
 	private int idAnimation;
 	private float time;
-	private float degree=-1111111;
+	private float degree;
 	
-	public void setDegree(float d)
+	public void setDegree(float degree)
 	{
-		degree=d;
+		this.degree=degree;
 	}
 	
 	public int getId(){return id;}
@@ -142,31 +142,14 @@ public class Actor
 
 		int x_weapon=x_body+h_x-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionWidth()/2+diff;
 		int y_weapon=y_body+h_y-ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction].getRegionHeight()/2;
-
-		float degrees=0;
-		if(this.degree==-1111111)
-		{
-			double C=Math.sqrt((mousePositionAbsolute.x-actorPositionAbsolute.x)*(mousePositionAbsolute.x-actorPositionAbsolute.x)+(mousePositionAbsolute.y-actorPositionAbsolute.y)*(mousePositionAbsolute.y-actorPositionAbsolute.y));
-			double A=Math.sqrt((mousePositionAbsolute.x-mousePositionAbsolute.x)*(mousePositionAbsolute.x-mousePositionAbsolute.x)+(actorPositionAbsolute.y-mousePositionAbsolute.y)*(actorPositionAbsolute.y-mousePositionAbsolute.y));	
-			double radians=Math.tan(A/C);
-			degrees=(float)(radians*180/Math.PI);
-		}
-		else
-		{
-			degrees=this.degree;
-		}
 		
-		if(direction==0)
-		{
-			if(actorPositionAbsolute.y-mousePositionAbsolute.y>0) degrees=-degrees;
-		}
-		else
-		{
-			if(actorPositionAbsolute.y-mousePositionAbsolute.y<0) degrees=-degrees;
-		}
+		float degrees=0;
+
+		if(direction==0) degrees=-degree;
+		if(direction==1) degrees=(-degree)+180;
 		
 		//draw body, head, weapon
-		DrawEngineScene.INSTANCE.Draw(currentFrameBody, x_body,y_body,0);
+		DrawEngineScene.INSTANCE.Draw(currentFrameBody, x_body,y_body,0);				
 		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.heroesData.get(idHero).animationsDrawableHead.get(idHeroType)[direction], x_head, y_head,degrees);
 		DrawEngineScene.INSTANCE.Draw(ResourcesManager.INSTANCE.weaponsData.get(idWeapon).animations[direction], x_weapon,y_weapon,degrees);
 		
