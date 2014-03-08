@@ -10,7 +10,6 @@ import java.nio.channels.DatagramChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
-import java.util.HashMap;
 import java.util.Vector;
 
 import com.sparkfighters.shared.lsd.LSDPacket;
@@ -118,6 +117,9 @@ public enum Network implements Runnable
 			byte[] data_readed = new byte[how_much_readed];
 			System.arraycopy(recvbuf.array(), 0, data_readed, 0, how_much_readed);
 			
+			if(how_much_readed>0)
+				Logger.INSTANCE.write("Recive:"+Logger.bytesToHex(data_readed), Logger.LogType.INFO);
+			
 			this.connection.on_received(Packet.from_bytes(data_readed));
 	
 			if(this.connection.has_new_data==true)
@@ -148,7 +150,6 @@ public enum Network implements Runnable
 	{
 		try
 		{
-			//Logger.INSTANCE.write("Send:"+text, Logger.LogType.INFO);
 			//prepare to send data
 			this.connection.getChannel(channel).write(text.getBytes("UTF-8"));	
 		}
@@ -162,7 +163,6 @@ public enum Network implements Runnable
 	{
 		try
 		{
-			//Logger.INSTANCE.write("Send:"+text, Logger.LogType.INFO);
 			//prepare to send data
 			this.connection.getChannel(channel).write(bytes);	
 		}
@@ -176,7 +176,6 @@ public enum Network implements Runnable
 	{
 		try
 		{
-			//Logger.INSTANCE.write("Recive:"+new String(msg), Logger.LogType.INFO);
 			if(channel==0) Channel0(msg);
 			if(channel==1) Channel1(msg);
 			if(channel==2) Channel2(msg);
@@ -359,6 +358,7 @@ public enum Network implements Runnable
 			{
 				p = this.connection.on_sendable();
 				ByteBuffer buf=ByteBuffer.wrap(p.to_bytes());	
+				Logger.INSTANCE.write("Send:"+Logger.bytesToHex(buf.array()), Logger.LogType.INFO);
 				this.channel.send(buf, new InetSocketAddress(this.ip, this.port));
 			} 
 			catch (NothingToSend e) 
