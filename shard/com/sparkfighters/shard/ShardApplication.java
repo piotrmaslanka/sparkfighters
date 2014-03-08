@@ -20,7 +20,6 @@ public class ShardApplication {
 	 * @param args
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		
 		Gson gson = new Gson();
 		JSONBattleDTO bpf = null;
 		try {

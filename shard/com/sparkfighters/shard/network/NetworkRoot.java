@@ -278,8 +278,8 @@ public class NetworkRoot {
 				
 				this.milis.add(System.currentTimeMillis());
 				
-				int mousex = data[0]*256 + data[1];
-				int mousey = data[2]*256 + data[3];
+				int mousex = ((int)(data[0] & 0xFF) << 8) | (int)(data[1] & 0xFF);
+				int mousey = ((int)(data[2] & 0xFF) << 8) | (int)(data[3] & 0xFF);
 				
 				boolean lmb = (data[4] & 16) > 0;
 				boolean rmb = (data[4] & 32) > 0;

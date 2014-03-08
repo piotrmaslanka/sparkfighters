@@ -40,7 +40,6 @@ public class Synchronizer {
 	 */
 	public void on_input_status_changed(com.sparkfighters.shard.network.bridge.net.InputStatusChanged base,
 										com.sparkfighters.shared.physics.objects.Vector character_location) {
-		
 		// f_angle will be in range [pi; -pi] radians
 		double f_angle = -Math.atan2(character_location.y - base.mouse_y, character_location.x - base.mouse_x);
 		
