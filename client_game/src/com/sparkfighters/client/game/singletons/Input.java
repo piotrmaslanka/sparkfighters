@@ -43,11 +43,11 @@ public enum Input
 	private void SendInputStatus()
 	{
 		byte[] mouse_x=new byte[2];
-		mouse_x[0]=(byte) (x_absolute<<8);
+		mouse_x[0]=(byte) (x_absolute>>8);
 		mouse_x[1]=(byte) (x_absolute);
 
 		byte[] mouse_y=new byte[2];
-		mouse_y[0]=(byte) (y_absolute<<8);
+		mouse_y[0]=(byte) (y_absolute>>8);
 		mouse_y[1]=(byte) (y_absolute);
 		
 		byte KBDStatus= (byte) ((up ? 1 : 0) + (right ? 2 : 0) + (down ? 4 : 0)+(left ? 8 : 0)
